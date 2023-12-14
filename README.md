@@ -30,7 +30,7 @@ without pc(with termux)
 termux-setup-storage
   ```
   ```bash
-apt update && yes | apt upgrade && pkg install git && git clone https://github.com/offici5l/MiTool && cd MiTool && bash install.sh
+pkg install git && git clone https://github.com/offici5l/MiTool && cd MiTool && bash install.sh
   ```
 
 **Usage:**
