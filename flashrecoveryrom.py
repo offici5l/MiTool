@@ -13,7 +13,7 @@ rom_files = [f for f in os.listdir(ROM_FOLDER) if f.endswith(".zip")]
 
 if rom_files:
     input("Make sure your device is connected in sideload mode. Connect your device using OTG, then press Enter when ready.")
-    os.system("adb sideload flash {}/{}".format(ROM_FOLDER, rom_files[0]))
+    os.system("adb sideload {}/{}".format(ROM_FOLDER, rom_files[0]))
 else:
     print("Could not find rom.zip file.")
     exit(1)
