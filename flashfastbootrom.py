@@ -39,7 +39,7 @@ else:
     if tgzFile:
         print("ROM file detected in mi-flash-fastboot-rom folder.")
         print("The ROM file is being decompressed, please wait")
-        os.system(f"pv {tgzFile} | tar -xzf- -C {ROM_FOLDER}/")
+        os.system(f"pv {tgzFile} | tar --strip-components=1 -xzf- -C {ROM_FOLDER}/ --wildcards --no-anchored 'flash_all.sh' 'flash_all_lock.sh' 'images'")
     else:
         print("No .tgz file detected, assuming ROM files are already uncompressed.")
 
