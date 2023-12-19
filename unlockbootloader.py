@@ -4,13 +4,23 @@ from base64 import b64encode, b64decode
 from Cryptodome.Cipher import AES
 from termcolor import colored
 
+text_to_print = """
+•Bind your Xiaomi account to your phone. 
+\n•Go to Settings » About phone » MIUI version.
+Tap repeatedly on the MIUI version until you see the pop-up You are now a developer!
+\n•Go back to Settings, click on Additional settings, then Developer options.
+\n•Enable OEM unlocking and USB debugging.
+\nTap Mi Unlock status » Agree » Add account and device. (Make sure your device can connect to the internet using mobile data.)
+Once the account is successfully bound, you should get a message Added successfully.
+"""
+print(text_to_print)
+
+input(colored(f"\n If you complete the steps successfully. Press Enter  ", 'green'))
+
 filename = "/sdcard/Download/account_info.txt"
 
 while os.path.isfile(filename):
-    with open(filename, 'r') as file:
-            file_content = file.read()
-    file_path = os.path.abspath(filename)
-    use_previous = input(f"\nDo you want to use previous information in {filename} \n{file_content}\n? (yes/no): ").lower()
+    use_previous = input(f"\ndo you want to use previous information in \033[92m{filename}\033[0m (yes/no) ? : ").lower()
     if use_previous == "yes":
         break
     elif use_previous == "no":
@@ -24,31 +34,30 @@ with open(filename, "a+") as file:
     content = file.read()
     if "Username:" not in content:
         usernamee = input("Enter username or email or number (Xiaomi Account): ")
-        file.write(f"Username: {usernamee}\n")
+        file.write(f"\nUsername: {usernamee}\n")
     if "Password:" not in content:
         passwordd = input("Enter password: ")
-        hashed_password = hashlib.md5(passwordd.encode()).hexdigest().upper()
-        file.write(f"Password: {hashed_password}\n")
+        file.write(f"\nPassword: {passwordd}\n")
     if "region:" not in content:
         region = input("Choose a region (Account) (india, global, china, russia, europe): ")
-        file.write(f"region: {region}\n")
+        file.write(f"\nregion: {region}\n")
     if "token:" not in content or "product:" not in content:
         entry_choice = input("Do you want to input device token and product automatically or manually? (a/m): ").lower()
         if entry_choice == 'm':
             if "token:" not in content:
                  token = input("Enter output from `fastboot getvar token`: ")
-                 file.write(f"token: {token}\n")
+                 file.write(f"\ntoken: {token}\n")
             if "product:" not in content:
                  product = input("Enter output from `fastboot getvar product`: ")
-                 file.write(f"product: {product}\n")
+                 file.write(f"\nproduct: {product}\n")
         elif entry_choice == 'a':
             confirmation = input("Make sure your device is connected in fastboot mode. Connect your device using OTG, then press Enter when ready.")
             output = os.popen("fastboot getvar all 2>&1").read()
             token, product = [os.popen(f'echo "{output}" | grep -Po "(?<={var}:).*"').read().strip() for var in ["token", "product"]]
             if "token:" not in content:
-                file.write(f"token: {token}\n")
+                file.write(f"\ntoken: {token}\n")
             if "product" not in content:
-                file.write(f"product: {product}\n")
+                file.write(f"\nproduct: {product}\n")
         else:
             print("Invalid choice")
 
@@ -56,15 +65,16 @@ if "wb_value:" in open(filename).read():
     pass
 else:
     input(f"\nWhen you press Enter The page will open in your default browser to confirm your login, after seeing {{\"R\":\"\",\"S\":\"OK\"}} in browser, copy URL from address bar Then come back here and paste link here ")
-    os.system(f"termux-open-url 'https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&json=false&passive=true&hidden=false&_snsDefault=facebook&checkSafePhone=true&_locale=en'")
+    os.system(f"termux-open-url 'https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&checkSafeAddress=true'")
     wbinput = input("\nlink: ")
     wb_value_match = re.search(r'sts\?d=[^&]*', wbinput)
     if wb_value_match:
         wb_value = wb_value_match.group(0).split('=')[1]
         with open(filename, "a") as file:
-            file.write(f"wb_value: {wb_value}\n")
+            file.write(f"\nwb_value: {wb_value}\n")
     else:
         print("Invalid URL")
+        exit()
 
 with open(filename, "r") as file:
     lines = file.readlines()
@@ -75,7 +85,22 @@ with open(filename, "r") as file:
     wbvalueline = next((line.split(' ', 1)[1].strip() for line in lines if "wb_value:" in line), None)
     region = next((line.split(' ', 1)[1].strip() for line in lines if "region:" in line), None)
 
-response = requests.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&json=false&passive=false&hidden=false&_snsDefault=facebook&checkSafePhone=true&_locale=en&_json=true", data={"user": username, "hash": password}, headers={"content-type": "application/x-www-form-urlencoded; charset=UTF-8"}, cookies={"deviceId": wbvalueline}).text.replace("&&&START&&&", "")
+response = requests.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&_json=true", data={"user": username, "hash": hashlib.md5(password.encode()).hexdigest().upper()}, headers={"User-Agent": "XiaomiPCSuite"}, cookies={"deviceId": wbvalueline}).text.replace("&&&START&&&", "")
+
+m_value, tsl_value = urllib.parse.parse_qs(urllib.parse.urlparse(json.loads(response)["location"]).query).get('m', [''])[0], urllib.parse.parse_qs(urllib.parse.urlparse(json.loads(response)["location"]).query).get('tsl', [''])[0]
+
+with open('/sdcard/Download/log.txt', 'a') as log_file:
+    log_file.write(f"\n\n>>> m = {m_value}, tsl = {tsl_value}, ")
+
+if json.loads(response)["securityStatus"] == 16:
+    error_message = f'\n\033[91msecurityStatus {json.loads(response)["securityStatus"]}\033[0m\n\n\033[92mPlease go to: settings > Mi Account > Devices > select Current device > Find device "enable Find device"\033[0m\n'
+    print(error_message)
+    exit()
+
+if json.loads(response)["code"] == 70016:
+    error_message = f'\n\033[91mcodeStatus {json.loads(response)["code"]} Error descEN: The account ID or password you entered is incorrect. \n\033[0m'
+    print(error_message)
+    exit()
 
 region_urls = {
     "india": "in-unlock.update.intl.miui.com",
@@ -93,7 +118,15 @@ data = json.loads(result2)
 
 ssecurity, psecurity, userid, c_userid, code, nonce, location = (data["ssecurity"], data["psecurity"], data["userId"], data["cUserId"], data["code"], data["nonce"], data["location"])
 
-cookies = requests.Session().get(location + "&clientSign=" + urllib.parse.quote_plus(b64encode(hashlib.sha1(f"nonce={nonce}".encode("utf-8") + b"&" + ssecurity.encode("utf-8")).digest()))).cookies
+response_cookies = requests.Session().get(location + "&clientSign=" + urllib.parse.quote_plus(b64encode(hashlib.sha1(f"nonce={nonce}".encode("utf-8") + b"&" + ssecurity.encode("utf-8")).digest()))).cookies
+cookies = response_cookies
+
+if not cookies:
+    error_message = f'\n\033[91mdescEN: Error information not obtained from server.\nInvalid wb_value: {wbvalueline}\n\033[0m\033[92m'
+    print(error_message)
+    exit()
+else:
+    pass
 
 params = {k.encode("utf-8") if isinstance(k, str) else k: v.encode("utf-8") if isinstance(v, str) else b64encode(json.dumps(v).encode("utf-8")) if not isinstance(v, bytes) else v for k, v in {"appId": "1", "data": {"clientId": "2", "clientVersion": "5.5.224.55", "language": "en", "operate": "unlock", "pcId": hashlib.md5(wbvalueline.encode("utf-8")).hexdigest(), "product": productname, "deviceInfo": {"product": productname}, "deviceToken": tokenname}
 }.items()}
@@ -176,6 +209,21 @@ def unlock_device_request(endpoint, params):
 
 add_nonce()
 result = run()
+
+log_m = "\n(Please share /sdcard/Download/log.txt on github.com/offici5l/MiTool/issues/5 or t.me/Offici5l_Group if you want assistance in improving the tool)\n"
+
+if "code" in result:
+    with open('/sdcard/Download/log.txt', 'a+') as log_file:
+        log_file.write(f"code = {result['code']}, ")
+
+if "description" in result:
+    with open('/sdcard/Download/log.txt', 'a+') as log_file:
+        log_file.write(f"description: {result['description']}, ")
+
+if "descEN" in result:
+    with open('/sdcard/Download/log.txt', 'a+') as log_file:
+        log_file.write(f"descEN: {result['descEN']}, ")
+
 if "encryptData" in result:
     unlock_token = result["encryptData"]
     input("Make sure your device is connected in fastboot mode. Connect your device using OTG, then press Enter when ready.")
@@ -188,7 +236,11 @@ if "encryptData" in result:
     if answer.lower() == "y":
         os.system("fastboot stage token.bin")
         os.system("fastboot oem unlock")
+        print(log_m)
     else:
         print("Cancel unlock...")
+        print(log_m)
 else:
-    print("\033[92m" + result["descEN"] + "\033[0m")
+    result_str = json.dumps(result, indent=2, ensure_ascii=False, separators=('\n', ': '))[1:-1].replace('"', '')
+    print(colored(result_str, 'green'))
+    print(log_m)
