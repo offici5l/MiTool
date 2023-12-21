@@ -6,17 +6,17 @@ from termcolor import colored
 from urllib.parse import urlparse
 
 text_to_print = """
-1. Bind your Xiaomi account to your phone.
-2. Navigate to Settings » About phone » MIUI version.
-   - Tap MIUI version repeatedly to become a developer.
-3. Go back to Settings » Additional settings » Developer options.
-   - Enable OEM unlocking and USB debugging.
-   - Tap Mi Unlock status » Agree » Add account and device.
-     (Ensure your device can connect to the internet using mobile data.)
-4. Once the account is successfully bound, you'll see a message: Added successfully.
+1.Bind your Xiaomi account to your phone.\n
+2.Navigate to Settings » About phone » MIUI version.
+- Tap MIUI version repeatedly to become a developer.\n
+3.Go back to Settings » Additional settings » Developer options.
+- Enable OEM unlocking and USB debugging.
+- Tap Mi Unlock status » Agree » Add account and device.
+(Ensure your device can connect to the internet using mobile data.)\n
+" Once the account is successfully bound, you'll see a message: Added successfully "
 """
 
-input(text_to_print + colored("\nIf you complete the steps successfully, press Enter.", 'green'))
+input(colored(f"\n{'='*15}github.com/offici5l/MiTool{'='*15}\n{text_to_print}\n{'='*56}\n", 'green') + "\nIf you complete the steps successfully, press Enter")
 
 filename = "/sdcard/Download/account_info.txt"
 
@@ -89,11 +89,6 @@ headers={"User-Agent": "XiaomiPCSuite"}
 session = requests.Session()
 
 response = session.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&_json=true", data={"user": username, "hash": hashlib.md5(password.encode()).hexdigest().upper()}, headers=headers, cookies={"deviceId": wbvalueline}).text.replace("&&&START&&&", "")
-
-m_value, tsl_value = urllib.parse.parse_qs(urllib.parse.urlparse(json.loads(response)["location"]).query).get('m', [''])[0], urllib.parse.parse_qs(urllib.parse.urlparse(json.loads(response)["location"]).query).get('tsl', [''])[0]
-
-with open('/sdcard/Download/log.txt', 'a') as log_file:
-    log_file.write(f"\n\n>>> m = {m_value}, tsl = {tsl_value}, ")
 
 if json.loads(response)["securityStatus"] == 16:
     error_message = f'\n\033[91msecurityStatus {json.loads(response)["securityStatus"]}\033[0m\n\n\033[92mPlease go to: settings > Mi Account > Devices > select Current device > Find device "enable Find device"\033[0m\n'
@@ -214,39 +209,14 @@ add_nonce()
 result = run()
 session.close()
 
-log_m = "\n(Please share /sdcard/Download/log.txt on github.com/offici5l/MiTool/issues/5 or t.me/Offici5l_Group if you want assistance in improving the tool)\n"
-
-if "code" in result:
-    with open('/sdcard/Download/log.txt', 'a+') as log_file:
-        log_file.write(f"code = {result['code']}, ")
-
-if "description" in result:
-    with open('/sdcard/Download/log.txt', 'a+') as log_file:
-        log_file.write(f"description: {result['description']}, ")
-
-if "descEN" in result:
-    with open('/sdcard/Download/log.txt', 'a+') as log_file:
-        log_file.write(f"descEN: {result['descEN']}, ")
-
 if "encryptData" in result:
     unlock_token = result["encryptData"]
-    input("Make sure your device is connected in fastboot mode. Connect your device using OTG, then press Enter when ready.")
-
+    input("Ensure your device is in fastboot mode, connected via OTG. Press Enter when ready to unlock the device")
     with open("token.bin", "wb") as token_file:
         token_file.write(bytes.fromhex(unlock_token))
-
-    answer = input("Last step: Confirm that you want to unlock the device? (y/n): ")
-
-    if answer.lower() == "y":
         os.system("fastboot stage token.bin")
         os.system("fastboot oem unlock")
-        print(log_m)
-    else:
-        print("Cancel unlock...")
-        print(log_m)
 else:
-    formatted_result = json.dumps(result, indent=2, ensure_ascii=False, separators=('\n', ': '))[1:-1].replace('"', '')
-    framed_result = colored(f"{'='*10} Result {'='*10}\n{formatted_result}\n{'='*27}", 'green')
+    formatted_result = json.dumps(result, indent=0, ensure_ascii=False, separators=('\n', ': '))[1:-1].replace('"', '')
+    framed_result = colored(f"\n{'='*56}\n{formatted_result}\n{'='*56}\n", 'green')
     print(framed_result)
-    print(log_m)
-
