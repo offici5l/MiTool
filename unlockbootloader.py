@@ -3,25 +3,26 @@ from urllib3.util.url import Url
 from base64 import b64encode, b64decode
 from Cryptodome.Cipher import AES
 from termcolor import colored
+from urllib.parse import urlparse
 
 text_to_print = """
-•Bind your Xiaomi account to your phone. 
-\n•Go to Settings » About phone » MIUI version.
-Tap repeatedly on the MIUI version until you see the pop-up You are now a developer!
-\n•Go back to Settings, click on Additional settings, then Developer options.
-\n•Enable OEM unlocking and USB debugging.
-\nTap Mi Unlock status » Agree » Add account and device. (Make sure your device can connect to the internet using mobile data.)
-Once the account is successfully bound, you should get a message Added successfully.
+1. Bind your Xiaomi account to your phone.
+2. Navigate to Settings » About phone » MIUI version.
+   - Tap MIUI version repeatedly to become a developer.
+3. Go back to Settings » Additional settings » Developer options.
+   - Enable OEM unlocking and USB debugging.
+   - Tap Mi Unlock status » Agree » Add account and device.
+     (Ensure your device can connect to the internet using mobile data.)
+4. Once the account is successfully bound, you'll see a message: Added successfully.
 """
-print(text_to_print)
 
-input(colored(f"\n If you complete the steps successfully. Press Enter  ", 'green'))
+input(text_to_print + colored("\nIf you complete the steps successfully, press Enter.", 'green'))
 
 filename = "/sdcard/Download/account_info.txt"
 
 while os.path.isfile(filename):
-    use_previous = input(f"\ndo you want to use previous information in \033[92m{filename}\033[0m (yes/no) ? : ").lower()
-    if use_previous == "yes":
+    pr = input(f"\ndo you want to use previous information in \033[92m{filename}\033[0m (yes/no) ? : ").lower()
+    if pr == "yes":
         break
     elif use_previous == "no":
         os.remove(filename)
@@ -51,7 +52,7 @@ with open(filename, "a+") as file:
                  product = input("Enter output from `fastboot getvar product`: ")
                  file.write(f"\nproduct: {product}\n")
         elif entry_choice == 'a':
-            confirmation = input("Make sure your device is connected in fastboot mode. Connect your device using OTG, then press Enter when ready.")
+            confirmation = input("Make sure your device is in fastboot mode. Connect your device using OTG, then press Enter when ready.")
             output = os.popen("fastboot getvar all 2>&1").read()
             token, product = [os.popen(f'echo "{output}" | grep -Po "(?<={var}:).*"').read().strip() for var in ["token", "product"]]
             if "token:" not in content:
@@ -61,31 +62,33 @@ with open(filename, "a+") as file:
         else:
             print("Invalid choice")
 
-if "wb_value:" in open(filename).read():
-    pass
-else:
-    input(f"\nWhen you press Enter The page will open in your default browser to confirm your login, after seeing {{\"R\":\"\",\"S\":\"OK\"}} in browser, copy URL from address bar Then come back here and paste link here ")
+if "wb_value:" not in open(filename).read():
+    input(f"\nPress Enter to open confirmation page in your default browser. After seeing {{\"R\":\"\",\"S\":\"OK\"}}, copy Link from address bar. Come back here")
     os.system(f"termux-open-url 'https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&checkSafeAddress=true'")
-    wbinput = input("\nlink: ")
-    wb_value_match = re.search(r'sts\?d=[^&]*', wbinput)
-    if wb_value_match:
-        wb_value = wb_value_match.group(0).split('=')[1]
+    wbinput = input("\nEnter Link: ")
+    wbinputmatch = wbinput.split('sts?d=')[1].split('&ticket')[0]
+    if wbinputmatch:
+        wbvalue = wbinputmatch.group(0).split('=')[1]
         with open(filename, "a") as file:
-            file.write(f"\nwb_value: {wb_value}\n")
+            file.write(f"\nwb_value: {wbvalue}\n")
     else:
         print("Invalid URL")
         exit()
 
 with open(filename, "r") as file:
     lines = file.readlines()
-    tokenname = next((line.split(' ', 1)[1].strip() for line in lines if "token:" in line), None)
-    productname = next((line.split(' ', 1)[1].strip() for line in lines if "product:" in line), None)
-    username = next((line.split(' ', 1)[1].strip() for line in lines if "Username:" in line), None)
-    password = next((line.split(' ', 1)[1].strip() for line in lines if "Password:" in line), None)
-    wbvalueline = next((line.split(' ', 1)[1].strip() for line in lines if "wb_value:" in line), None)
-    region = next((line.split(' ', 1)[1].strip() for line in lines if "region:" in line), None)
+    extract_info = lambda keyword: next((line.split(' ', 1)[1].strip() for line in lines if keyword in line), None)
+    tokenname = extract_info("token:")
+    productname = extract_info("product:")
+    username = extract_info("Username:")
+    password = extract_info("Password:")
+    wbvalueline = extract_info("wb_value:")
+    region = extract_info("region:")
 
-response = requests.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&_json=true", data={"user": username, "hash": hashlib.md5(password.encode()).hexdigest().upper()}, headers={"User-Agent": "XiaomiPCSuite"}, cookies={"deviceId": wbvalueline}).text.replace("&&&START&&&", "")
+headers={"User-Agent": "XiaomiPCSuite"}
+session = requests.Session()
+
+response = session.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&_json=true", data={"user": username, "hash": hashlib.md5(password.encode()).hexdigest().upper()}, headers=headers, cookies={"deviceId": wbvalueline}).text.replace("&&&START&&&", "")
 
 m_value, tsl_value = urllib.parse.parse_qs(urllib.parse.urlparse(json.loads(response)["location"]).query).get('m', [''])[0], urllib.parse.parse_qs(urllib.parse.urlparse(json.loads(response)["location"]).query).get('tsl', [''])[0]
 
@@ -103,22 +106,23 @@ if json.loads(response)["code"] == 70016:
     exit()
 
 region_urls = {
-    "india": "in-unlock.update.intl.miui.com",
-    "global": "unlock.update.intl.miui.com",
-    "china": "unlock.update.miui.com",
-    "russia": "ru-unlock.update.intl.miui.com",
-    "europe": "eu-unlock.update.intl.miui.com"
+    "india": "https://in-unlock.update.intl.miui.com",
+    "global": "https://unlock.update.intl.miui.com",
+    "china": "https://unlock.update.miui.com",
+    "russia": "https://ru-unlock.update.intl.miui.com",
+    "europe": "https://eu-unlock.update.intl.miui.com"
 }
 
-result2 = re.sub(r'[^/]+\.com', lambda match: region_urls.get(region, ''), response)
+url= region_urls.get(region, '')
 
-url = re.search(r'([^/]+)/sts', result2).group(1)
+result2 = response.replace(response.split('"location":"')[1].split('/sts?d=')[0], url)
 
 data = json.loads(result2)
 
 ssecurity, psecurity, userid, c_userid, code, nonce, location = (data["ssecurity"], data["psecurity"], data["userId"], data["cUserId"], data["code"], data["nonce"], data["location"])
 
-response_cookies = requests.Session().get(location + "&clientSign=" + urllib.parse.quote_plus(b64encode(hashlib.sha1(f"nonce={nonce}".encode("utf-8") + b"&" + ssecurity.encode("utf-8")).digest()))).cookies
+response_cookies = session.get( location + "&clientSign=" + urllib.parse.quote_plus(b64encode(hashlib.sha1(f"nonce={nonce}".encode("utf-8") + b"&" + ssecurity.encode("utf-8")).digest())), headers=headers ).cookies
+
 cookies = response_cookies
 
 if not cookies:
@@ -131,13 +135,13 @@ else:
 params = {k.encode("utf-8") if isinstance(k, str) else k: v.encode("utf-8") if isinstance(v, str) else b64encode(json.dumps(v).encode("utf-8")) if not isinstance(v, bytes) else v for k, v in {"appId": "1", "data": {"clientId": "2", "clientVersion": "5.5.224.55", "language": "en", "operate": "unlock", "pcId": hashlib.md5(wbvalueline.encode("utf-8")).hexdigest(), "product": productname, "deviceInfo": {"product": productname}, "deviceToken": tokenname}
 }.items()}
 
-cipher = AES.new(b64decode(ssecurity), AES.MODE_CBC, b"0102030405060708")
+psiggn = bytes.fromhex("327442656f45794a54756e6d57554771376251483241626e306b324e686875724f61714266797843754c56676e3441566a3773776361776535337544556e6f")
 
 def get_params(sep):
     return b"POST" + sep + "/api/v3/ahaUnlock".encode("utf-8") + sep + b"&".join([k + b"=" + v for k, v in params.items()])
 
 def add_sign():
-    params[b"sign"] = binascii.hexlify(hmac.digest(bytes.fromhex("327442656f45794a54756e6d57554771376251483241626e306b324e686875724f61714266797843754c56676e3441566a3773776361776535337544556e6f"), get_params(b"\n"), "sha1"))
+    params[b"sign"] = binascii.hexlify(hmac.digest(psiggn, get_params(b"\n"), "sha1"))
 
 def _encrypt(value):
     return b64encode(AES.new(b64decode(ssecurity), AES.MODE_CBC, b"0102030405060708").encrypt((lambda s: s + (16 - len(s) % 16) * bytes([16 - len(s) % 16]))(value)))
@@ -163,19 +167,18 @@ def run():
     return json.loads(send())
 
 def send():
-    response = requests.request("POST", Url(scheme="https", host=url, path="/api/v3/ahaUnlock").url, data=params, headers={"User-Agent": "XiaomiPCSuite"}, cookies=cookies)
+    response = session.request("POST", Url(host=url, path="/api/v3/ahaUnlock").url, data=params, headers=headers, cookies=cookies)
     response.raise_for_status()
     return _decrypt(response.text)
 
 def unlock_device_request(endpoint, params):
     request_params = {k.encode("utf-8") if isinstance(k, str) else k: v.encode("utf-8") if isinstance(v, str) else b64encode(json.dumps(v).encode("utf-8")) if not isinstance(v, bytes) else v for k, v in params.items()}
-    cipher = AES.new(b64decode(ssecurity), AES.MODE_CBC, b"0102030405060708")
 
     def get_request_params(sep):
         return b"POST" + sep + endpoint.encode("utf-8") + sep + b"&".join([k + b"=" + v for k, v in request_params.items()])
 
     def add_sign():
-        request_params[b"sign"] = binascii.hexlify(hmac.digest(bytes.fromhex("327442656f45794a54756e6d57554771376251483241626e306b324e686875724f61714266797843754c56676e3441566a3773776361776535337544556e6f"), get_request_params(b"\n"), "sha1"))
+        request_params[b"sign"] = binascii.hexlify(hmac.digest(psiggn, get_request_params(b"\n"), "sha1"))
 
     def _encrypt(value):
         return b64encode(AES.new(b64decode(ssecurity), AES.MODE_CBC, b"0102030405060708").encrypt((lambda s: s + (16 - len(s) % 16) * bytes([16 - len(s) % 16]))(value)))
@@ -201,7 +204,7 @@ def unlock_device_request(endpoint, params):
         return json.loads(send())
 
     def send():
-        response = requests.request("POST", Url(scheme="https", host=url, path=endpoint).url, data=request_params, headers={"User-Agent": "XiaomiPCSuite"}, cookies=cookies)
+        response = session.request("POST", Url(host=url, path=endpoint).url, data=request_params, headers=headers, cookies=cookies)
         response.raise_for_status()
         return _decrypt(response.text)
 
@@ -209,6 +212,7 @@ def unlock_device_request(endpoint, params):
 
 add_nonce()
 result = run()
+session.close()
 
 log_m = "\n(Please share /sdcard/Download/log.txt on github.com/offici5l/MiTool/issues/5 or t.me/Offici5l_Group if you want assistance in improving the tool)\n"
 
@@ -241,6 +245,8 @@ if "encryptData" in result:
         print("Cancel unlock...")
         print(log_m)
 else:
-    result_str = json.dumps(result, indent=2, ensure_ascii=False, separators=('\n', ': '))[1:-1].replace('"', '')
-    print(colored(result_str, 'green'))
+    formatted_result = json.dumps(result, indent=2, ensure_ascii=False, separators=('\n', ': '))[1:-1].replace('"', '')
+    framed_result = colored(f"{'='*10} Result {'='*10}\n{formatted_result}\n{'='*27}", 'green')
+    print(framed_result)
     print(log_m)
+
