@@ -9,11 +9,14 @@ without pc(with termux)
 <div align="left">
 
 ### Description:
-<sub>- MiTool is a tool to retrieve the encryptData(token) for Xiaomi devices, with `unlockbootloader.py`, which requires essential packages such as Python, pycryptodomex, and requests.. These packages will be installed via the `install.sh`.</sub>
+<sub>- MiTool is a tool to retrieve the encryptData(token) for Xiaomi devices, with unlockbootloader.py. for " unlock bootloader ".</sub>
 
-<sub>- To obtain device product and device token and unlocking process, we need `fastboot` tool sourced from [nohajc](https://github.com/nohajc/termux-adb). will also be installed using `install.sh`</sub>
+### To-Do List
 
-[Additionally](#to-do-list), MiTool includes simple features, such as the ability to flash Fastboot ROM and Recovery ROM with `flashrecoveryrom.py` and `flashfastbootrom.py`
+- [x] [Flash Fastboot ROM]. command:`mitool (Then choose number 1)`
+- [x] [Flash Recovery Rom]. command:`mitool (Then choose number 2)`
+- [x] [Unlock Xiaomi Bootloader]. command:`mitool (Then choose number 3)`
+- [x] [root device]. command:`adb sideload patch/Magisk.zip`
 
 <div align="left">
 
@@ -24,7 +27,6 @@ without pc(with termux)
 <b>2.Install </b> <a href="https://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk">Termux API</a>
 
 3.From termux command line:
-
 
   ```bash
 termux-setup-storage
@@ -39,10 +41,3 @@ run command:
 mitool
 ```
 
-
-### To-Do List
-
-- [x] [Flash Fastboot ROM]. command:`mitool (Then choose number 1)`
-- [x] [Flash Recovery Rom]. command:`mitool (Then choose number 2)`
-- [x] [Unlock Xiaomi Bootloader]. command:`mitool (Then choose number 3)`
-- [x] [root device]. command:`adb sideload patch/Magisk.zip`
