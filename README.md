@@ -9,7 +9,7 @@ without pc(with termux)
 <div align="left">
 
 ### Description:
-<sub>- MiTool is a tool to retrieve the encryptData(token) for Xiaomi devices, with unlockbootloader.py. for " unlock bootloader ".</sub>
+MiTool is a tool to retrieve the encryptData(token) for Xiaomi devices, with unlockbootloader.py. for " unlock bootloader "
 
 ### To-Do List
 
