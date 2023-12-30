@@ -68,9 +68,8 @@ if "wb_value:" not in open(filename).read():
     wbinput = input("\nEnter Link: ")
     wbinputmatch = wbinput.split('sts?d=')[1].split('&ticket')[0]
     if wbinputmatch:
-        wbvalue = wbinputmatch.group(0).split('=')[1]
         with open(filename, "a") as file:
-            file.write(f"\nwb_value: {wbvalue}\n")
+            file.write(f"\nwb_value: {wbinputmatch}\n")
     else:
         print("Invalid URL")
         exit()
