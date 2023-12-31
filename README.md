@@ -40,7 +40,7 @@ curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | ba
 or install with wget
 
   ```bash
-pkg install wget && wget -O - https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
+yes | pkg install wget && wget -O - https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
   ```
 
 **Usage:**
