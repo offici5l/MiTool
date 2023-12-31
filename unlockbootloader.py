@@ -24,7 +24,7 @@ while os.path.isfile(filename):
     pr = input(f"\ndo you want to use previous information in \033[92m{filename}\033[0m (yes/no) ? : ").lower()
     if pr == "yes":
         break
-    elif use_previous == "no":
+    elif pr == "no":
         os.remove(filename)
         break
     else:
