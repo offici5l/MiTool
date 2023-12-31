@@ -1,111 +1,91 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-echo -e "
-\033[32mupdate pkg ...\033[0m
-" && yes | pkg update && echo -e "
-\033[32mupgrade pkg ...\033[0m
-" && yes | pkg upgrade
+echo -e "\033[32mpkg update ...\033[0m" && yes | pkg update
+echo -e "\033[32mpkg upgrade ...\033[0m" && yes | pkg upgrade
 
-if command -v openssl &>/dev/null; then
-    echo -e "
-\033[32mopenssl is installed\033[0m
-"
+if [ ! -f "$PREFIX/share/doc/gnupg/OpenPGP" ]; then
+  yes | pkg install gnupg
 else
-    pkg install openssl-tool
-    pkg install openssl
+  echo -e "\033[32mgnupg is installed.\033[0m"
 fi
 
-if command -v coreutils &>/dev/null; then
-    echo -e "
-\033[32mcoreutils is installed\033[0m
-"
+if [ ! -f "$PREFIX/bin/coreutils" ]; then
+  yes | pkg install coreutils
 else
-    pkg install coreutils
+  echo -e "\033[32mcoreutils is installed.\033[0m"
 fi
 
-if command -v gpg &>/dev/null; then
-    echo -e "
-\033[32mGnuPG is installed.\033[0m
-"
+if [ ! -f "$PREFIX/bin/wget" ]; then
+  yes | pkg install wget
 else
-    yes | pkg install gnupg
+  echo -e "\033[32mwget is installed.\033[0m"
 fi
 
-if command -v wget &>/dev/null; then
-    echo -e "
-\033[32mwget is installed.\033[0m
-"
+if [ ! -f "$PREFIX/bin/openssl" ]; then
+  yes | pkg install openssl
+  yes | pkg install openssl-tool
 else
-    yes | pkg install wget
+  echo -e "\033[32mopenssl is installed.\033[0m"
 fi
+
+if [ ! -f "$PREFIX/bin/pv" ]; then
+  yes | pkg install pv
+else
+  echo -e "\033[32mpv is installed.\033[0m"
+fi
+
+if [ ! -f "$PREFIX/bin/python" ]; then
+  yes | pkg install python
+else
+  echo -e "\033[32mpython is installed.\033[0m"
+fi
+
+if [ ! -f "$PREFIX/lib/python3.11/site-packages/requests/sessions.py" ]; then
+  yes | pip install requests
+else
+  echo -e "\033[32mrequests is installed.\033[0m"
+fi
+
+if [ ! -f "$PREFIX/lib/python3.11/site-packages/pyshorteners/base.py" ]; then
+  yes | pip3 install pyshorteners
+else
+  echo -e "\033[32mpyshorteners is installed.\033[0m"
+fi
+
+if [ ! -f "$PREFIX/lib/python3.11/site-packages/Cryptodome/Random/random.py" ]; then
+  yes | pip3 install pycryptodomex
+else
+  echo -e "\033[32mpycryptodomex is installed.\033[0m"
+fi
+
+if [ ! -f "$PREFIX/lib/python3.11/site-packages/termcolor/termcolor.py" ]; then
+  yes | pip install termcolor
+else
+  echo -e "\033[32mtermcolor is installed.\033[0m"
+fi
+
+echo -e "\033[32mapt-get update ...\033[0m" && yes | apt-get update
+echo -e "\033[32maot-get upgrade ...\033[0m" && yes | apt-get upgrade
 
 if [ ! -f "$PREFIX/etc/apt/sources.list.d/termux-adb.list" ]; then
   mkdir -p $PREFIX/etc/apt/sources.list.d
   echo -e "deb https://nohajc.github.io termux extras" > $PREFIX/etc/apt/sources.list.d/termux-adb.list
   wget -qP $PREFIX/etc/apt/trusted.gpg.d https://nohajc.github.io/nohajc.gpg
+  yes | apt update
+  yes | apt install termux-adb
+  cp $PREFIX/bin/termux-adb $PREFIX/bin/adb && cp $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot
 else
-  echo -e "
-\033[32msources exist.\033[0m
-"
-fi
-
-echo -e "
-\033[32mupdate adb and fastboot ...\033[0m
-"
-yes | apt update && yes | pkg remove termux-adb &>/dev/null && apt clean && pkg install termux-adb && cp $PREFIX/bin/termux-adb $PREFIX/bin/adb && cp $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot
-
-if command -v pv &>/dev/null; then
-    echo -e "
-\033[32mpv is installed.\033[0m
-"
-else
-    pkg install pv
-fi
-
-if command -v python &>/dev/null || command -v python3 &>/dev/null; then
-    echo -e "
-\033[32mpython is installed.\033[0m
-"
-else
-    yes | pkg install python
-fi
-
-if python3 -c "import requests" &>/dev/null || python -c "import requests" &>/dev/null; then
-    echo -e "
-\033[32mrequests is installed.\033[0m
-"
-else
-    pip install requests
-fi
-
-if python3 -c "import pyshorteners" &>/dev/null; then
-    echo -e "
-\033[32mpyshorteners is installed.\033[0m
-"
-else
-    pip3 install pyshorteners
-fi
-
-if python3 -c "import Cryptodome" &>/dev/null; then
-    echo -e "
-\033[32mCryptodome is installed.\033[0m
-"
-else
-    pip3 install pycryptodomex
-fi
-
-if python -c "import termcolor" &>/dev/null || python3 -c "import termcolor" &>/dev/null; then
-    echo -e "
-\033[32mtermcolor is installed.\033[0m
-"
-else
-    pip install termcolor
+  echo -e "\033[32madb&fastboot is installed.\033[0m"
+  echo -e "\033[32mupdate adb&fastboot ...\033[0m"
+  yes | apt install termux-adb
+  cp $PREFIX/bin/termux-adb $PREFIX/bin/adb && cp $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot
 fi
 
 files=("mitool" "flashfastbootrom.py" "unlockbootloader.py" "flashrecoveryrom.py" "root.py")
 
 for file in "${files[@]}"; do
-    curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/$file" -o "$PREFIX/bin/$file" &&
+    echo -e "\033[32mupdate $file...\033[0m"
+    curl "https://raw.githubusercontent.com/offici5l/MiTool/master/$file" -o "$PREFIX/bin/$file" &&
     chmod +x "$PREFIX/bin/$file"
 done
 
