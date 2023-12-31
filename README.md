@@ -35,7 +35,7 @@ termux-setup-storage
 
 install with curl
   ```bash
-curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
+curl https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
   ```
 or install with wget
 
