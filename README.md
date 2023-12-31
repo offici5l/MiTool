@@ -33,10 +33,11 @@ MiTool is a tool to retrieve the encryptData(token) for Xiaomi devices, with unl
 termux-setup-storage
   ```
 
+install with curl
   ```bash
 curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
   ```
-*or*
+or install with wget
 
   ```bash
 pkg install wget && wget -O - https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
