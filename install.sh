@@ -1,8 +1,10 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 echo -e "
-\033[32mupdate&upgrade pkg ...\033[0m
-" && yes | pkg upgrade && yes | pkg update && yes | pkg upgrade
+\033[32mupdate pkg ...\033[0m
+" && yes | pkg update && echo -e "
+\033[32mupgrade pkg ...\033[0m
+" && yes | pkg upgrade
 
 if command -v openssl &>/dev/null; then
     echo -e "
@@ -47,29 +49,10 @@ else
 "
 fi
 
-if command -v termux-adb &>/dev/null; then
-    echo -e "
-\033[32madb is installed.\033[0m
+echo -e "
+\033[32mupdate adb and fastboot ...\033[0m
 "
-    cp $PREFIX/bin/termux-adb $PREFIX/bin/adb
-else
-    pkg uninstall termux-adb &>/dev/null
-    apt update &>/dev/null
-    apt install termux-adb
-    cp $PREFIX/bin/termux-adb $PREFIX/bin/adb
-fi
-
-if command -v termux-fastboot &>/dev/null; then
-    echo -e "
-\033[32mfastboot is installed.\033[0m
-"
-    cp $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot
-else
-    pkg uninstall termux-adb &>/dev/null
-    apt update &>/dev/null
-    apt install termux-adb
-    cp $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot
-fi
+yes | apt update && yes | pkg remove termux-adb &>/dev/null && apt clean && pkg install termux-adb && cp $PREFIX/bin/termux-adb $PREFIX/bin/adb && cp $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot
 
 if command -v pv &>/dev/null; then
     echo -e "
