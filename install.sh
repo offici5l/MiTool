@@ -3,6 +3,13 @@
 echo -e "\033[32mpkg update ...\033[0m" && yes | pkg update
 echo -e "\033[32mpkg upgrade ...\033[0m" && yes | pkg upgrade
 
+if [ ! -f "$PREFIX/var/lib/dpkg/info/openssl-tool.list" ]; then
+  yes | pkg install openssl-tool
+  yes | pkg install openssl
+else
+  echo -e "\033[32mopenssl-tool is installed.\033[0m"
+fi
+
 if [ ! -f "$PREFIX/share/doc/gnupg/OpenPGP" ]; then
   yes | pkg install gnupg
 else
@@ -19,13 +26,6 @@ if [ ! -f "$PREFIX/bin/wget" ]; then
   yes | pkg install wget
 else
   echo -e "\033[32mwget is installed.\033[0m"
-fi
-
-if [ ! -f "$PREFIX/bin/openssl" ]; then
-  yes | pkg install openssl
-  yes | pkg install openssl-tool
-else
-  echo -e "\033[32mopenssl is installed.\033[0m"
 fi
 
 if [ ! -f "$PREFIX/bin/pv" ]; then
