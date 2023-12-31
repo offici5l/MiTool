@@ -36,7 +36,7 @@ termux-setup-storage
   ```bash
 curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
   ```
-# or
+*or*
 
   ```bash
 pkg install wget && wget -O - https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
