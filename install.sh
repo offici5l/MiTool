@@ -26,7 +26,7 @@ if command -v gpg &>/dev/null; then
 \033[32mGnuPG is installed.\033[0m
 "
 else
-    pkg install gnupg
+    yes | pkg install gnupg
 fi
 
 if command -v wget &>/dev/null; then
@@ -34,7 +34,7 @@ if command -v wget &>/dev/null; then
 \033[32mwget is installed.\033[0m
 "
 else
-    pkg install wget
+    yes | pkg install wget
 fi
 
 if [ ! -f "$PREFIX/etc/apt/sources.list.d/termux-adb.list" ]; then
