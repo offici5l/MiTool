@@ -1,10 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 echo -e "
-\033[32mupdate pkg ...\033[0m
-" && yes | pkg update && echo -e "
-\033[32mupgrade pkg ...\033[0m
-" && yes | pkg upgrade
+\033[32mupdate&upgrade pkg ...\033[0m
+" && yes | pkg upgrade && yes | pkg update && yes | pkg upgrade
 
 if command -v openssl &>/dev/null; then
     echo -e "
