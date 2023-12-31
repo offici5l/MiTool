@@ -51,38 +51,24 @@ if command -v termux-adb &>/dev/null; then
     echo -e "
 \033[32madb is installed.\033[0m
 "
+    cp $PREFIX/bin/termux-adb $PREFIX/bin/adb
 else
     pkg uninstall termux-adb &>/dev/null
     apt update &>/dev/null
     apt install termux-adb
+    cp $PREFIX/bin/termux-adb $PREFIX/bin/adb
 fi
 
 if command -v termux-fastboot &>/dev/null; then
     echo -e "
 \033[32mfastboot is installed.\033[0m
 "
+    cp $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot
 else
     pkg uninstall termux-adb &>/dev/null
     apt update &>/dev/null
     apt install termux-adb
-fi
-
-if command -v adb &>/dev/null; then
-    echo -e "
-\033[32madb file exist.\033[0m
-"
-else
-    cp $PREFIX/bin/termux-adb $PREFIX/bin/adb
-    echo "fix adb ..."
-fi
-
-if command -v fastboot &>/dev/null; then
-    echo -e "
-\033[32mfastboot file exist.\033[0m
-"
-else
     cp $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot
-    echo "fix fastboot ..."
 fi
 
 if command -v pv &>/dev/null; then
