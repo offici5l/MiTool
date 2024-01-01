@@ -26,7 +26,7 @@ MiTool is a tool to retrieve the encryptData(token) for Xiaomi devices, with unl
 
 <b>1.Install Termux</b>
 for
-<a href="https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0%2Bgithub-debug_arm64-v8a.apk">ARM64-v8a</a>, <a href="https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0%2Bgithub-debug_armeabi-v7a.apk">armeabi-v7a</a>, or <a href="https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0%2Bgithub-debug_universal.apk">Universal</a>
+<a href="https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0%2Bgithub-debug_arm64-v8a.apk">ARM64-v8a</a>/<a href="https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0%2Bgithub-debug_armeabi-v7a.apk">armeabi-v7a</a>, or <a href="https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0%2Bgithub-debug_universal.apk">Universal</a>
 
 <b>2.Install </b> <a href="https://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk">Termux API</a>
 
