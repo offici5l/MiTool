@@ -33,17 +33,9 @@ for <a href="https://github.com/termux/termux-app/releases/download/v0.118.0/ter
   ```bash
 termux-setup-storage
   ```
-
-install with curl
   ```bash
 curl https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
   ```
-or install with wget
-
-  ```bash
-yes | pkg install wget && wget -O - https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
-  ```
-
 **Usage:**
 run command:
 ```bash
