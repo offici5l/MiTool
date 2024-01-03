@@ -64,8 +64,8 @@ else
   echo -e "\033[32mtermcolor is installed.\033[0m"
 fi
 
-echo -e "\033[32mapt-get update ...\033[0m" && yes | apt-get update
-echo -e "\033[32maot-get upgrade ...\033[0m" && yes | apt-get upgrade
+echo -e "\033[32mapt-get update ...\033[0m" && yes | apt-get update > /dev/null 2>&1
+echo -e "\033[32mapt-get upgrade ...\033[0m" && yes | apt-get upgrade > /dev/null 2>&1
 
 if [ ! -f "$PREFIX/etc/apt/sources.list.d/termux-adb.list" ]; then
   mkdir -p $PREFIX/etc/apt/sources.list.d
@@ -77,7 +77,7 @@ if [ ! -f "$PREFIX/etc/apt/sources.list.d/termux-adb.list" ]; then
 else
   echo -e "\033[32madb&fastboot is installed.\033[0m"
   echo -e "\033[32mupdate adb&fastboot ...\033[0m"
-  yes | apt install termux-adb
+  yes | apt install termux-adb > /dev/null 2>&1
   cp $PREFIX/bin/termux-adb $PREFIX/bin/adb && cp $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot
 fi
 
@@ -85,7 +85,7 @@ files=("mitool" "flashfastbootrom.py" "unlockbootloader.py" "flashrecoveryrom.py
 
 for file in "${files[@]}"; do
     echo -e "\033[32mupdate $file...\033[0m"
-    curl -m 0 "https://raw.githubusercontent.com/offici5l/MiTool/master/$file" -o "$PREFIX/bin/$file" &&
+    curl -m 0 -s "https://raw.githubusercontent.com/offici5l/MiTool/master/$file" -o "$PREFIX/bin/$file" &&
     chmod +x "$PREFIX/bin/$file"
 done
 
