@@ -89,9 +89,7 @@ for file in "${files[@]}"; do
     chmod +x "$PREFIX/bin/$file"
 done
 
-current_version=$(cat "$PREFIX/bin/mitoolV")
-
-version=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/v)
+version=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV)
 printf "
 \e[1;32m[Current Version:%s]\e[0m\n" "$version"
 
