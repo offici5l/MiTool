@@ -85,11 +85,11 @@ files=("mitool" "flashfastbootrom.py" "unlockbootloader.py" "flashrecoveryrom.py
 
 for file in "${files[@]}"; do
     echo -e "\033[32mupdate $file...\033[0m"
-    curl "https://raw.githubusercontent.com/offici5l/MiTool/master/$file" -o "$PREFIX/bin/$file" &&
+    curl -m 0 "https://raw.githubusercontent.com/offici5l/MiTool/master/$file" -o "$PREFIX/bin/$file" &&
     chmod +x "$PREFIX/bin/$file"
 done
 
-version=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | awk -F '(' '{print $2}' | awk -F ')' '{print $1}')
+version=$(curl -m 0 -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | awk -F '(' '{print $2}' | awk -F ')' '{print $1}')
 printf "
 \e[1;32m[Current Version:%s]\e[0m\n" "$version"
 
