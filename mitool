@@ -3,6 +3,24 @@
 echo "
 https://github.com/offici5l/MiTool
 "
+current_version=$(cat "$PREFIX/bin/mitoolV")
+latest_version=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/v)
+printf "\e[1;32mVersion [current:%s | latest:%s]\e[0m\n" "$current_version" "$latest_version"
+
+if [ "$(printf "$current_version\n$latest_version" | sort -V | tail -n 1)" != "$current_version" ]; then
+    read -p "new update available! update MiTool? (yes/no): " update
+    if [ "$update" == "yes" ]; then
+        curl https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
+    elif [ "$update" == "no" ]; then
+        echo "skip update .."
+    else
+        echo "Invalid choice! skip update .."
+    fi
+else
+    echo
+fi
+
+echo
 echo "1. Flash-Fastboot-ROM"
 echo "2. Flash-Recovery-ROM"
 echo "3. Unlock-Bootloader"
