@@ -1,8 +1,8 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 echo "https://github.com/offici5l/MiTool"
-current_version=$(cat "$PREFIX/bin/mitoolV")
-latest_version=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV)
+current_version=$(cat "$PREFIX/bin/mitoolV" | awk -F '(' '{print $2}' | awk -F ')' '{print $1}')
+latest_version=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | awk -F '(' '{print $2}' | awk -F ')' '{print $1}')
 printf "\e[1;32mVersion [current:%s | latest:%s]\e[0m\n" "$current_version" "$latest_version"
 
 if [ "$(printf "$current_version\n$latest_version" | sort -V | tail -n 1)" != "$current_version" ]; then
