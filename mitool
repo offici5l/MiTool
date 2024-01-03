@@ -13,7 +13,7 @@ if [ "$(printf "$current_version\n$latest_version" | sort -V | tail -n 1)" != "$
 $update
 update MiTool? : " update
     if [ "$update" == "u" ]; then
-        curl -m 0 https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
+        curl -m 0 -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | sed '/pkg update/ s/^#*/#/' | sed '/pkg upgrade/ s/^#*/#/' | bash
         exit
     else
         echo "skip update .."
