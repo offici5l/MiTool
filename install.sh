@@ -81,7 +81,7 @@ else
   cp $PREFIX/bin/termux-adb $PREFIX/bin/adb && cp $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot
 fi
 
-files=("mitool" "flashfastbootrom.py" "unlockbootloader.py" "flashrecoveryrom.py" "root.py")
+files=("mitool" "flashfastbootrom.py" "unlockbootloader.py" "flashrecoveryrom.py" "root.py" "mitoolV")
 
 for file in "${files[@]}"; do
     echo -e "\033[32mupdate $file...\033[0m"
@@ -89,6 +89,12 @@ for file in "${files[@]}"; do
     chmod +x "$PREFIX/bin/$file"
 done
 
-echo -e "
-use command: \033[32mmitool\033[0m
+current_version=$(cat "$PREFIX/bin/mitoolV")
+
+version=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/v)
+printf "
+\e[1;32m[Current Version:%s]\e[0m\n" "$version"
+
+printf "
+use command: \e[1;32mmitool\e[0m\n
 "
