@@ -2,18 +2,18 @@
 
 echo "https://github.com/offici5l/MiTool"
 current_version=$(cat "$PREFIX/bin/mitoolV" | awk -F '(' '{print $2}' | awk -F ')' '{print $1}')
-latest_version=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | awk -F '(' '{print $2}' | awk -F ')' '{print $1}')
+latest_version=$(curl -m 0 -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | awk -F '(' '{print $2}' | awk -F ')' '{print $1}')
 printf "\e[1;32mVersion [current:%s | latest:%s]\e[0m\n" "$current_version" "$latest_version"
 
 if [ "$(printf "$current_version\n$latest_version" | sort -V | tail -n 1)" != "$current_version" ]; then
     echo "(type u to update or Enter to skip..)
 "
-    update=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | sed -n 's/(\(.*\))/ /p')
+    update=$(curl -m 0 -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | sed -n 's/(\(.*\))/ /p')
     read -p $"new update available!
 $update
 update MiTool? : " update
     if [ "$update" == "u" ]; then
-        curl https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
+        curl -m 0 https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
         exit
     else
         echo "skip update .."
