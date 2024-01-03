@@ -85,7 +85,7 @@ files=("mitool" "flashfastbootrom.py" "unlockbootloader.py" "flashrecoveryrom.py
 
 for file in "${files[@]}"; do
     echo -e "\033[32mupdate $file...\033[0m"
-    curl -m 0 -s "https://raw.githubusercontent.com/offici5l/MiTool/master/$file" -o "$PREFIX/bin/$file" &&
+    curl -m 0 "https://raw.githubusercontent.com/offici5l/MiTool/master/$file" -o "$PREFIX/bin/$file" &&
     chmod +x "$PREFIX/bin/$file"
 done
 
