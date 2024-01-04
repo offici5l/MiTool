@@ -81,15 +81,15 @@ else
   cp $PREFIX/bin/termux-adb $PREFIX/bin/adb && cp $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot
 fi
 
-files=("mitool" "flashfastbootrom.py" "unlockbootloader.py" "flashrecoveryrom.py" "root.py" "mitoolV" "flashcustomrecovery.py")
+files=("mitool" "flashfastbootrom.py" "unlockbootloader.py" "flashrecoveryrom.py" "root.py" "flashcustomrecovery.py" "mitoolV")
 
 for file in "${files[@]}"; do
     echo -e "\033[32mupdate $file...\033[0m"
-    curl -m 0 "https://raw.githubusercontent.com/offici5l/MiTool/master/$file" -o "$PREFIX/bin/$file" &&
+    curl "https://raw.githubusercontent.com/offici5l/MiTool/master/$file" -o "$PREFIX/bin/$file" &&
     chmod +x "$PREFIX/bin/$file"
 done
 
-version=$(curl -m 0 -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | awk -F '(' '{print $2}' | awk -F ')' '{print $1}')
+version=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | awk -F '(' '{print $2}' | awk -F ')' '{print $1}')
 printf "
 \e[1;32m[Current Version:%s]\e[0m\n" "$version"
 
