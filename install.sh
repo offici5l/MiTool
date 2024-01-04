@@ -81,7 +81,7 @@ else
   cp $PREFIX/bin/termux-adb $PREFIX/bin/adb && cp $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot
 fi
 
-files=("mitool" "flashfastbootrom.py" "unlockbootloader.py" "flashrecoveryrom.py" "root.py" "mitoolV")
+files=("mitool" "flashfastbootrom.py" "unlockbootloader.py" "flashrecoveryrom.py" "root.py" "mitoolV" "flashcustomrecovery.py")
 
 for file in "${files[@]}"; do
     echo -e "\033[32mupdate $file...\033[0m"
