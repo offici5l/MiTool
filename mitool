@@ -27,9 +27,10 @@ echo "1. Flash-Fastboot-ROM"
 echo "2. Flash-Recovery-ROM"
 echo "3. Unlock-Bootloader"
 echo "4. Root"
+echo "5. Flash-Custom-Recovery"
 
 read -p "
-Enter your choice (1/2/3/4): " choice
+Enter your choice (1/2/3/4/5): " choice
 
 if [ "$choice" == "1" ]; then
     python3 "$PREFIX/bin/flashfastbootrom.py"
@@ -39,6 +40,8 @@ elif [ "$choice" == "3" ]; then
     python3 "$PREFIX/bin/unlockbootloader.py"
 elif [ "$choice" == "4" ]; then
     python3 "$PREFIX/bin/root.py"
+elif [ "$choice" == "5" ]; then
+    python3 "$PREFIX/bin/flashcustomrecovery.py"
 else
     echo "
 Invalid choice
