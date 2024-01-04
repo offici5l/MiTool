@@ -1,20 +1,20 @@
 import os
 
-print("Flashing Custom Recovery...")
+print("\Flashing Custom Recovery...\n")
 
 ROM_FOLDER = "/sdcard/Download/mi-flash-CustomRecovery"
 
 if not os.path.exists(ROM_FOLDER):
     os.makedirs(ROM_FOLDER)
 
-input("Please make sure to place recovery.img file in {} folder .. Then press Enter".format(ROM_FOLDER))
+input("\nPlease make sure to place recovery.img file in {} folder .. Then press Enter\n".format(ROM_FOLDER))
 
 img_files = [f for f in os.listdir(ROM_FOLDER) if f.endswith(".img")]
 
 if img_files:
     input("\nMake sure your device is in fastboot mode. Connect your device using OTG, then press Enter when ready\n")
 else:
-    print("Could not find recovery.img file.")
+    print(f"\nCould not find recovery.img file in {ROM_FOLDER}.\n")
     exit(1)
 
 while True:
