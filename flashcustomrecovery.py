@@ -1,31 +1,41 @@
 import os
+import zipfile
 
-print("\Flashing Custom Recovery...\n")
+print("\nFlashing Custom Recovery...\n")
 
-ROM_FOLDER = "/sdcard/Download/mi-flash-CustomRecovery"
+C_FOLDER = "/sdcard/Download/mi-flash-CustomRecovery"
 
-if not os.path.exists(ROM_FOLDER):
-    os.makedirs(ROM_FOLDER)
+if not os.path.exists(C_FOLDER):
+    os.makedirs(C_FOLDER)
 
-input("\nmake sure to place *.img (recovery) file in {} folder .. Then press Enter\n".format(ROM_FOLDER))
+input("\nMake sure to place the recovery file in the {} folder, then press Enter\n".format(C_FOLDER))
 
 while True:
-    img_files = [f for f in os.listdir(ROM_FOLDER) if f.endswith(".img")]
-    if not img_files:
-        input(f"\nCould not find *.img file in {ROM_FOLDER}.\n"
-              f"\nPlease make sure to place *.img file in {ROM_FOLDER} folder. Press Enter when ready.\n")
-        continue
+    img_files = [f for f in os.listdir(C_FOLDER) if f.endswith(".img")]
+    zip_files = [f for f in os.listdir(C_FOLDER) if f.endswith(".zip")]
+
     if img_files:
-        input("\nMake sure your device is in fastboot mode. Connect your device using OTG, then press Enter when ready\n")
         break
+    elif zip_files:
+        zip_file = os.path.join(C_FOLDER, zip_files[0])
+        recovery_img = "recovery.img"
+        
+        with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+            zip_ref.extract(recovery_img, C_FOLDER)
+        
+        break
+    else:
+        input("\nPlease make sure to place the recovery file in the {} folder, then press Enter\n".format(C_FOLDER))
+        continue
+
+input("\nMake sure your device is in fastboot mode. Connect your device using OTG, then press Enter when ready\n")
 
 while True:
     status = os.popen("fastboot devices | grep -o 'fastboot'").read().strip()
     if status == "fastboot":
         break
     else:
-        input("\nplease Verify that the device is in fastboot mode! If so, check that it is connected via OTG! then press Enter\n")
+        input("\nVerify that the device is in fastboot mode! If so, check that it is connected via OTG! Then press Enter\n")
         continue
 
-
-os.system("fastboot flash recovery {}/{}".format(ROM_FOLDER, img_files[0]))
+os.system("fastboot flash recovery {}/{}".format(C_FOLDER, [f for f in os.listdir(C_FOLDER) if f.endswith(".img")][0]))
