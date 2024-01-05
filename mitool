@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-echo "https://github.com/offici5l/MiTool"
+echo "
+https://github.com/offici5l/MiTool"
 current_version=$(cat "$PREFIX/bin/mitoolV" | awk -F '(' '{print $2}' | awk -F ')' '{print $1}')
 latest_version=$(curl -m 3 -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | awk -F '(' '{print $2}' | awk -F ')' '{print $1}')
 printf "\e[1;32mVersion [current:%s | latest:%s]\e[0m\n" "$current_version" "$latest_version"
