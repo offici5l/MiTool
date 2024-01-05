@@ -1,7 +1,9 @@
-(1.4.1)
+(1.4.2)
 
 
 
 [
-- add: Flash Custom Recovery
+4. Root
+- delete flash with sidelaod mode
+- add: flash with fastboot mode
 ]
