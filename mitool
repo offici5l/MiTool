@@ -8,7 +8,7 @@ printf "\e[1;32mVersion [current:%s | latest:%s]\e[0m\n" "$current_version" "$la
 if [ "$(printf "$current_version\n$latest_version" | sort -V | tail -n 1)" != "$current_version" ]; then
     update=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | awk '/\[/,/\]/{if (!/\[|\]/) print}')
     printf "
-new update available!: \e[1;32m$update\e[0m\n
+new update available!:\n \e[1;32m$update\e[0m\n
 "
     read -p $"(type u to update or Enter to skip..)
 update MiTool? : " u
