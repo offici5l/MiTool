@@ -89,9 +89,6 @@ for file in "${files[@]}"; do
     chmod +x "$PREFIX/bin/$file"
 done
 
-version=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | awk -F '(' '{print $2}' | awk -F ')' '{print $1}')
-printf "
-\e[1;32m[Current Version:%s]\e[0m\n" "$version"
 
 printf "
 use command: \e[1;32mmitool\e[0m\n
