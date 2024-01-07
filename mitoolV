@@ -1,5 +1,7 @@
 (1.4.3)
 
 - add: flash Specific Partitions "dtbo.img,super.img,cust.img,userdata.img,Etc...". fastboot mode
+
 - add: flash ".zip". sidelaod mode
+
 - other improvements
