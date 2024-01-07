@@ -47,7 +47,7 @@ def decompress_and_flash_rom(tgz_file_name):
         print(f"\nError during extraction with tar (Exit Code: {return_code})\n")
         exit(1)
 
-    if all(os.path.exists(os.path.join(RF, file)) for file in ["flash_all_lock.sh", "flash_all.sh", flash_all_except_data_storage.sh]) and os.path.exists(os.path.join(RF, "images")):
+    if all(os.path.exists(os.path.join(RF, file)) for file in ["flash_all_lock.sh", "flash_all.sh", "flash_all_except_data_storage.sh"]) and os.path.exists(os.path.join(RF, "images")):
         flashOption = int(input(text1))
         if flashOption == 1:
             input(text2)
@@ -72,7 +72,7 @@ def decompress_and_flash_rom(tgz_file_name):
         exit(1)
 
 target_extension = ".tgz"
-target_files = ["flash_all_lock.sh", "flash_all.sh"]
+target_files = ["flash_all_lock.sh", "flash_all.sh", "flash_all_except_data_storage.sh"]
 target_folder = "images"
 
 result_paths = []
