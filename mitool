@@ -25,10 +25,11 @@ else
 fi
 
 echo
-echo -e " \e[1;32m1\e[0m. Flash-Fastboot-ROM"
-echo -e " \e[1;32m2\e[0m. Flash-Specific-Partitions-With-Fastboot"
-echo -e " \e[1;32m3\e[0m. Flash-Zip-With-Sideload"
-echo -e " \e[1;32m4\e[0m. Unlock-or-Lock-Bootloader"
+echo -e " \e[1;32m1\e[0m. Unlock-or-Lock-Bootloader"
+echo -e " \e[1;32m2\e[0m. Flash-Fastboot-ROM"
+echo -e " \e[1;32m3\e[0m. Flash-Specific-Partitions-With-Fastboot"
+echo -e " \e[1;32m4\e[0m. Flash-Zip-With-Sideload"
+
 
 echo -e "\n          [other: (\e[1;32mr\e[0m)oot , (\e[1;32mc\e[0m)ustom-recovery]\n"
 
@@ -40,13 +41,13 @@ else
 fi
 
 if [ "$choice" == "1" ]; then
-    python3 "$PREFIX/bin/flashfastbootrom.py"
-elif [ "$choice" == "2" ]; then
-    python3 "$PREFIX/bin/specificpartitions.py"
-elif [ "$choice" == "3" ]; then
-    python3 "$PREFIX/bin/flashwithsideloadmode.py"
-elif [ "$choice" == "4" ]; then
     python3 "$PREFIX/bin/unlockbootloader.py"
+elif [ "$choice" == "2" ]; then
+    python3 "$PREFIX/bin/flashfastbootrom.py"
+elif [ "$choice" == "3" ]; then
+    python3 "$PREFIX/bin/specificpartitions.py"
+elif [ "$choice" == "4" ]; then
+    python3 "$PREFIX/bin/flashwithsideloadmode.py"
 elif [ "$choice" == "c" ] || [ "$choice" == "custom-recovery" ]; then
     echo -e "\nFlashing Custom Recovery with fastboot mode...\n\nRequirements: recovery.img ,Bootloader unlocked\n"
     read -p "press Enter to continue..."
