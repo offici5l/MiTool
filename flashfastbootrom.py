@@ -1,6 +1,6 @@
 import os
 
-text1 = "\nChoose an option:\n\n\033[92m1 -\033[0m Flash without locking bootloader\n\033[92m2 -\033[0m Flash with lock bootloader\n\033[92m2 -\033[0m Flash all except data storage\n\nEnter the option number: "
+text1 = "\nChoose an option:\n\n\033[92m1 -\033[0m Flash without locking bootloader\n\033[92m2 -\033[0m Flash with lock bootloader\n\033[92m3 -\033[0m Flash all except data storage\n\nEnter the option number: "
 
 text2 = "\n\033[92mMake sure your device is connected in fastboot mode. Connect your device using OTG, then press Enter when ready.\033[0m\n"
 
