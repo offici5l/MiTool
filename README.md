@@ -13,12 +13,11 @@ MiTool is a tool to retrieve the encryptData(token) for Xiaomi devices, with unl
 
 ### MiTool To-Do List
 
-- [x] [Unlock Xiaomi Bootloader]
+- [x] [Unlock or Lock Bootloader]
 - [x] [Flash Fastboot ROM]
-- [x] [Flash Recovery ROM]
-- [x] [Root]
-- [x] [Flash Custom Recovery]
-- [x] [...]
+- [x] [Flash Specific Partitions]
+- [x] [Flash Zip]
+- [x] [Ather...]
 
 <div align="left">
 
