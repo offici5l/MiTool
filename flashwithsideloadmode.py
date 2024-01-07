@@ -3,7 +3,7 @@ import sys
 
 while True:
     if len(sys.argv) < 2:
-        target_filename = input("\nEnter target file name: ")
+        target_filename = input("\n\033[92mEnter target name\033[0m: ")
     else:
         target_filename = sys.argv[1]
 
