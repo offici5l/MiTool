@@ -31,7 +31,7 @@ def flash_selected_result(selected_result):
         input(text2)
         check_fastboot_mode()
         flash_all_except_data_storage = "flash_all_except_data_storage.sh"
-        os.system(f"sh {RF}/{flash_all_except_data_storage.sh}")
+        os.system(f"sh {RF}/{flash_all_except_data_storage}")
     else:
         print("\nInvalid option\n")
         exit(1)
@@ -63,7 +63,7 @@ def decompress_and_flash_rom(tgz_file_name):
             input(text2)
             check_fastboot_mode()
             flash_all_except_data_storage = "flash_all_except_data_storage.sh"
-            os.system(f"sh {RF}/{flash_all_except_data_storage.sh}")
+            os.system(f"sh {RF}/{flash_all_except_data_storage}")
         else:
             print("\nInvalid option\n")
             exit(1)
