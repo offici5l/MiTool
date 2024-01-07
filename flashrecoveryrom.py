@@ -1,21 +1,51 @@
 import os
+import sys
 
-print("Flashing Recovery ROM...")
+print("Flashing Zip with sidelaod mode ...")
 
-ROM_FOLDER = "/sdcard/Download/mi-flash-recovery-rom"
+while True:
+    if len(sys.argv) < 2:
+        target_filename = input("\nEnter target file name: ")
+    else:
+        target_filename = sys.argv[1]
 
-if not os.path.exists(ROM_FOLDER):
-    os.makedirs(ROM_FOLDER)
+    if target_filename:
+        break 
 
-input("Please make sure to place the ROM file in the {} folder .. Then press Enter".format(ROM_FOLDER))
+file_paths = []
+for root, dirs, files in os.walk("/sdcard"):
+    if target_filename in files:
+        file_paths.append(os.path.join(root, target_filename))
 
-rom_files = [f for f in os.listdir(ROM_FOLDER) if f.endswith(".zip")]
+if file_paths:
+    for i, file in enumerate(file_paths, start=1):
+        print(f"{i}. {file}")
 
-if rom_files:
-    input("\nMake sure your device is in sideload mode. Connect your device using OTG, then press Enter when ready\n")
+    while True:
+        try:
+            selected_index = int(input("\nEnter the number corresponding to the correct file For confirmation: "))
+            if 1 <= selected_index <= len(file_paths):
+                break
+            else:
+                print("\nInvalid selection. Please enter a valid number\n")
+        except ValueError:
+            print("\nInvalid input. Please enter a valid number\n")
+
+    selected_file = file_paths[selected_index - 1]
+    print(f"\nSelected file '{selected_file}'\n")
 else:
-    print("Could not find rom.zip file.")
+    print(f"file {file_paths} not found")
+    exit()
+
+zipfile = selected_file.endswith(".zip")
+
+if zipfile:
+    print(f"\nfile {selected_file} {zipfile} is zip 'ok'\n")
+else:
+    print(f"\nfile {selected_file} {zipfile} is not zip 'exit'\n")
     exit(1)
+
+input("\nMake sure your device is in sideload mode. Connect your device using OTG, then press Enter when ready\n")
 
 while True:
     status = os.popen("adb get-state").read().strip()
@@ -26,4 +56,4 @@ while True:
         input("\nplease Verify that device is in sideload mode ! If so, check that it is connected via otg ! then press Enter\n")
         continue
 
-os.system("adb sideload {}/{}".format(ROM_FOLDER, rom_files[0]))
+os.system(f"adb sideload {selected_file}")
