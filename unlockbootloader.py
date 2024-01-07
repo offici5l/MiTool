@@ -5,6 +5,31 @@ from Cryptodome.Cipher import AES
 from termcolor import colored
 from urllib.parse import urlparse
 
+def check_fastboot_mode():
+    while True:
+        status = os.popen("fastboot devices | grep -o 'fastboot'").read().strip()
+        if status == "fastboot":
+            break
+        else:
+            input("\nVerify that the device is in fastboot mode! If so, check that it is connected via OTG! Then press Enter\n")
+            continue
+
+print("\n\033[92m1.\033[0m Unlock")
+print("\033[92m2.\033[0m Lock")
+
+choice = input("\nEnter your \033[92mchoice\033[0m: ")
+
+if choice == "1":
+    print("\nunlock bootloader\n")
+elif choice == "2":
+    input("\nEnsure your device is in fastboot mode, connected via OTG. Press Enter when ready to unlock the device\n")
+    check_fastboot_mode()
+    os.system(f"fastboot oem lock")
+    exit()
+else:
+    print("\nInvalid choice.\n")
+    exit()
+
 text_to_print = """
 1.Bind your Xiaomi account to your phone.\n
 2.Navigate to Settings » About phone » MIUI version.
@@ -211,6 +236,7 @@ session.close()
 if "encryptData" in result:
     unlock_token = result["encryptData"]
     input("Ensure your device is in fastboot mode, connected via OTG. Press Enter when ready to unlock the device")
+    check_fastboot_mode()
     with open("token.bin", "wb") as token_file:
         token_file.write(bytes.fromhex(unlock_token))
         os.system("fastboot stage token.bin")
