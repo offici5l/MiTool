@@ -4,15 +4,16 @@ echo "
 https://github.com/offici5l/MiTool"
 current_version=$(cat "$PREFIX/bin/mitoolV" | sed -n '1s/[^0-9.]//gp')
 latest_version=$(curl -m 3 -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | sed -n '1s/[^0-9.]//gp')
-printf "\e[1;32mVersion [current:%s | latest:%s]\e[0m\n" "$current_version" "$latest_version"
+printf "Version [current:%s | latest:%s]\n" "$current_version" "$latest_version"
+echo -e "( to update use command: \e[1;32mu\e[0m or \e[1;32muall\e[0m )"
 
 if [ "$(printf "$current_version\n$latest_version" | sort -V | tail -n 1)" != "$current_version" ]; then
     update=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | sed '1d')
     printf "
-new update available!:\n \e[1;32m$update\e[0m\n
+new update available!: \e[1;32m$latest_version\e[0m \n \e[1;32m$update\e[0m\n
 "
-    read -p $"(type u to update or Enter to skip..)
-update MiTool? : " u
+    echo -e "type \e[1;32mu\e[0m to update or \e[1;32mEnter\e[0m to skip : "
+    read u
     if [ "$u" == "u" ]; then
         curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | sed -n '/files=("mitool"/,/^done/p' | bash
         mitool
@@ -24,25 +25,42 @@ else
 fi
 
 echo
-echo "1. Flash-Fastboot-ROM"
-echo "2. Flash-Recovery-ROM"
-echo "3. Unlock-Bootloader"
-echo "4. Root"
-echo "5. Flash-Custom-Recovery"
+echo -e " \e[1;32m1\e[0m. Flash-Fastboot-ROM"
+echo -e " \e[1;32m2\e[0m. Flash-Specific-Partitions"
+echo -e " \e[1;32m3\e[0m. Flash-Zip-with-Sideload"
+echo -e " \e[1;32m4\e[0m. Unlock-or-Lock-Bootloader"
 
-read -p "
-Enter your choice (1/2/3/4/5): " choice
+echo -e "\n          [other: (\e[1;32mr\e[0m)oot , (\e[1;32mc\e[0m)ustom-recovery]\n"
+
+if [ -z "$1" ]; then
+    echo -e "Enter your \e[1;32mchoice\e[0m: "
+    read choice
+else
+    choice="$1"
+fi
 
 if [ "$choice" == "1" ]; then
     python3 "$PREFIX/bin/flashfastbootrom.py"
 elif [ "$choice" == "2" ]; then
-    python3 "$PREFIX/bin/flashrecoveryrom.py"
+    python3 "$PREFIX/bin/specificpartitions.py"
 elif [ "$choice" == "3" ]; then
-    python3 "$PREFIX/bin/unlockbootloader.py"
+    python3 "$PREFIX/bin/flashwithsideloadmode.py"
 elif [ "$choice" == "4" ]; then
-    python3 "$PREFIX/bin/root.py"
-elif [ "$choice" == "5" ]; then
-    python3 "$PREFIX/bin/flashcustomrecovery.py"
+    python3 "$PREFIX/bin/unlockbootloader.py"
+elif [ "$choice" == "c" ] || [ "$choice" == "custom-recovery" ]; then
+    echo -e "\nFlashing Custom Recovery with fastboot mode...\n\nRequirements: recovery.img ,Bootloader unlocked\n"
+    read -p "press Enter to continue..."
+    python3 "$PREFIX/bin/SpecificPartitions.py recovery.img"
+elif [ "$choice" == "r" ] || [ "$choice" == "root" ]; then
+    echo -e "\nFlashing root with fastboot mode...\n\nRequirements: boot.img ,Bootloader unlocked\n\n1. Download and install Magisk app\n2. Open Magisk app and press the Install button in the Magisk card\n3. Choose 'Select and Patch a File' in method, and select the boot.img\n4. Rename magisk_patched-*.img to boot.img\n\n"
+    read -p "If you complete the steps, press Enter to continue..."
+    python3 "$PREFIX/bin/SpecificPartitions.py boot.img"
+elif [ "$choice" == "u" ]; then
+    curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | sed -n '/files=("mitool"/,/^done/p' | bash
+    mitool
+elif [ "$choice" == "uall" ]; then
+    curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | sed '$d' | bash
+    mitool
 else
     echo "
 Invalid choice
