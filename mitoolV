@@ -1,5 +1,5 @@
-(1.4.2)
+(1.4.3)
 
-4. Root
-- delete flash with sidelaod mode
-- add: flash with fastboot mode
+- add: flash Specific Partitions "dtbo.img,super.img,cust.img,userdata.img,Etc...". fastboot mode
+- add: flash ".zip". sidelaod mode
+- other improvements
