@@ -1,8 +1,6 @@
 import os
 import sys
 
-print("Flashing Zip with sidelaod mode ...")
-
 while True:
     if len(sys.argv) < 2:
         target_filename = input("\nEnter target file name: ")
