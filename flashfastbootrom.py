@@ -1,6 +1,6 @@
 import os
 
-text1 = "\nChoose an option:\n\n\033[92m1 -\033[0m Flash without locking bootloader\n\033[92m2 -\033[0m Flash with lock bootloader\n\nEnter the option number: "
+text1 = "\nChoose an option:\n\n\033[92m1 -\033[0m Flash without locking bootloader\n\033[92m2 -\033[0m Flash with lock bootloader\n\033[92m2 -\033[0m Flash all except data storage\n\nEnter the option number: "
 
 text2 = "\n\033[92mMake sure your device is connected in fastboot mode. Connect your device using OTG, then press Enter when ready.\033[0m\n"
 
@@ -27,6 +27,11 @@ def flash_selected_result(selected_result):
         check_fastboot_mode()
         flash_lock = "flash_all_lock.sh"
         os.system(f"sh {selected_result}/{flash_lock}")
+        elif flashOption == 3:
+            input(text2)
+            check_fastboot_mode()
+            flash_all_except_data_storage = "flash_all_except_data_storage.sh"
+            os.system(f"sh {RF}/{flash_all_except_data_storage.sh}")
     else:
         print("\nInvalid option\n")
         exit(1)
@@ -36,13 +41,13 @@ def decompress_and_flash_rom(tgz_file_name):
     if not os.path.exists(RF):
         os.makedirs(RF)
     print(f"\n\033[92mdecompressed..., please wait\033[0m\n")
-    tar_command = f"pv -bpe {tgz_file_name} | tar --strip-components=1 -xzf- -C {RF}/ --wildcards --no-anchored 'flash_all.sh' 'flash_all_lock.sh' 'images'"
+    tar_command = f"pv -bpe {tgz_file_name} | tar --strip-components=1 -xzf- -C {RF}/"
     return_code = os.system(tar_command)
     if return_code != 0:
         print(f"\nError during extraction with tar (Exit Code: {return_code})\n")
         exit(1)
 
-    if any(file.endswith((".sh", ".lock.sh")) for file in os.listdir(RF)):
+    if all(os.path.exists(os.path.join(RF, file)) for file in ["flash_all_lock.sh", "flash_all.sh", flash_all_except_data_storage.sh]) and os.path.exists(os.path.join(RF, "images")):
         flashOption = int(input(text1))
         if flashOption == 1:
             input(text2)
@@ -54,6 +59,11 @@ def decompress_and_flash_rom(tgz_file_name):
             check_fastboot_mode()
             flash_lock = "flash_all_lock.sh"
             os.system(f"sh {RF}/{flash_lock}")
+        elif flashOption == 3:
+            input(text2)
+            check_fastboot_mode()
+            flash_all_except_data_storage = "flash_all_except_data_storage.sh"
+            os.system(f"sh {RF}/{flash_all_except_data_storage.sh}")
         else:
             print("\nInvalid option\n")
             exit(1)
