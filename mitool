@@ -26,8 +26,8 @@ fi
 
 echo
 echo -e " \e[1;32m1\e[0m. Flash-Fastboot-ROM"
-echo -e " \e[1;32m2\e[0m. Flash-Specific-Partitions"
-echo -e " \e[1;32m3\e[0m. Flash-Zip-with-Sideload"
+echo -e " \e[1;32m2\e[0m. Flash-Specific-Partitions-With-Fastboot"
+echo -e " \e[1;32m3\e[0m. Flash-Zip-With-Sideload"
 echo -e " \e[1;32m4\e[0m. Unlock-or-Lock-Bootloader"
 
 echo -e "\n          [other: (\e[1;32mr\e[0m)oot , (\e[1;32mc\e[0m)ustom-recovery]\n"
