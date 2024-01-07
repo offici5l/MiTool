@@ -73,7 +73,7 @@ if [ ! -f "$PREFIX/etc/apt/sources.list.d/termux-adb.list" ]; then
   wget -qP $PREFIX/etc/apt/trusted.gpg.d https://nohajc.github.io/nohajc.gpg
   yes | apt update
   yes | apt install termux-adb
-  cp $PREFIX/bin/termux-adb $PREFIX/bin/adb && cp $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot
+  cp -f $PREFIX/bin/termux-adb $PREFIX/bin/adb && cp -f $PREFIX/bin/termux-fastboot $PREFIX/bin/fastboot
 else
   echo -e "\033[32madb&fastboot is installed.\033[0m"
   echo -e "\033[32mupdate adb&fastboot ...\033[0m"
