@@ -50,10 +50,12 @@ elif [ "$choice" == "4" ]; then
 elif [ "$choice" == "c" ] || [ "$choice" == "custom-recovery" ]; then
     echo -e "\nFlashing Custom Recovery with fastboot mode...\n\nRequirements: recovery.img ,Bootloader unlocked\n"
     read -p "press Enter to continue..."
+    echo
     python3 $PREFIX/bin/specificpartitions.py recovery.img
 elif [ "$choice" == "r" ] || [ "$choice" == "root" ]; then
     echo -e "\nFlashing root with fastboot mode...\n\nRequirements: boot.img ,Bootloader unlocked\n\n1. Download and install Magisk app\n2. Open Magisk app and press the Install button in the Magisk card\n3. Choose 'Select and Patch a File' in method, and select the boot.img\n4. Rename magisk_patched-*.img to boot.img\n\n"
     read -p "If you complete the steps, press Enter to continue..."
+    echo
     python3 $PREFIX/bin/specificpartitions.py boot.img
 elif [ "$choice" == "u" ]; then
     curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | sed -n '/files=("mitool"/,/^done/p' | bash
