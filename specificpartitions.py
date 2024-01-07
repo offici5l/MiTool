@@ -17,17 +17,17 @@ for root, dirs, files in os.walk("/sdcard"):
 
 if file_paths:
     for i, file in enumerate(file_paths, start=1):
-        print(f"{i}. {file}")
+        print(f"\n \033[92m{i}\033[0m - {file}\n")
 
     while True:
         try:
-            selected_index = int(input("\nEnter the number corresponding to the correct file For confirmation: "))
+            selected_index = int(input(f"\nEnter correct \033[92mnumber\033[0m for confirmation: "))
             if 1 <= selected_index <= len(file_paths):
                 break
             else:
-                print("\nInvalid selection. Please enter a valid number\n")
+                print("\nInvalid selection !")
         except ValueError:
-            print("\nInvalid input. Please enter a valid number\n")
+            print("\nInvalid input !")
 
     selected_file = file_paths[selected_index - 1]
     print(f"\nSelected file '{selected_file}'\n")
