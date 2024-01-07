@@ -45,12 +45,12 @@ def decompress_and_flash_rom(tgz_file_name):
     if any(file.endswith((".sh", ".lock.sh")) for file in os.listdir(RF)):
         flashOption = int(input(text1))
         if flashOption == 1:
-            input(text)
+            input(text2)
             check_fastboot_mode()
             flash = "flash_all.sh"
             os.system(f"sh {RF}/{flash}")
         elif flashOption == 2:
-            input(text)
+            input(text2)
             check_fastboot_mode()
             flash_lock = "flash_all_lock.sh"
             os.system(f"sh {RF}/{flash_lock}")
