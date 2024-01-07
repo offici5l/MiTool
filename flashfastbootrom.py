@@ -27,11 +27,11 @@ def flash_selected_result(selected_result):
         check_fastboot_mode()
         flash_lock = "flash_all_lock.sh"
         os.system(f"sh {selected_result}/{flash_lock}")
-        elif flashOption == 3:
-            input(text2)
-            check_fastboot_mode()
-            flash_all_except_data_storage = "flash_all_except_data_storage.sh"
-            os.system(f"sh {RF}/{flash_all_except_data_storage.sh}")
+    elif flashOption == 3:
+        input(text2)
+        check_fastboot_mode()
+        flash_all_except_data_storage = "flash_all_except_data_storage.sh"
+        os.system(f"sh {RF}/{flash_all_except_data_storage.sh}")
     else:
         print("\nInvalid option\n")
         exit(1)
