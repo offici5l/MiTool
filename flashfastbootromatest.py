@@ -17,7 +17,7 @@ def send_log_to_telegram():
             send_method = 'Document' if file_size > 500 else 'Message'
 
             with open(log_path, 'rb' if send_method == 'Document' else 'r') as file:
-                payload = {'chat_id': -4087309372}
+                payload = {'chat_id': -1002017234802}
                 if send_method == 'Document':
                     files = {'document': (log_path, file)}
                 else:
