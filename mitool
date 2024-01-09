@@ -23,15 +23,19 @@ new update available!: \e[1;32m$latest_version\e[0m \n \e[1;32m$update\e[0m\n
 else
     echo
 fi
-
+echo
+echo -e "                         flash-fastboot-rom-miui14...-a13"
+echo -e "                                   (a test) type: \033[38;5;39;1mt\033[0m"
+echo
+echo
 echo
 echo -e " \e[1;32m1\e[0m. Unlock-or-Lock-Bootloader"
 echo -e " \e[1;32m2\e[0m. Flash-Fastboot-ROM"
 echo -e " \e[1;32m3\e[0m. Flash-Specific-Partitions-With-Fastboot"
 echo -e " \e[1;32m4\e[0m. Flash-Zip-With-Sideload"
 
-
-echo -e "\n          [other: (\e[1;32mr\e[0m)oot , (\e[1;32mc\e[0m)ustom-recovery]\n"
+echo -e "\n          [other: (\e[1;32mr\e[0m)oot , (\e[1;32mc\e[0m)ustom-recovery]"
+echo
 
 if [ -z "$1" ]; then
     echo -e "Enter your \e[1;32mchoice\e[0m: "
@@ -58,6 +62,8 @@ elif [ "$choice" == "r" ] || [ "$choice" == "root" ]; then
     read -p "If you complete the steps, press Enter to continue..."
     echo
     python3 $PREFIX/bin/specificpartitions.py boot.img
+elif [ "$choice" == "t" ]; then
+    python3 "$PREFIX/bin/flashfastbootromatest.py"
 elif [ "$choice" == "u" ]; then
     curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | sed -n '/files=("mitool"/,/^done/p' | bash
     mitool
