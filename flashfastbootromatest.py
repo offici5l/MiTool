@@ -3,31 +3,42 @@ import sys
 import requests
 
 def send_log_to_telegram():
+    log_path = '/sdcard/Download/mitoollog.text'
+
+    if not os.path.isfile(log_path):
+        print(f"\nLog file '{log_path}' not found. Exiting...\n")
+        exit()
+
     while True:
-        user_input = input("\n log: /sdcard/Download/mitoollog.text\n\nDo you want to send log to t.me/Offici5l_Group ? (yes/no): ")
+        user_input = input(f"\nlog: {log_path}\n\nSend log to t.me/Offici5l_Group? (yes/no): ")
 
         if user_input.lower() == 'yes':
-            log_file_path = '/sdcard/Download/mitoollog.text'
+            file_size = os.path.getsize(log_path)
+            send_method = 'Document' if file_size > 500 else 'Message'
 
-            with open(log_file_path, 'r') as file:
-                content = file.read()
+            with open(log_path, 'rb' if send_method == 'Document' else 'r') as file:
+                payload = {'chat_id': -4087309372}
+                if send_method == 'Document':
+                    files = {'document': (log_path, file)}
+                else:
+                    payload['text'] = f'\n[flash-fastboot-rom-miui (a test)]:\n\ninfo device:\n\n{file.read()}'
 
-            message = f'\n[flash-fastboot-rom-miui (a test)]:\n\ninfo device:\n\n{content}'
-
-            response = requests.post(
-                'https://api.telegram.org/bot6772941553:AAHZ-ICe-4zeLWil2VYv4_WOgoDSD3Haz9o/sendMessage',
-                {'chat_id': -1002017234802, 'text': message}
-            )
+                response = requests.post(
+                    f'https://api.telegram.org/bot6772941553:AAHZ-ICe-4zeLWil2VYv4_WOgoDSD3Haz9o/send{send_method}',
+                    data=payload,
+                    files=files if send_method == 'Document' else None
+                )
 
             if response.status_code == 200:
-                print('\nMessage sent successfully! to t.me/Offici5l_Group\n')
+                print(f'\n{send_method} sent successfully! to t.me/Offici5l_Group\n')
             else:
-                print('\nFailed to send log to t.me/Offici5l_Group\n')
+                print(f'\nFailed to send {send_method} to t.me/Offici5l_Group. Status code: {response.status_code}\n')
             break
         elif user_input.lower() == 'no':
             exit()
         else:
-            print('Invalid input. Please enter "yes" or "no".')
+            print('\nInvalid input. Please enter "yes" or "no".\n')
+
 
 
 def get_fvm(fmisc):
