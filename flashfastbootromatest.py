@@ -16,7 +16,7 @@ def send_log_to_telegram():
 
             response = requests.post(
                 'https://api.telegram.org/bot6772941553:AAHZ-ICe-4zeLWil2VYv4_WOgoDSD3Haz9o/sendMessage',
-                {'chat_id': -4087309372, 'text': message}
+                {'chat_id': -1002017234802, 'text': message}
             )
 
             if response.status_code == 200:
