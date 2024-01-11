@@ -1,12 +1,12 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
 c_v=$(cat "$PREFIX/bin/mitoolV" | sed -n '1s/[^0-9.]//gp')
-l_v=$(curl -m 3 -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | sed -n '1s/[^0-9.]//gp')
+l_v=$(curl -m 3 -s https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitoolV | sed -n '1s/[^0-9.]//gp')
 
 printf "\nhttps://github.com/offici5l/MiTool\nversion:[current:%s | latest:%s]\n" "$c_v" "$l_v"
 
 if [ "$(printf "$c_v\n$l_v" | sort -V | tail -n 1)" != "$c_v" ]; then
-    update=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | sed '1d')
+    update=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitoolV | sed '1d')
     printf "
 new update available!: \e[1;32m$l_v\e[0m \n \e[1;32m$update\e[0m\n
 "
