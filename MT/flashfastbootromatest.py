@@ -2,6 +2,14 @@ import os
 import sys
 import requests
 
+print(f"\n- Fastboot-Flash-Rom-V2 (\033[91mtrial version! Please be aware that this is an experimental release , By continuing, you assume responsibility for any problems that may occur on your device\033[0m)\n")
+
+while True:
+    choice = input("\ntype 1 to continue type 2 to exit : ")
+    if choice == "1":
+        break
+    if choice == "2":
+        exit()
 def send_log_to_telegram():
     log_path = '/sdcard/Download/mitoollog.text'
 
@@ -71,41 +79,60 @@ def run_command(selected_result, target):
     os.system(command)
     send_log_to_telegram()
 
-def Check_rollback_ver_command(file_path):
+def modify_file(file_path):
     try:
         with open(file_path, 'r+') as file:
             content = file.read()
-            if 'version=`fastboot getvar rollbantiack_ver 2>&1 | grep "anti:" | awk -F ": " \'{print $2}\'`' in content:
-                content = content.replace('version=`fastboot getvar rollbantiack_ver 2>&1 | grep "anti:" | awk -F ": " \'{print $2}\'`', 'version=`fastboot getvar rollback_ver 2>&1 | grep "rollback_ver:" | awk -F ": " \'{print $2}\'`')
-                file.seek(0)
-                file.write(content)
-                file.truncate()
-                print("\nCommand found and replaced with the rollback version command...\033[92mdone\033[0m\n")
-            elif 'version=`fastboot getvar anti 2>&1 | grep "anti:" | awk -F ": " \'{print $2}\'`' in content:
-                content = content.replace('version=`fastboot getvar anti 2>&1 | grep "anti:" | awk -F ": " \'{print $2}\'`', 'version=`fastboot getvar rollback_ver 2>&1 | grep "rollback_ver:" | awk -F ": " \'{print $2}\'`')
-                file.seek(0)
-                file.write(content)
-                file.truncate()
-                print("\nCommand found and replaced with the rollback version command...\033[92mdone\033[0m\n")
+            start_pattern_1 = 'CURRENT_ANTI_VER'
+            end_pattern_1 = 'current device antirollback version is greater than this package" ; exit 1 ; fi'
+
+            start_index_1 = content.find(start_pattern_1)
+            end_index_1 = content.find(end_pattern_1, start_index_1) + len(end_pattern_1)
+
+            pattern_2 = 'fastboot $* erase boot\nif [ $? -ne 0 ] ; then echo "Erase boot error"; exit 1; fi'
+
+            if start_index_1 != -1 and end_index_1 != -1:
+                content = content[:start_index_1] + content[end_index_1:]
+                print("\nText section 1 found and removed...\033[92mdone\033[0m\n")
             else:
-                print("\nCommand not found...\033[92mok\033[0m\n")
+                print("\nText section 1 not found...\033[92mok\033[0m\n")
+
+            if pattern_2 in content:
+                content = content.replace(pattern_2, '')
+                print("Text section 2 found and removed...\033[92mdone\033[0m\n")
+            else:
+                print("Text section 2 not found...\033[92mok\033[0m\n")
+
+            file.seek(0)
+            file.write(content)
+            file.truncate()
+
     except FileNotFoundError:
         print(f"\nFile '{file_path}' not found. Exiting...")
         sys.exit()
 
-def check_fastboot_mode():
+
+def check_mode():
     while True:
-        status = os.popen("fastboot devices | grep -o 'fastboot'").read().strip()
-        if status == "fastboot":
-            break
-        else:
-            input("\nVerify that the device is in fastboot mode! If so, check that it is connected via OTG! Then press Enter\n")
+        status1 = os.popen("adb get-state 2>/dev/null").read().strip()
+        if status1 == "sideload":
+            print(f"\n{status1} mode .. reboot to fastboot mode ... wait ..\n\n")
+            os.system("adb reboot bootloader")
             continue
+        status2 = os.popen("adb get-state 2>/dev/null").read().strip()
+        if status2 == "device":
+            print(f"\n{status2} mode .. reboot to fastboot mode ... wait ..\n\n")
+            os.system("adb reboot bootloader")
+            continue
+        status3 = os.popen("fastboot devices 2>/dev/null | awk '{print $NF}'").read().strip()
+        if status3 == "fastboot":
+            print(f"\n{status1} ok\\n")
+            break
 
 
 text1 = "\nChoose an option:\n\n\033[92m1 -\033[0m Flash without locking bootloader\n\033[92m2 -\033[0m Flash with lock bootloader\n\033[92m3 -\033[0m Flash all except data storage\n\nEnter the option number: "
 
-text2 = "\n\033[92mMake sure your device is connected in fastboot mode. Connect your device using OTG, then press Enter when ready.\033[0m\n"
+text2 = "\ncheck device it is connected via OTG! ...\n"
 
 
 def flash_selected_result(selected_result):
@@ -113,23 +140,23 @@ def flash_selected_result(selected_result):
 
     if flashOption == 1:
         Check1 = "flash_all.sh"
-        Check_rollback_ver_command(f"{selected_result}/{Check1}")
-        input(text2)
-        check_fastboot_mode()
+        modify_file(f"{selected_result}/{Check1}")
+        print(text2)
+        check_mode()
         get_fvm(f"{selected_result}/misc.txt")
         run_command(f"{selected_result}", f"{Check1}")
     elif flashOption == 2:
         Check2 = "flash_all_lock.sh"
-        Check_rollback_ver_command(f"{selected_result}/{Check2}")
-        input(text2)
-        check_fastboot_mode()
+        modify_file(f"{selected_result}/{Check2}")
+        print(text2)
+        check_mode()
         get_fvm(f"{selected_result}/misc.txt")
         run_command(f"{selected_result}", f"{Check2}")
     elif flashOption == 3:
         Check3 = "flash_all_except_data_storage.sh"
-        Check_rollback_ver_command(f"{selected_result}/{Check3}")
-        input(text2)
-        check_fastboot_mode()
+        modify_file(f"{selected_result}/{Check3}")
+        print(text2)
+        check_mode()
         get_fvm(f"{selected_result}/misc.txt")
         run_command(f"{selected_result}", f"{Check3}")
     else:
@@ -152,23 +179,23 @@ def decompress_and_flash_rom(tgz_file_name):
 
         if flashOption == 1:
             Check1 = "flash_all.sh"
-            Check_rollback_ver_command(f"{RF}/{Check}")
-            input(text2)
-            check_fastboot_mode()
+            modify_file(f"{RF}/{Check1}")
+            print(text2)
+            check_mode()
             get_fvm(f"{RF}/misc.txt")
             run_command(f"{RF}", f"{Check1}")
         elif flashOption == 2:
             Check2 = "flash_all_lock.sh"
-            Check_rollback_ver_command(f"{RF}/{Check2}")
-            input(text2)
-            check_fastboot_mode()
+            modify_file(f"{RF}/{Check2}")
+            print(text2)
+            check_mode()
             get_fvm(f"{RF}/misc.txt")
             run_command(f"{RF}", f"{Check2}")
         elif flashOption == 3:
             Check3 = "flash_all_except_data_storage.sh"
-            Check_rollback_ver_command(f"{RF}/{Check}")
-            input(text2)
-            check_fastboot_mode()
+            modify_file(f"{RF}/{Check3}")
+            print(text2)
+            check_mode()
             get_fvm(f"{RF}/misc.txt")
             run_command(f"{RF}", f"{Check3}")
         else:
