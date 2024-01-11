@@ -1,57 +1,48 @@
 import os
-import sys
 
-while True:
-    if len(sys.argv) < 2:
-        target_filename = input("\n\033[92mEnter target name\033[0m: ")
-    else:
-        target_filename = sys.argv[1]
-
-    if target_filename:
-        break 
-
-file_paths = []
-for root, dirs, files in os.walk("/sdcard"):
-    if target_filename in files:
-        file_paths.append(os.path.join(root, target_filename))
-
-if file_paths:
-    for i, file in enumerate(file_paths, start=1):
-        print(f"{i}. {file}")
-
+def check_mode():
     while True:
-        try:
-            selected_index = int(input("\nEnter the number corresponding to the correct file For confirmation: "))
-            if 1 <= selected_index <= len(file_paths):
-                break
-            else:
-                print("\nInvalid selection. Please enter a valid number\n")
-        except ValueError:
-            print("\nInvalid input. Please enter a valid number\n")
+        status1 = os.popen("adb get-state 2>/dev/null").read().strip()
+        if status1 == "sideload":
+            print(f"\n{status1} ok\\n")
+            break
+        status2 = os.popen("adb get-state 2>/dev/null").read().strip()
+        if status2 == "device":
+            print(f"\n{status2} mode .. reboot to sideload mode ... wait ..\n\n")
+            os.system("adb reboot sideload")
+            continue
+        status3 = os.popen("fastboot devices 2>/dev/null | awk '{print $NF}'").read().strip()
+        if status3 == "fastboot":
+            print(f"\n{status3} mode .. reboot to sideload mode\n\n")
+            os.system("fastboot reboot")
+            continue
 
-    selected_file = file_paths[selected_index - 1]
-    print(f"\nSelected file '{selected_file}'\n")
-else:
-    print(f"file {file_paths} not found")
-    exit()
+result_paths = []
 
-zipfile = selected_file.endswith(".zip")
-
-if zipfile:
-    print(f"\nfile {selected_file} {zipfile} is zip 'ok'\n")
-else:
-    print(f"\nfile {selected_file} {zipfile} is not zip 'exit'\n")
-    exit(1)
-
-input("\nMake sure your device is in sideload mode. Connect your device using OTG, then press Enter when ready\n")
-
-while True:
-    status = os.popen("adb get-state").read().strip()
-    print(status)
-    if status == "sideload":
-        break
-    else:
-        input("\nplease Verify that device is in sideload mode ! If so, check that it is connected via otg ! then press Enter\n")
+for root, dirs, files in os.walk("/sdcard"):
+    if "Android" in root:
         continue
 
-os.system(f"adb sideload {selected_file}")
+    tgz_files = [f for f in files if f.endswith(".zip")]
+    result_paths.extend([os.path.join(root, f) for f in tgz_files])
+
+if result_paths:
+    for i, result in enumerate(result_paths, start=1):
+        print(f"\n \033[92m{i}\033[0m - {result}\n")
+        
+    while True:
+        try:
+            selected_index = int(input(f"\ntype correct \033[92mnumber\033[0m you want to flash: "))
+            if 1 <= selected_index <= len(result_paths):
+                break
+            else:
+                print("\nInvalid selection !")
+        except ValueError:
+            print("\nInvalid input !")
+
+    selected_result = result_paths[selected_index - 1]
+    print(f"\nzip selected: \033[92m{selected_result}\033[0m\n\ncheck device it is connected via otg ! ..\n")
+    check_mode()
+    os.system(f"adb sideload {selected_result}")
+
+
