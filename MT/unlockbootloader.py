@@ -1,18 +1,29 @@
-import re, requests, json, hmac, random, binascii, urllib, hashlib, os, urllib.parse, time
+import re, requests, json, hmac, random, binascii, urllib, hashlib, os, urllib.parse, time, codecs
 from urllib3.util.url import Url
 from base64 import b64encode, b64decode
 from Cryptodome.Cipher import AES
 from termcolor import colored
 from urllib.parse import urlparse
+import sys
 
-def check_fastboot_mode():
+filename = "/sdcard/Download/account_info.txt"
+
+def check_mode():
     while True:
-        status = os.popen("fastboot devices | grep -o 'fastboot'").read().strip()
-        if status == "fastboot":
-            break
-        else:
-            input("\nVerify that the device is in fastboot mode! If so, check that it is connected via OTG! Then press Enter\n")
+        status1 = os.popen("adb get-state 2>/dev/null").read().strip()
+        if status1 == "sideload":
+            print(f"\n{status1} mode .. reboot to fastboot mode ... wait ..\n\n")
+            os.system("adb reboot bootloader")
             continue
+        status2 = os.popen("adb get-state 2>/dev/null").read().strip()
+        if status2 == "device":
+            print(f"\n{status2} mode .. reboot to fastboot mode ... wait ..\n\n")
+            os.system("adb reboot bootloader")
+            continue
+        status3 = os.popen("fastboot devices 2>/dev/null | awk '{print $NF}'").read().strip()
+        if status3 == "fastboot":
+            print(f"\n {status1} ok \n")
+            break
 
 print("\n\033[92m1.\033[0m Unlock")
 print("\033[92m2.\033[0m Lock")
@@ -23,7 +34,8 @@ if choice == "1":
     print("\nunlock bootloader\n")
 elif choice == "2":
     input("\nEnsure your device is in fastboot mode, connected via OTG. Press Enter when ready to unlock the device\n")
-    check_fastboot_mode()
+    print("\ncheck device it is connected via OTG! ...\n")
+    check_mode()
     os.system(f"fastboot oem lock")
     exit()
 else:
@@ -31,19 +43,10 @@ else:
     exit()
 
 text_to_print = """
-1.Bind your Xiaomi account to your phone.\n
-2.Navigate to Settings » About phone » MIUI version.
-- Tap MIUI version repeatedly to become a developer.\n
-3.Go back to Settings » Additional settings » Developer options.
-- Enable OEM unlocking and USB debugging.
-- Tap Mi Unlock status » Agree » Add account and device.
-(Ensure your device can connect to the internet using mobile data.)\n
-" Once the account is successfully bound, you'll see a message: Added successfully "
+Go to Settings » Additional settings » Developer options:\n\n- Enable OEM unlocking and USB debugging.\n- Tap Mi Unlock status » Agree » Add account and device.\n\n"After successful binding, you'll see a confirmation message: Added successfully."
 """
 
 input(colored(f"\n{'='*15}github.com/offici5l/MiTool{'='*15}\n{text_to_print}\n{'='*56}\n", 'green') + "\nIf you complete the steps successfully, press Enter")
-
-filename = "/sdcard/Download/account_info.txt"
 
 while os.path.isfile(filename):
     pr = input(f"\ndo you want to use previous information in \033[92m{filename}\033[0m (yes/no) ? : ").lower()
@@ -55,37 +58,24 @@ while os.path.isfile(filename):
     else:
         print("Invalid choice. Please enter 'yes' or 'no'.")
 
-with open(filename, "a+") as file:
-    file.seek(0)
-    content = file.read()
-    if "Username:" not in content:
-        usernamee = input("Enter username or email or number (Xiaomi Account): ")
-        file.write(f"\nUsername: {usernamee}\n")
-    if "Password:" not in content:
-        passwordd = input("Enter password: ")
-        file.write(f"\nPassword: {passwordd}\n")
-    if "region:" not in content:
-        region = input("Choose a region (Account) (india, global, china, russia, europe): ")
-        file.write(f"\nregion: {region}\n")
-    if "token:" not in content or "product:" not in content:
-        entry_choice = input("Do you want to input device token and product automatically or manually? (a/m): ").lower()
-        if entry_choice == 'm':
-            if "token:" not in content:
-                 token = input("Enter output from `fastboot getvar token`: ")
-                 file.write(f"\ntoken: {token}\n")
-            if "product:" not in content:
-                 product = input("Enter output from `fastboot getvar product`: ")
-                 file.write(f"\nproduct: {product}\n")
-        elif entry_choice == 'a':
-            confirmation = input("Make sure your device is in fastboot mode. Connect your device using OTG, then press Enter when ready.")
+
+def update_file_content(filename):
+    with open(filename, "a+") as file:
+        file.seek(0)
+        content = file.read()
+        if "Username:" not in content:
+            username = input("Enter username or email or number (Xiaomi Account): ")
+            file.write(f"\nUsername: {username}\n")
+        if "Password:" not in content:
+            password = input("Enter password: ")
+            file.write(f"\nPassword: {password}\n")
+        if "token:" not in content or "product:" not in content:
+            print("\ncheck device it is connected via OTG! ...\n")
+            check_mode()
             output = os.popen("fastboot getvar all 2>&1").read()
             token, product = [os.popen(f'echo "{output}" | grep -Po "(?<={var}:).*"').read().strip() for var in ["token", "product"]]
-            if "token:" not in content:
-                file.write(f"\ntoken: {token}\n")
-            if "product" not in content:
-                file.write(f"\nproduct: {product}\n")
-        else:
-            print("Invalid choice")
+            file.write(f"\ntoken: {token}\nproduct: {product}\n")
+
 
 if "wb_value:" not in open(filename).read():
     input(f"\nPress Enter to open confirmation page in your default browser. After seeing {{\"R\":\"\",\"S\":\"OK\"}}, copy Link from address bar. Come back here")
@@ -99,6 +89,8 @@ if "wb_value:" not in open(filename).read():
         print("Invalid URL")
         exit()
 
+update_file_content(filename)
+
 with open(filename, "r") as file:
     lines = file.readlines()
     extract_info = lambda keyword: next((line.split(' ', 1)[1].strip() for line in lines if keyword in line), None)
@@ -107,7 +99,6 @@ with open(filename, "r") as file:
     username = extract_info("Username:")
     password = extract_info("Password:")
     wbvalueline = extract_info("wb_value:")
-    region = extract_info("region:")
 
 headers={"User-Agent": "XiaomiPCSuite"}
 session = requests.Session()
@@ -124,15 +115,19 @@ if json.loads(response)["code"] == 70016:
     print(error_message)
     exit()
 
+region = re.search(r'p_idc=(.*?)&nonce', response).group(1)
+
+final_region = region if region.lower() in ['india', 'europe', 'russia', 'china'] else 'Global'
+
 region_urls = {
-    "india": "https://in-unlock.update.intl.miui.com",
-    "global": "https://unlock.update.intl.miui.com",
-    "china": "https://unlock.update.miui.com",
-    "russia": "https://ru-unlock.update.intl.miui.com",
-    "europe": "https://eu-unlock.update.intl.miui.com"
+    "India": "https://in-unlock.update.intl.miui.com",
+    "Global": "https://unlock.update.intl.miui.com",
+    "China": "https://unlock.update.miui.com",
+    "Russia": "https://ru-unlock.update.intl.miui.com",
+    "Europe": "https://eu-unlock.update.intl.miui.com"
 }
 
-url= region_urls.get(region, '')
+url = region_urls.get(final_region, '')
 
 result2 = response.replace(response.split('"location":"')[1].split('/sts?d=')[0], url)
 
@@ -233,10 +228,26 @@ add_nonce()
 result = run()
 session.close()
 
+code = result.get("code", "")
+descEN = result.get("descEN", "")
+
+
+if "code" in result and result["code"] == 10000:
+    print(f"\ncode: {code} descEN: {descEN}\nInvalid device token or product.\n")
+    with open(filename, "r") as file:
+        lines = [line for line in file.readlines() if "token:" not in line and "product:" not in line]
+    with open(filename, "w") as file:
+        file.writelines(lines)
+    exec("\n".join(line for i, line in enumerate(codecs.open('/data/data/com.termux/files/usr/bin/un-lock.py', 'r', 'utf-8').read().split('\n'), 1) if i not in range(27, 60)))
+    exit()
+
+
+
 if "encryptData" in result:
     unlock_token = result["encryptData"]
     input("Ensure your device is in fastboot mode, connected via OTG. Press Enter when ready to unlock the device")
-    check_fastboot_mode()
+    print("\ncheck device it is connected via OTG! ...\n")
+    check_mode()
     with open("token.bin", "wb") as token_file:
         token_file.write(bytes.fromhex(unlock_token))
         os.system("fastboot stage token.bin")
