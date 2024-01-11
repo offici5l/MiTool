@@ -1,16 +1,14 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-echo "
-https://github.com/offici5l/MiTool"
-current_version=$(cat "$PREFIX/bin/mitoolV" | sed -n '1s/[^0-9.]//gp')
-latest_version=$(curl -m 3 -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | sed -n '1s/[^0-9.]//gp')
-printf "Version [current:%s | latest:%s]\n" "$current_version" "$latest_version"
-echo -e "( to update use command: \e[1;32mu\e[0m or \e[1;32muall\e[0m )            ( a \033[38;5;196;1mt\033[0mest )"
+c_v=$(cat "$PREFIX/bin/mitoolV" | sed -n '1s/[^0-9.]//gp')
+l_v=$(curl -m 3 -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | sed -n '1s/[^0-9.]//gp')
 
-if [ "$(printf "$current_version\n$latest_version" | sort -V | tail -n 1)" != "$current_version" ]; then
+printf "\nhttps://github.com/offici5l/MiTool\nversion:[current:%s | latest:%s]\n" "$c_v" "$l_v"
+
+if [ "$(printf "$c_v\n$l_v" | sort -V | tail -n 1)" != "$c_v" ]; then
     update=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/mitoolV | sed '1d')
     printf "
-new update available!: \e[1;32m$latest_version\e[0m \n \e[1;32m$update\e[0m\n
+new update available!: \e[1;32m$l_v\e[0m \n \e[1;32m$update\e[0m\n
 "
     echo -e "type \e[1;32mu\e[0m to update or \e[1;32mEnter\e[0m to skip : "
     read u
@@ -23,21 +21,22 @@ new update available!: \e[1;32m$latest_version\e[0m \n \e[1;32m$update\e[0m\n
 else
     echo
 fi
-echo
-echo
-echo
-echo
-echo
-echo
-echo -e " \e[1;32m1\e[0m. Unlock-or-Lock-Bootloader"
-echo -e " \e[1;32m2\e[0m. Flash-Fastboot-ROM"
-echo -e " \e[1;32m3\e[0m. Flash-Specific-Partitions-With-Fastboot"
-echo -e " \e[1;32m4\e[0m. Flash-Zip-With-Sideload"
 
-echo -e "\n          [other: (\e[1;32mr\e[0m)oot , (\e[1;32mc\e[0m)ustom-recovery]"
-echo
-echo
-echo
+echo -e "\n(\e[1;32mr\e[0m)oot,(\e[1;32mc\e[0m)ustom-recovery,(\e[1;32mh\e[0m)elp,(\e[1;31mt\e[0m)est,\e[1;32mu\e[0m or \e[1;32muall\e[0m to update"
+
+echo -e "
+
+
+- \e[1;32m1\e[0m. Unlock-or-Lock-Bootloader
+"
+echo -e "
+- \e[1;32m2\e[0m. Flash-Fastboot-ROM
+"
+echo -e "
+- \e[1;32m3\e[0m. Flash-Zip-With-Sideload
+
+"
+
 if [ -z "$1" ]; then
     read -p $'\n\nEnter your \e[1;32mchoice\e[0m: ' choice
 else
@@ -45,23 +44,11 @@ else
 fi
 
 if [ "$choice" == "1" ]; then
-    python3 "$PREFIX/bin/unlockbootloader.py"
+    python3 "$PREFIX/bin/un-lock.py"
 elif [ "$choice" == "2" ]; then
     python3 "$PREFIX/bin/flashfastbootrom.py"
 elif [ "$choice" == "3" ]; then
-    python3 "$PREFIX/bin/specificpartitions.py"
-elif [ "$choice" == "4" ]; then
     python3 "$PREFIX/bin/flashwithsideloadmode.py"
-elif [ "$choice" == "c" ] || [ "$choice" == "custom-recovery" ]; then
-    echo -e "\nFlashing Custom Recovery with fastboot mode...\n\nRequirements: recovery.img ,Bootloader unlocked\n"
-    read -p "press Enter to continue..."
-    echo
-    python3 $PREFIX/bin/specificpartitions.py recovery.img
-elif [ "$choice" == "r" ] || [ "$choice" == "root" ]; then
-    echo -e "\nFlashing root with fastboot mode...\n\nRequirements: boot.img ,Bootloader unlocked\n\n1. Download and install Magisk app\n2. Open Magisk app and press the Install button in the Magisk card\n3. Choose 'Select and Patch a File' in method, and select the boot.img\n4. Rename magisk_patched-*.img to boot.img\n\n"
-    read -p "If you complete the steps, press Enter to continue..."
-    echo
-    python3 $PREFIX/bin/specificpartitions.py boot.img
 elif [ "$choice" == "u" ]; then
     curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | sed -n '/files=("mitool"/,/^done/p' | bash
     mitool
@@ -69,11 +56,21 @@ elif [ "$choice" == "uall" ]; then
     curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | sed '$d' | bash
     mitool
 elif [ "$choice" == "t" ]; then
-    echo -e "\n (\033[38;5;196;1mFlash-Fastboot-ROM\033[0m version a test) \n"
-    read -p "press Enter to continue" 
     python3 "$PREFIX/bin/flashfastbootromatest.py"
+elif [ "$choice" == "c" ]; then
+    echo -e "\nFlashing Custom Recovery with fastboot mode...\n\nRequirements: recovery.img ,Bootloader unlocked\n"
+    read -p "press Enter to continue"
+    python3 $PREFIX/bin/specificpartitions.py recovery
+elif [ "$choice" == "r" ]; then
+    echo -e "\nfor flashing root with fastboot mode\n\nRequirements: boot.img ,Bootloader unlocked\n\n1. Download and install Magisk app\n2. Open Magisk app and press the Install button in the Magisk card\n3. Choose 'Select and Patch a File' in method, and select the boot.img\n\n\nnotice choose boot.img for device you want to root\n\n"
+    echo -e "If you complete the steps, press Enter"
+    read
+    python3 $PREFIX/bin/specificpartitions.py boot
+elif [ "$choice" == "h" ]; then
+    echo -e "\nversion 34.0.4-android-tools\n\ncommands adb\ntype: \e[1;32madb help\e[0m\n\ncommands fastboot\ntype: \e[1;32mfastboot help\e[0m\n"
 else
-    echo "
-Invalid choice
-"
+    echo "Invalid choice"
+    exit
 fi
+
+
