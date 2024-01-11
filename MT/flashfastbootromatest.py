@@ -2,7 +2,14 @@ import os
 import sys
 import requests
 
-print(f"\n- Fastboot-Flash-Rom-V2 (\033[91mtrial version! Please be aware that this is an experimental release , By continuing, you assume responsibility for any problems that may occur on your device\033[0m)\n")
+print(f"\n- Fastboot-Flash-Rom-V2")
+
+print("\nThis version is designed for those encountering the following issues:")
+print("1. error: current device antirollback version is greater than this package")
+print("2. error: antirollback check error")
+print("3. Erase boot error\n")
+
+print(f"\n(\033[91mFastboot-Flash-Rom-V2 it's a trial version! please be aware that this is an experimental release. By continuing, you assume responsibility for any problems that may occur on your device\033[0m)")
 
 while True:
     choice = input("\ntype 1 to continue type 2 to exit : ")
