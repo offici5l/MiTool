@@ -1,2 +1,15 @@
 (1.4.3)
 
+
+
+version 1.4.4:
+
+- Device verification has been added in any mode, automatically restarting it to the appropriate mode
+
+- A trial version for flashing Fastboot Rom (v2) has been added (only for those facing issues with the following errors: "error: current device antirollback version is greater than this package" or "error: antirollback check error" or "Erase boot error")
+
+- Improved handling of some errors automatically during bootloader unlocking, such as error code 10000, and more..
+
+- delete the region selection request while unlocking the bootloader Let mitool take care of that
+
+- Other improvements and additions
