@@ -9,7 +9,7 @@ version 1.4.4:
 - A trial version for flashing Fastboot Rom (v2) has been added (only for those facing issues with the following errors: "error: current device antirollback version is greater than this package" or "error: antirollback check error" or "Erase boot error")
 (Usage: run command: mitool t)
 
-- Improved handling of some errors automatically during bootloader unlocking, such as error code 10000, and more ..
+- Improved handling of some errors automatically during bootloader unlocking, such as error code 10000, and more .
 
 - delete the region selection request while unlocking the bootloader Let mitool take care of that
 
