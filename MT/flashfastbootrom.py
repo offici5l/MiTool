@@ -2,34 +2,42 @@ import os
 
 text1 = "\nChoose an option:\n\n\033[92m1 -\033[0m Flash without locking bootloader\n\033[92m2 -\033[0m Flash with lock bootloader\n\033[92m3 -\033[0m Flash all except data storage\n\nEnter the option number: "
 
-text2 = "\n\033[92mMake sure your device is connected in fastboot mode. Connect your device using OTG, then press Enter when ready.\033[0m\n"
+text2 = "\ncheck device it is connected via OTG! ...\n"
 
-def check_fastboot_mode():
+def check_mode():
     while True:
-        status = os.popen("fastboot devices | grep -o 'fastboot'").read().strip()
-        if status == "fastboot":
-            break
-        else:
-            input("\nVerify that the device is in fastboot mode! If so, check that it is connected via OTG! Then press Enter\n")
+        status1 = os.popen("adb get-state 2>/dev/null").read().strip()
+        if status1 == "sideload":
+            print(f"\n{status1} mode .. reboot to fastboot mode ... wait ..\n\n")
+            os.system("adb reboot bootloader")
             continue
+        status2 = os.popen("adb get-state 2>/dev/null").read().strip()
+        if status2 == "device":
+            print(f"\n{status2} mode .. reboot to fastboot mode ... wait ..\n\n")
+            os.system("adb reboot bootloader")
+            continue
+        status3 = os.popen("fastboot devices 2>/dev/null | awk '{print $NF}'").read().strip()
+        if status3 == "fastboot":
+            print(f"\n{status1} ok\\n")
+            break
 
 
 def flash_selected_result(selected_result):
     flashOption = int(input(text1))
 
     if flashOption == 1:
-        input(text2)
-        check_fastboot_mode()
+        print(text2)
+        check_mode()
         flash = "flash_all.sh"
         os.system(f"sh {selected_result}/{flash}")
     elif flashOption == 2:
-        input(text2)
-        check_fastboot_mode()
+        print(text2)
+        check_mode()
         flash_lock = "flash_all_lock.sh"
         os.system(f"sh {selected_result}/{flash_lock}")
     elif flashOption == 3:
-        input(text2)
-        check_fastboot_mode()
+        print(text2)
+        check_mode()
         flash_all_except_data_storage = "flash_all_except_data_storage.sh"
         os.system(f"sh {RF}/{flash_all_except_data_storage}")
     else:
@@ -50,18 +58,18 @@ def decompress_and_flash_rom(tgz_file_name):
     if all(os.path.exists(os.path.join(RF, file)) for file in ["flash_all_lock.sh", "flash_all.sh", "flash_all_except_data_storage.sh"]) and os.path.exists(os.path.join(RF, "images")):
         flashOption = int(input(text1))
         if flashOption == 1:
-            input(text2)
-            check_fastboot_mode()
+            print(text2)
+            check_mode()
             flash = "flash_all.sh"
             os.system(f"sh {RF}/{flash}")
         elif flashOption == 2:
-            input(text2)
-            check_fastboot_mode()
+            print(text2)
+            check_mode()
             flash_lock = "flash_all_lock.sh"
             os.system(f"sh {RF}/{flash_lock}")
         elif flashOption == 3:
-            input(text2)
-            check_fastboot_mode()
+            print(text2)
+            check_mode()
             flash_all_except_data_storage = "flash_all_except_data_storage.sh"
             os.system(f"sh {RF}/{flash_all_except_data_storage}")
         else:
