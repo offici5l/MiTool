@@ -120,3 +120,12 @@ if result_paths:
     elif os.path.isdir(selected_result):
         flash_selected_result(selected_result)
 
+
+if not result_paths:
+    print("\n \033[91mNo ROMs found on the device !\033[0m")
+    print("\n   Please download or transfer a ROM to your device.\n")
+else:
+    for i, result in enumerate(result_paths, start=1):
+        print(f"\n \033[92m{i}\033[0m - {result}\n")
+
+
