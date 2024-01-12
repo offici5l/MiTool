@@ -46,3 +46,9 @@ if result_paths:
     os.system(f"adb sideload {selected_result}")
 
 
+if not result_paths:
+    print("\n \033[91mNo ROMs.zip found on the device !\033[0m")
+    print("\n   Please download or transfer a ROM.zip to your device.\n")
+else:
+    for i, result in enumerate(result_paths, start=1):
+        print(f"\n \033[92m{i}\033[0m - {result}\n")
