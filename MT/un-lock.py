@@ -65,35 +65,31 @@ while os.path.isfile(filename):
 with open(filename, "a+") as file:
     file.seek(0)
     content = file.read()
-
     if "Username:" not in content:
         username = input("Enter username or email or number (Xiaomi Account): ")
         file.write(f"\nUsername: {username}\n")
-
     if "Password:" not in content:
         password = input("Enter password: ")
         file.write(f"\nPassword: {password}\n")
 
-    if "token:" not in content or "product:" not in content:
-        print("\ncheck device it is connected via OTG! ...\n")
-        check_mode()  
-        output = os.popen("fastboot getvar all 2>&1").read()
-        token, product = [os.popen(f'echo "{output}" | grep -Po "(?<={var}:).*"').read().strip() for var in ["token", "product"]]
-        file.write(f"\ntoken: {token}\nproduct: {product}\n")
-
 username = next((line.split(' ', 1)[1].strip() for line in open(filename) if "Username:" in line), None)
-
 password = next((line.split(' ', 1)[1].strip() for line in open(filename) if "Password:" in line), None)
 
 headers={"User-Agent": "XiaomiPCSuite"}
 
 if "wb_value:" not in open(filename).read():
-    linkc = json.loads(requests.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&checkSafeAddress=true&_json=true", data={"user": username, "hash": hashlib.md5(password.encode()).hexdigest().upper()}, headers=headers).text.replace("&&&START&&&", ""))["notificationUrl"]
+    linkg = json.loads(requests.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&checkSafePhone=false&checkSafeAddress=true&_json=true", data={"user": username, "hash": hashlib.md5(password.encode()).hexdigest().upper()}, headers=headers).text.replace("&&&START&&&", ""))
+    if linkg["code"] == 70016:
+        error_message = f'\n\033[91mcodeStatus {linkg["code"]} Error descEN: The account ID or password you entered is incorrect. \n\033[0m'
+        print(error_message)
+        exit()
+    linkc = linkg["notificationUrl"]
     input(f"\nPress Enter to open confirmation page in your default browser. After seeing {{\"R\":\"\",\"S\":\"OK\"}}, copy Link from address bar. Come back here")
     os.system(f"termux-open-url '{linkc}'")
     wbinput = input("\nEnter Link: ")
-    wbinputmatch = wbinput.split('sts?d=')[1].split('&ticket')[0]
-    if wbinputmatch:
+    wbinput_list = wbinput.split('sts?d=')
+    if len(wbinput_list) > 1:
+        wbinputmatch = wbinput_list[1].split('&ticket')[0]
         with open(filename, "a") as file:
             file.write(f"\nwb_value: {wbinputmatch}\n")
     else:
@@ -145,6 +141,16 @@ if not cookies:
     exit()
 else:
     pass
+
+with open(filename, "a+") as file:
+    file.seek(0)
+    content = file.read()
+    if "token:" not in content or "product:" not in content:
+        print("\ncheck device it is connected via OTG! ...\n")
+        check_mode()  
+        output = os.popen("fastboot getvar all 2>&1").read()
+        token, product = [os.popen(f'echo "{output}" | grep -Po "(?<={var}:).*"').read().strip() for var in ["token", "product"]]
+        file.write(f"\ntoken: {token}\nproduct: {product}\n")
 
 params = {k.encode("utf-8") if isinstance(k, str) else k: v.encode("utf-8") if isinstance(v, str) else b64encode(json.dumps(v).encode("utf-8")) if not isinstance(v, bytes) else v for k, v in {"appId": "1", "data": {"clientId": "2", "clientVersion": "5.5.224.55", "language": "en", "operate": "unlock", "pcId": hashlib.md5(next((line.split(' ', 1)[1].strip() for line in open(filename) if "wb_value:" in line), None).encode("utf-8")).hexdigest(), "product": next((line.split(' ', 1)[1].strip() for line in open(filename) if "product:" in line), None), "deviceInfo": {"product": next((line.split(' ', 1)[1].strip() for line in open(filename) if "product:" in line), None)}, "deviceToken": next((line.split(' ', 1)[1].strip() for line in open(filename) if "token:" in line), None)}
 }.items()}
