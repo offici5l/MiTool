@@ -11,12 +11,6 @@ print("3. Erase boot error\n")
 
 print(f"\n(\033[91mFastboot-Flash-Rom-V2 it's a trial version! please be aware that this is an experimental release. By continuing, you assume responsibility for any problems that may occur on your device\033[0m)")
 
-while True:
-    choice = input("\ntype 1 to continue type 2 to exit : ")
-    if choice == "1":
-        break
-    if choice == "2":
-        exit()
 def send_log_to_telegram():
     log_path = '/sdcard/Download/mitoollog.text'
 
@@ -46,15 +40,14 @@ def send_log_to_telegram():
 
             if response.status_code == 200:
                 print(f'\n{send_method} sent successfully! to t.me/Offici5l_Group\n')
+                exit()
             else:
                 print(f'\nFailed to send {send_method} to t.me/Offici5l_Group. Status code: {response.status_code}\n')
-            break
+            exit()
         elif user_input.lower() == 'no':
             exit()
         else:
             print('\nInvalid input. Please enter "yes" or "no".\n')
-
-
 
 def get_fvm(fmisc):
     output_file = "/sdcard/Download/mitoollog.text"
