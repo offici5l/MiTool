@@ -72,20 +72,9 @@ with open(filename, "a+") as file:
         password = input("Enter password: ")
         file.write(f"\nPassword: {password}\n")
 
-username = next((line.split(' ', 1)[1].strip() for line in open(filename) if "Username:" in line), None)
-password = next((line.split(' ', 1)[1].strip() for line in open(filename) if "Password:" in line), None)
-
-headers={"User-Agent": "XiaomiPCSuite"}
-
 if "wb_value:" not in open(filename).read():
-    linkg = json.loads(requests.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&checkSafePhone=false&checkSafeAddress=true&_json=true", data={"user": username, "hash": hashlib.md5(password.encode()).hexdigest().upper()}, headers=headers).text.replace("&&&START&&&", ""))
-    if linkg["code"] == 70016:
-        error_message = f'\n\033[91mcodeStatus {linkg["code"]} Error descEN: The account ID or password you entered is incorrect. \n\033[0m'
-        print(error_message)
-        exit()
-    linkc = linkg["notificationUrl"]
     input(f"\nPress Enter to open confirmation page in your default browser. After seeing {{\"R\":\"\",\"S\":\"OK\"}}, copy Link from address bar. Come back here")
-    os.system(f"termux-open-url '{linkc}'")
+    os.system(f"termux-open-url 'https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&checkSafeAddress=true'")
     wbinput = input("\nEnter Link: ")
     wbinput_list = wbinput.split('sts?d=')
     if len(wbinput_list) > 1:
@@ -96,6 +85,10 @@ if "wb_value:" not in open(filename).read():
         print("Invalid URL")
         exit()
 
+username = next((line.split(' ', 1)[1].strip() for line in open(filename) if "Username:" in line), None)
+password = next((line.split(' ', 1)[1].strip() for line in open(filename) if "Password:" in line), None)
+
+headers={"User-Agent": "XiaomiPCSuite"}
 session = requests.Session()
 
 response = session.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&_json=true", data={"user": username, "hash": hashlib.md5(password.encode()).hexdigest().upper()}, headers=headers, cookies={"deviceId": next((line.split(' ', 1)[1].strip() for line in open(filename) if "wb_value:" in line), None)}).text.replace("&&&START&&&", "")
