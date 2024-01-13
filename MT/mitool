@@ -22,7 +22,7 @@ else
     echo
 fi
 
-echo -e "\n(\e[1;32mr\e[0m)oot,(\e[1;32mc\e[0m)ustom-recovery,(\e[1;32mh\e[0m)elp,(\e[1;31mt\e[0m)est"
+echo -e "\n(\e[1;32mr\e[0m)oot, (\e[1;32mc\e[0m)ustom-recovery, (\e[1;32mh\e[0m)elp, (\e[1;31mt\e[0m)est"
 
 echo -e "
 
