@@ -1,7 +1,17 @@
-(1.4.4)
+(1.4.5)
 
 
 
+
+
+In version 1.4.5:
+
+- to facilitate the bootloader unlocking step:
+  Now, when the browser is opened, you don't need to enter login credentials again; you only need to confirm the login.
+
+- suggestions or issue reports can now be directly sent to t.me/Offici5l_Group through mitool. with command : m (this is especially useful for users who do not have a telegram account.)
+
+- other improvements.
 
 
 
