@@ -25,6 +25,8 @@ def check_mode():
             print(f"\n {status1} ok \n")
             break
 
+
+
 print("\n\033[92m1.\033[0m Unlock")
 print("\033[92m2.\033[0m Lock")
 
@@ -59,27 +61,36 @@ while os.path.isfile(filename):
         print("Invalid choice. Please enter 'yes' or 'no'.")
 
 
-def update_file_content(filename):
-    with open(filename, "a+") as file:
-        file.seek(0)
-        content = file.read()
-        if "Username:" not in content:
-            username = input("Enter username or email or number (Xiaomi Account): ")
-            file.write(f"\nUsername: {username}\n")
-        if "Password:" not in content:
-            password = input("Enter password: ")
-            file.write(f"\nPassword: {password}\n")
-        if "token:" not in content or "product:" not in content:
-            print("\ncheck device it is connected via OTG! ...\n")
-            check_mode()
-            output = os.popen("fastboot getvar all 2>&1").read()
-            token, product = [os.popen(f'echo "{output}" | grep -Po "(?<={var}:).*"').read().strip() for var in ["token", "product"]]
-            file.write(f"\ntoken: {token}\nproduct: {product}\n")
 
+with open(filename, "a+") as file:
+    file.seek(0)
+    content = file.read()
+
+    if "Username:" not in content:
+        username = input("Enter username or email or number (Xiaomi Account): ")
+        file.write(f"\nUsername: {username}\n")
+
+    if "Password:" not in content:
+        password = input("Enter password: ")
+        file.write(f"\nPassword: {password}\n")
+
+    if "token:" not in content or "product:" not in content:
+        print("\ncheck device it is connected via OTG! ...\n")
+        check_mode()  
+        output = os.popen("fastboot getvar all 2>&1").read()
+        token, product = [os.popen(f'echo "{output}" | grep -Po "(?<={var}:).*"').read().strip() for var in ["token", "product"]]
+        file.write(f"\ntoken: {token}\nproduct: {product}\n")
+
+username = next((line.split(' ', 1)[1].strip() for line in open(filename) if "Username:" in line), None)
+
+password = next((line.split(' ', 1)[1].strip() for line in open(filename) if "Password:" in line), None)
+
+headers={"User-Agent": "XiaomiPCSuite"}
 
 if "wb_value:" not in open(filename).read():
+    linkc = json.loads(requests.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&checkSafeAddress=true&_json=true", data={"user": username, "hash": hashlib.md5(password.encode()).hexdigest().upper()}, headers=headers).text.replace("&&&START&&&", ""))["notificationUrl"]
     input(f"\nPress Enter to open confirmation page in your default browser. After seeing {{\"R\":\"\",\"S\":\"OK\"}}, copy Link from address bar. Come back here")
-    os.system(f"termux-open-url 'https://account.xiaomi.com/pass/serviceLogin?sid=unlockApi&checkSafeAddress=true'")
+    os.system(f"termux-open-url '{linkc}'")
     wbinput = input("\nEnter Link: ")
     wbinputmatch = wbinput.split('sts?d=')[1].split('&ticket')[0]
     if wbinputmatch:
@@ -89,21 +100,9 @@ if "wb_value:" not in open(filename).read():
         print("Invalid URL")
         exit()
 
-update_file_content(filename)
-
-with open(filename, "r") as file:
-    lines = file.readlines()
-    extract_info = lambda keyword: next((line.split(' ', 1)[1].strip() for line in lines if keyword in line), None)
-    tokenname = extract_info("token:")
-    productname = extract_info("product:")
-    username = extract_info("Username:")
-    password = extract_info("Password:")
-    wbvalueline = extract_info("wb_value:")
-
-headers={"User-Agent": "XiaomiPCSuite"}
 session = requests.Session()
 
-response = session.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&_json=true", data={"user": username, "hash": hashlib.md5(password.encode()).hexdigest().upper()}, headers=headers, cookies={"deviceId": wbvalueline}).text.replace("&&&START&&&", "")
+response = session.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&_json=true", data={"user": username, "hash": hashlib.md5(password.encode()).hexdigest().upper()}, headers=headers, cookies={"deviceId": next((line.split(' ', 1)[1].strip() for line in open(filename) if "wb_value:" in line), None)}).text.replace("&&&START&&&", "")
 
 if json.loads(response)["securityStatus"] == 16:
     error_message = f'\n\033[91msecurityStatus {json.loads(response)["securityStatus"]}\033[0m\n\n\033[92mPlease go to: settings > Mi Account > Devices > select Current device > Find device "enable Find device"\033[0m\n'
@@ -140,13 +139,14 @@ response_cookies = session.get( location + "&clientSign=" + urllib.parse.quote_p
 cookies = response_cookies
 
 if not cookies:
-    error_message = f'\n\033[91mdescEN: Error information not obtained from server.\nInvalid wb_value: {wbvalueline}\n\033[0m\033[92m'
+    wbe = next((line.split(' ', 1)[1].strip() for line in open(filename) if "wb_value:" in line), None)
+    error_message = f'\n\033[91mdescEN: Error information not obtained from server.\nInvalid wb_value: {wbe} \n\033[0m\033[92m'
     print(error_message)
     exit()
 else:
     pass
 
-params = {k.encode("utf-8") if isinstance(k, str) else k: v.encode("utf-8") if isinstance(v, str) else b64encode(json.dumps(v).encode("utf-8")) if not isinstance(v, bytes) else v for k, v in {"appId": "1", "data": {"clientId": "2", "clientVersion": "5.5.224.55", "language": "en", "operate": "unlock", "pcId": hashlib.md5(wbvalueline.encode("utf-8")).hexdigest(), "product": productname, "deviceInfo": {"product": productname}, "deviceToken": tokenname}
+params = {k.encode("utf-8") if isinstance(k, str) else k: v.encode("utf-8") if isinstance(v, str) else b64encode(json.dumps(v).encode("utf-8")) if not isinstance(v, bytes) else v for k, v in {"appId": "1", "data": {"clientId": "2", "clientVersion": "5.5.224.55", "language": "en", "operate": "unlock", "pcId": hashlib.md5(next((line.split(' ', 1)[1].strip() for line in open(filename) if "wb_value:" in line), None).encode("utf-8")).hexdigest(), "product": next((line.split(' ', 1)[1].strip() for line in open(filename) if "product:" in line), None), "deviceInfo": {"product": next((line.split(' ', 1)[1].strip() for line in open(filename) if "product:" in line), None)}, "deviceToken": next((line.split(' ', 1)[1].strip() for line in open(filename) if "token:" in line), None)}
 }.items()}
 
 psiggn = bytes.fromhex("327442656f45794a54756e6d57554771376251483241626e306b324e686875724f61714266797843754c56676e3441566a3773776361776535337544556e6f")
@@ -231,17 +231,14 @@ session.close()
 code = result.get("code", "")
 descEN = result.get("descEN", "")
 
-
 if "code" in result and result["code"] == 10000:
     print(f"\ncode: {code} descEN: {descEN}\nInvalid device token or product.\n")
     with open(filename, "r") as file:
         lines = [line for line in file.readlines() if "token:" not in line and "product:" not in line]
     with open(filename, "w") as file:
         file.writelines(lines)
-    exec("\n".join(line for i, line in enumerate(codecs.open('/data/data/com.termux/files/usr/bin/un-lock.py', 'r', 'utf-8').read().split('\n'), 1) if i not in range(27, 60)))
+    exec("\n".join(line for i, line in enumerate(codecs.open('/data/data/com.termux/files/usr/bin/un-lock.py', 'r', 'utf-8').read().split('\n'), 1) if i not in range(28, 63)))
     exit()
-
-
 
 if "encryptData" in result:
     unlock_token = result["encryptData"]
