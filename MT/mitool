@@ -3,7 +3,8 @@
 c_v=$(cat "$PREFIX/bin/mitoolV" | sed -n '1s/[^0-9.]//gp')
 l_v=$(curl -m 3 -s https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitoolV | sed -n '1s/[^0-9.]//gp')
 
-printf "\nhttps://github.com/offici5l/MiTool\nversion:[current:%s | latest:%s]\n" "$c_v" "$l_v"
+printf "\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n┃ https://github.com/offici5l/MiTool\n┃ Version: [current:%s | latest:%s]\n┃ For issues or suggestions: \e[38;5;208mm\e[0m\n┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" "$c_v" "$l_v"
+
 
 if [ "$(printf "$c_v\n$l_v" | sort -V | tail -n 1)" != "$c_v" ]; then
     update=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitoolV | sed '1d')
@@ -68,9 +69,13 @@ elif [ "$choice" == "r" ]; then
     python3 $PREFIX/bin/specificpartitions.py boot
 elif [ "$choice" == "h" ]; then
     echo -e "\nversion 34.0.4-android-tools\n\ncommands adb\ntype: \e[1;32madb help\e[0m\n\ncommands fastboot\ntype: \e[1;32mfastboot help\e[0m\n"
+elif [ "$choice" == "m" ]; then
+    read -p $'\nDo you want to send a \e[1;31missue\e[0m or a \e[0;32msuggestion\e[0m (i/s): ' choice && ([ -z "$choice" ] || ([ "$choice" != "i" ] && [ "$choice" != "s" ])) && echo -e "Invalid choice. Exiting." || read -p "Please write your $(if [ "$choice" == "i" ]; then echo -e "\e[1;31mIssue\e[0m"; else echo -e "\e[1;32msuggestion\e[0m"; fi): " input_text && mtype=$(if [ "$choice" == "i" ]; then echo "Issue"; else echo "Suggestion"; fi) && curl -X POST -d "chat_id=-1002017234802&text=${mtype}%3A%0A%0A${input_text}" https://api.telegram.org/bot6772941553:AAHZ-ICe-4zeLWil2VYv4_WOgoDSD3Haz9o/sendMessage > /dev/null 2>&1 && ([ $? -eq 0 ] && echo -e "${mtype} sent successfully to t.me/Offici5l_Group " || echo -e "\e[31mFailed to send ${mtype} to t.me/Offici5l_Group . Exit code: $? \e[0m")
 else
     echo "Invalid choice"
     exit
 fi
+
+
 
 
