@@ -49,7 +49,7 @@ def decompress_and_flash_rom(tgz_file_name):
     if not os.path.exists(RF):
         os.makedirs(RF)
     print(f"\n\033[92mdecompressed..., please wait\033[0m\n")
-    tar_command = f"pv -bpe {tgz_file_name} | tar --strip-components=1 -xzf- -C {RF}/"
+    tar_command = f"pv -bpe '{tgz_file_name}' | tar --strip-components=1 -xzf- -C {RF}/"
     return_code = os.system(tar_command)
     if return_code != 0:
         print(f"\nError during extraction with tar (Exit Code: {return_code})\n")
