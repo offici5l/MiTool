@@ -6,7 +6,7 @@ l_v=$(curl -m 3 -s https://raw.githubusercontent.com/offici5l/MiTool/master/MT/m
 printf "\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n┃ https://github.com/offici5l/MiTool\n┃ Version: [current:%s | latest:%s]\n┃ - For issues or suggestions: \e[38;5;208mm\e[0m\n┃ - To update: \e[1;32mu\e[0m or \e[1;32muall\e[0m\n┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" "$c_v" "$l_v"
 
 if [ "$(printf "$c_v\n$l_v" | sort -V | tail -n 1)" != "$c_v" ]; then
-    update=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitoolV | sed -n '/^#Update:/,$ { /^#Update:/d; p }' | sed -n '11,$p')
+    update=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitoolV | sed -n '/^#Update:/,$ { /^#Update:/d; p }')
     printf "
 new update available!: \e[1;32m$l_v\e[0m \n \e[1;32m$update\e[0m\n
 "
