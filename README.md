@@ -1,5 +1,3 @@
-1.4.5
-
 <div align="center">
 
 # MiTool
@@ -51,3 +49,8 @@ mitool
 <div align="center">
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
+
+
+
+
+v 1.4.5
