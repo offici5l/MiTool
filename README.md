@@ -6,9 +6,9 @@
 
 ##### MiTool developed to retrieve encryptData(token) for Xiaomi devices for unlocking bootloader
 
-###### ( a version for Mac, Windows, and Linux is also available via the following [link](https://github.com/offici5l/un-lock/upload/main/un-lock) )
-
 [![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
+
+###### ( a version for Mac, Windows, and Linux is also available via the following [link](https://github.com/offici5l/un-lock/upload/main/un-lock) )
 
 </div>
 
