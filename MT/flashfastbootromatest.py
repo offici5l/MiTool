@@ -1,5 +1,13 @@
 import os
 
+print(f"\n- Fastboot-Flash-Rom-V2")
+
+print("\nThis version is designed for those encountering the following issues:")
+print("1. error: current device antirollback version is greater than this package")
+print("2. Erase boot error\n")
+
+print(f"\n(\033[91mFastboot-Flash-Rom-V2 it's a trial version! please be aware that this is an experimental release. By continuing, you assume responsibility for any problems that may occur on your device\033[0m)")
+
 def check_mode():
     while True:
         status1 = os.popen("adb get-state 2>/dev/null").read().strip()
