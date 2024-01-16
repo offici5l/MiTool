@@ -1,9 +1,5 @@
 import os
 
-text1 = "\nChoose an option:\n\n\033[92m1 -\033[0m Flash without locking bootloader\n\033[92m2 -\033[0m Flash with lock bootloader\n\033[92m3 -\033[0m Flash all except data storage\n\nEnter the option number: "
-
-text2 = "\ncheck device it is connected via OTG! ...\n"
-
 def check_mode():
     while True:
         status1 = os.popen("adb get-state 2>/dev/null").read().strip()
@@ -22,27 +18,44 @@ def check_mode():
             break
 
 
-def flash_selected_result(selected_result):
-    flashOption = int(input(text1))
+def translate_file_name(file_name):
+    translations = {
+        "flash_all.sh": "Flash without locking bootloader",
+        "flash_all_lock.sh": "Flash with lock bootloader",
+        "flash_all_except_data_storage.sh": "Flash all except data storage"
+    }
+    return translations.get(file_name, file_name)
 
-    if flashOption == 1:
-        print(text2)
-        check_mode()
-        flash = "flash_all.sh"
-        os.system(f"sh {selected_result}/{flash}")
-    elif flashOption == 2:
-        print(text2)
-        check_mode()
-        flash_lock = "flash_all_lock.sh"
-        os.system(f"sh {selected_result}/{flash_lock}")
-    elif flashOption == 3:
-        print(text2)
-        check_mode()
-        flash_all_except_data_storage = "flash_all_except_data_storage.sh"
-        os.system(f"sh {RF}/{flash_all_except_data_storage}")
-    else:
-        print("\nInvalid option\n")
-        exit(1)
+def flash_selected_result(selected_result):
+    file_names = ["flash_all.sh", "flash_all_lock.sh", "flash_all_except_data_storage.sh"]
+    
+    while True:
+        found_files = [file for file in os.listdir(selected_result) if file in file_names]
+
+        if found_files:
+            for index, file in enumerate(found_files, start=1):
+                translated_name = translate_file_name(file)
+                print(f"\n \033[92m{index}\033[0m -  {translated_name}")
+            
+            choice = input("\nEnter your \033[92mchoice\033[0m: ")
+
+            try:
+                choice = int(choice)
+                if 1 <= choice <= len(found_files):
+                    selected_file = found_files[choice - 1]
+                    translated_file = translate_file_name(selected_file)
+                    print("\ncheck device it is connected via OTG ! ...\n")
+                    check_mode()
+                    os.system(f"sh {selected_result}/{selected_file}")
+                    exit()
+                else:
+                    print("\nInvalid choice !\n")
+            except ValueError:
+                print("\nInvalid input !\n")
+        else:
+            print("\nThe required files were not found !\n")
+            exit()  
+
 
 def decompress_and_flash_rom(tgz_file_name):
     RF = "/sdcard/Download/mi-flash-fastboot-rom"
@@ -53,31 +66,13 @@ def decompress_and_flash_rom(tgz_file_name):
     return_code = os.system(tar_command)
     if return_code != 0:
         print(f"\nError during extraction with tar (Exit Code: {return_code})\n")
-        exit(1)
+        exit()
 
-    if all(os.path.exists(os.path.join(RF, file)) for file in ["flash_all_lock.sh", "flash_all.sh", "flash_all_except_data_storage.sh"]) and os.path.exists(os.path.join(RF, "images")):
-        flashOption = int(input(text1))
-        if flashOption == 1:
-            print(text2)
-            check_mode()
-            flash = "flash_all.sh"
-            os.system(f"sh {RF}/{flash}")
-        elif flashOption == 2:
-            print(text2)
-            check_mode()
-            flash_lock = "flash_all_lock.sh"
-            os.system(f"sh {RF}/{flash_lock}")
-        elif flashOption == 3:
-            print(text2)
-            check_mode()
-            flash_all_except_data_storage = "flash_all_except_data_storage.sh"
-            os.system(f"sh {RF}/{flash_all_except_data_storage}")
-        else:
-            print("\nInvalid option\n")
-            exit(1)
+    if os.path.exists(os.path.join(RF, "images")) and any(os.path.exists(os.path.join(RF, file)) for file in ["flash_all_lock.sh", "flash_all.sh", "flash_all_except_data_storage.sh"]):
+        flash_selected_result(RF)
     else:
         print("\ninvalid tgz 'exit'\n")
-        exit(1)
+        exit()
 
 target_extension = ".tgz"
 target_files = ["flash_all_lock.sh", "flash_all.sh", "flash_all_except_data_storage.sh"]
@@ -96,7 +91,7 @@ for root, dirs, files in os.walk("/sdcard"):
         dir_path = os.path.join(root, dir_name)
         dir_files = set(os.listdir(dir_path))
 
-        if all(target_file in dir_files for target_file in target_files) and target_folder in dir_files:
+        if any(target_file in dir_files for target_file in target_files) and target_folder in dir_files and any(file in target_files for file in dir_files):
             result_paths.append(dir_path)
 
 if result_paths:
@@ -105,11 +100,11 @@ if result_paths:
         
     while True:
         try:
-            selected_index = int(input(f"\ntype correct \033[92mnumber\033[0m you want to flash: "))
+            selected_index = int(input("\nEnter your \033[92mchoice\033[0m: "))
             if 1 <= selected_index <= len(result_paths):
                 break
             else:
-                print("\nInvalid selection !")
+                print("\nInvalid choice !\n")
         except ValueError:
             print("\nInvalid input !")
 
@@ -120,12 +115,6 @@ if result_paths:
     elif os.path.isdir(selected_result):
         flash_selected_result(selected_result)
 
-
-if not result_paths:
+else:
     print("\n \033[91mNo ROMs found on the device !\033[0m")
     print("\n   Please download or transfer a ROM to your device.\n")
-else:
-    for i, result in enumerate(result_paths, start=1):
-        print(f"\n \033[92m{i}\033[0m - {result}\n")
-
-
