@@ -8,7 +8,7 @@
 
 [![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
 
-###### ( a version for Mac, Windows, and Linux is also available via the following [link](https://github.com/offici5l/un-lock/upload/main/un-lock) )
+###### ( a version for Mac, Windows, and Linux is also available via [link](https://github.com/offici5l/un-lock) )
 
 </div>
 
