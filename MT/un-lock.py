@@ -241,13 +241,14 @@ if "code" in result and result["code"] == 10000:
 
 if "encryptData" in result:
     unlock_token = result["encryptData"]
-    input("Ensure your device is in fastboot mode, connected via OTG. Press Enter when ready to unlock the device")
+    binary_data = bytes.fromhex(unlock_token)
+    bytes_io_data = io.BytesIO(binary_data)
+    with open("token.bin", "wb") as token_file:
+        token_file.write(bytes_io_data.getvalue())
     print("\ncheck device it is connected via OTG! ...\n")
     check_mode()
-    with open("token.bin", "wb") as token_file:
-        token_file.write(bytes.fromhex(unlock_token))
-        os.system("fastboot stage token.bin")
-        os.system("fastboot oem unlock")
+    os.system("fastboot stage token.bin")
+    os.system("fastboot oem unlock")
 else:
     formatted_result = json.dumps(result, indent=0, ensure_ascii=False, separators=('\n', ': '))[1:-1].replace('"', '')
     framed_result = colored(f"\n{'='*56}\n{formatted_result}\n{'='*56}\n", 'green')
