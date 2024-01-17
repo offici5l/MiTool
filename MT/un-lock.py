@@ -1,10 +1,10 @@
-import re, requests, json, hmac, random, binascii, urllib, hashlib, os, urllib.parse, time, codecs
+import re, requests, json, hmac, random, binascii, urllib, hashlib, os, urllib.parse, time, codecs, io, sys
 from urllib3.util.url import Url
 from base64 import b64encode, b64decode
 from Cryptodome.Cipher import AES
 from termcolor import colored
 from urllib.parse import urlparse
-import sys
+
 
 filename = "/sdcard/Download/account_info.txt"
 
