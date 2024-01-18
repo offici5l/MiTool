@@ -71,7 +71,16 @@ elif [ "$choice" == "r" ]; then
 elif [ "$choice" == "h" ]; then
     echo -e "\nversion 34.0.4-android-tools\n\nExample Usage:\n\nTo flash boot.img, use:\n\e[1;32mfastboot flash boot boot.img\e[0m\n\nTo flash recovery.img, use:\n\e[1;32mfastboot flash recovery recovery.img\e[0m\n\nTo flash rom.zip or magisk.zip ... with sideload mode, use:\n\e[1;32madb sideload name.zip\e[0m\n\nFor more adb commands, type:\n\e[1;32madb help\e[0m\n\nFor more fastboot commands, type:\n\e[1;32mfastboot help\e[0m\n\nIf you want to report a issue or suggest an improvement, use command 'm' after running mitool, then write your feedback. Your report or suggestion will be directly sent to: \n\e[1;34mt.me/Offici5l_Group\e[0m."
 elif [ "$choice" == "m" ]; then
-    read -p $'\nDo you want to send a \e[1;31missue\e[0m or a \e[0;32msuggestion\e[0m (i/s): ' choice && ([ -z "$choice" ] || ([ "$choice" != "i" ] && [ "$choice" != "s" ])) && echo -e "Invalid choice. Exiting." || read -p "Please write your $(if [ "$choice" == "i" ]; then echo -e "\e[1;31mIssue\e[0m"; else echo -e "\e[1;32msuggestion\e[0m"; fi): " input_text && mtype=$(if [ "$choice" == "i" ]; then echo "Issue"; else echo "Suggestion"; fi) && curl -X POST -d "chat_id=-1002017234802&text=${mtype}%3A%0A%0A${input_text}" https://api.telegram.org/bot6772941553:AAHZ-ICe-4zeLWil2VYv4_WOgoDSD3Haz9o/sendMessage > /dev/null 2>&1 && ([ $? -eq 0 ] && echo -e "${mtype} sent successfully to t.me/Offici5l_Group " || echo -e "\e[31mFailed to send ${mtype} to t.me/Offici5l_Group . Exit code: $? \e[0m")
+    read -p $'\nDo you want to send an \e[1;31missue\e[0m or a \e[0;32msuggestion\e[0m (i/s): ' choice &&
+([ -z "$choice" ] || ([ "$choice" != "i" ] && [ "$choice" != "s" ])) &&
+echo -e "Invalid choice. Exiting." ||
+read -p "Please write your $(if [ "$choice" == "i" ]; then echo -e "\e[1;31mIssue\e[0m"; else echo -e "\e[1;32msuggestion\e[0m"; fi): " input_text &&
+username=$(whoami) &&
+mtype=$(if [ "$choice" == "i" ]; then echo "#Issue"; else echo "#Suggestion"; fi) &&
+full_message="${mtype} from #user: ${username}%3A%0A%0A${input_text}" &&
+curl -X POST -d "chat_id=-1002017234802&text=${full_message}" https://api.telegram.org/bot6772941553:AAHZ-ICe-4zeLWil2VYv4_WOgoDSD3Haz9o/sendMessage > /dev/null 2>&1 &&
+([ $? -eq 0 ] && echo -e "${mtype} sent successfully to t.me/Offici5l_Group " ||
+echo -e "\e[31mFailed to send ${mtype} to t.me/Offici5l_Group . Exit code: $? \e[0m")
 else
     echo "Invalid choice"
     exit
