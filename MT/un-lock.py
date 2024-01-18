@@ -239,6 +239,10 @@ if "code" in result and result["code"] == 10000:
     exec("\n".join(line for i, line in enumerate(codecs.open('/data/data/com.termux/files/usr/bin/un-lock.py', 'r', 'utf-8').read().split('\n'), 1) if i not in range(28, 63)))
     exit()
 
+if "code" in result and result["code"] == 20036:
+    print(f"\n\n\033[92m{descEN}\033[0m\n\n")
+    exit()
+
 if "encryptData" in result:
     unlock_token = result["encryptData"]
     binary_data = bytes.fromhex(unlock_token)
