@@ -78,7 +78,7 @@ read -p "Please write your $(if [ "$choice" == "i" ]; then echo -e "\e[1;31mIssu
 username=$(whoami) &&
 mtype=$(if [ "$choice" == "i" ]; then echo "#Issue"; else echo "#Suggestion"; fi) &&
 full_message="${mtype} from #user: ${username}%3A%0A%0A${input_text}" &&
-curl -X POST -d "chat_id=-1002017234802&text=${full_message}" https://api.telegram.org/bot6772941553:AAHZ-ICe-4zeLWil2VYv4_WOgoDSD3Haz9o/sendMessage > /dev/null 2>&1 &&
+curl -X POST -d "chat_id=-1002017234802&text=${full_message}" "https://api.telegram.org/bot6772941553:AAHZ-ICe-4zeLWil2VYv4_WOgoDSD3Haz9o/sendMessage" > /dev/null 2>&1 &&
 ([ $? -eq 0 ] && echo -e "${mtype} sent successfully to t.me/Offici5l_Group " ||
 echo -e "\e[31mFailed to send ${mtype} to t.me/Offici5l_Group . Exit code: $? \e[0m")
 else
