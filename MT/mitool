@@ -22,7 +22,7 @@ fi
 
 curl -m3 -s https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitoolV | sed -n '/^#Note:/,/^#Update:/ {/^#Note:/b; /^#Update:/b; p}'
 
-printf "\n\n\n\n\n\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n┃ https://github.com/offici5l/MiTool\n┃ Version: [current:%s | latest:%s]\n┃ - For issues or suggestions: \e[1;32mm\e[0m\n┃ - To update: \e[1;32mu\e[0m or \e[1;32muall\e[0m\n┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" "$c_v" "$l_v"
+printf "\n\n\n\n\n\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n┃ https://github.com/offici5l/MiTool\n┃ Version: current:%s | latest:%s\n┃ - \e[1;32mm\e[0m for issues or suggestions\n┃ - \e[1;32mu\e[0m or \e[1;32muall\e[0m to update\n┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" "$c_v" "$l_v"
 
 echo -e "\n\n- \e[1;32mh\e[0m help (root, custom-recovery, partitions, commands ...)\n"
 
