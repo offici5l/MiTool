@@ -3,7 +3,7 @@
 c_v=$(cat "$PREFIX/bin/mitoolV" | sed -n '1p')
 l_v=$(curl -m 3 -s https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitoolV | sed -n '1p')
 
-if [ "$l_v" != "$c_v" ]; then
+if [ "$l_v" \> "$c_v" ]; then
     update=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitoolV | sed -n '/^#Update:/,$ { /^#Update:/d; p }')
     printf "
 new update available!: \e[1;32m$l_v\e[0m \n \e[1;32m$update\e[0m\n
