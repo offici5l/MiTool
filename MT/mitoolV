@@ -1,13 +1,8 @@
-1.4.6
+1.4.7
 
 #Note:
 
 
 #Update:
 
-- Improve Flash-Fastboot-ROM and Fastboot-Flash-Rom-V2
-
-- [ Sending 'token.bin' (0 KB) FAILED (File is too large to download) ... ]
-issus has been resolved
-
-- Other improvements
+- improvements
