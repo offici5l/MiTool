@@ -3,9 +3,7 @@
 c_v=$(cat "$PREFIX/bin/mitoolV" | sed -n '1p')
 l_v=$(curl -m 3 -s https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitoolV | sed -n '1p')
 
-printf "\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n┃ https://github.com/offici5l/MiTool\n┃ Version: [current:%s | latest:%s]\n┃ - For issues or suggestions: \e[38;5;208mm\e[0m\n┃ - To update: \e[1;32mu\e[0m or \e[1;32muall\e[0m\n┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" "$c_v" "$l_v"
-
-if [ "$(printf "$c_v\n$l_v" | sort -V | tail -n 1)" != "$c_v" ]; then
+if [ "$l_v" != "$c_v" ]; then
     update=$(curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitoolV | sed -n '/^#Update:/,$ { /^#Update:/d; p }')
     printf "
 new update available!: \e[1;32m$l_v\e[0m \n \e[1;32m$update\e[0m\n
@@ -24,18 +22,22 @@ fi
 
 curl -m3 -s https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitoolV | sed -n '/^#Note:/,/^#Update:/ {/^#Note:/b; /^#Update:/b; p}'
 
-echo -e "\n(\e[1;32mr\e[0m)oot, (\e[1;32mc\e[0m)ustom-recovery, (\e[1;32mh\e[0m)elp, (\e[1;31mt\e[0m)est"
+printf "\n\n\n\n\n\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n┃ https://github.com/offici5l/MiTool\n┃ Version: [current:%s | latest:%s]\n┃ - For issues or suggestions: \e[1;32mm\e[0m\n┃ - To update: \e[1;32mu\e[0m or \e[1;32muall\e[0m\n┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" "$c_v" "$l_v"
+
+echo -e "\n\n- \e[1;32mh\e[0m help (root, custom-recovery, partitions, commands ...)\n"
 
 echo -e "
 
 
-- \e[1;32m1\e[0m. Unlock-or-Lock-Bootloader
+- \e[1;32m1\e[0m Unlock-or-Lock-Bootloader
 "
 echo -e "
-- \e[1;32m2\e[0m. Flash-Fastboot-ROM
+- \e[1;32m2\e[0m Flash-Fastboot-ROM | - \e[1;32mv2\e[0m \e[1;31mFlash-Fastboot-ROM-V2\e[0m
 "
 echo -e "
-- \e[1;32m3\e[0m. Flash-Zip-With-Sideload
+- \e[1;32m3\e[0m Flash-Zip-With-Sideload
+
+
 
 "
 
@@ -57,19 +59,8 @@ elif [ "$choice" == "u" ]; then
 elif [ "$choice" == "uall" ]; then
     curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | sed '$d' | bash
     mitool
-elif [ "$choice" == "t" ]; then
+elif [ "$choice" == "v2" ]; then
     python3 "$PREFIX/bin/flashfastbootromatest.py"
-elif [ "$choice" == "c" ]; then
-    echo -e "\nFlashing Custom Recovery with fastboot mode...\n\nRequirements: recovery.img ,Bootloader unlocked\n"
-    read -p "press Enter to continue"
-    python3 $PREFIX/bin/specificpartitions.py recovery
-elif [ "$choice" == "r" ]; then
-    echo -e "\nfor flashing root with fastboot mode\n\nRequirements: boot.img ,Bootloader unlocked\n\n1. Download and install Magisk app\n2. Open Magisk app and press the Install button in the Magisk card\n3. Choose 'Select and Patch a File' in method, and select the boot.img\n\n\nnotice choose boot.img for device you want to root\n\n"
-    echo -e "If you complete the steps, press Enter"
-    read
-    python3 $PREFIX/bin/specificpartitions.py boot
-elif [ "$choice" == "h" ]; then
-    echo -e "\nversion 34.0.4-android-tools\n\nExample Usage:\n\nTo flash boot.img, use:\n\e[1;32mfastboot flash boot boot.img\e[0m\n\nTo flash recovery.img, use:\n\e[1;32mfastboot flash recovery recovery.img\e[0m\n\nTo flash rom.zip or magisk.zip ... with sideload mode, use:\n\e[1;32madb sideload name.zip\e[0m\n\nFor more adb commands, type:\n\e[1;32madb help\e[0m\n\nFor more fastboot commands, type:\n\e[1;32mfastboot help\e[0m\n\nIf you want to report a issue or suggest an improvement, use command 'm' after running mitool, then write your feedback. Your report or suggestion will be directly sent to: \n\e[1;34mt.me/Offici5l_Group\e[0m."
 elif [ "$choice" == "m" ]; then
     read -p $'\nDo you want to send an \e[1;31missue\e[0m or a \e[0;32msuggestion\e[0m (i/s): ' choice &&
 ([ -z "$choice" ] || ([ "$choice" != "i" ] && [ "$choice" != "s" ])) &&
@@ -81,8 +72,29 @@ full_message="${mtype} from #user: ${username}%3A%0A%0A${input_text}" &&
 curl -X POST -d "chat_id=-1002017234802&text=${full_message}" "https://api.telegram.org/bot6772941553:AAHZ-ICe-4zeLWil2VYv4_WOgoDSD3Haz9o/sendMessage" > /dev/null 2>&1 &&
 ([ $? -eq 0 ] && echo -e "${mtype} sent successfully to t.me/Offici5l_Group " ||
 echo -e "\e[31mFailed to send ${mtype} to t.me/Offici5l_Group . Exit code: $? \e[0m")
+elif [ "$choice" == "h" ]; then
+    echo -e "
+\n\n\n\033[1;36mFlash Custom Recovery:\033[0m
+Type: \033[1;32mfastboot flash recovery name.img\033[0m
+Example: \033[1;32mfastboot flash recovery /sdcard/download/recovery.img\033[0m
+
+\n\n\n\033[1;36mFlash Root:\033[0m
+1. Download and install \033[0;33mMagisk app\033[0m
+2. Open Magisk app, press \033[0;33mInstall\033[0m in the Magisk card
+3. Choose '\033[0;33mSelect and Patch a File\033[0m', select \033[1;32mboot.img\033[0m
+   (\033[1;33mNote: Choose boot.img for the device you want to root\033[0m)
+   Type: \033[1;32mfastboot flash boot name.img\033[0m
+   Example: \033[1;32mfastboot flash boot /sdcard/download/boot.img\033[0m
+
+\n\n\n\033[1;36mFlash Specific Partitions\033[0m
+('recovery', 'boot', 'vbmeta', 'vbmeta_system', 'metadata', 'dtbo', 'cust', 'super', 'userdata', ...):
+   Type, for example: \n   \033[1;32mfastboot flash super /sdcard/download/super.img\033[0m
+
+\n\n\n\033[1;36mFor more fastboot and adb commands:\033[0m\ntype: \033[1;32mfastboot help\033[0m or \033[1;32madb help\033[0m
+"
 else
     echo "Invalid choice"
     exit
 fi
+
 
