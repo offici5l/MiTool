@@ -20,9 +20,9 @@ def check_mode():
 
 def translate_file_name(file_name):
     translations = {
-        "flash_all.sh": "Flash without locking bootloader",
-        "flash_all_lock.sh": "Flash with lock bootloader",
-        "flash_all_except_data_storage.sh": "Flash all except data storage"
+        "flash_all.sh": "Flash all \033[92mwithout locking bootloader\033[0m",
+        "flash_all_lock.sh": "Flash all \033[91mwith lock bootloader\033[0m",
+        "flash_all_except_data_storage.sh": "Flash all \033[92mexcept data storage\033[0m"
     }
     return translations.get(file_name, file_name)
 
