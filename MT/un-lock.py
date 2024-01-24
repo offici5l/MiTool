@@ -1,10 +1,17 @@
-import re, requests, json, hmac, random, binascii, urllib, hashlib, os, urllib.parse, time, codecs, io, sys
+import re, requests, json, hmac, random, binascii, urllib, hashlib, os, urllib.parse, time, codecs, io, sys, shutil
 from urllib3.util.url import Url
 from base64 import b64encode, b64decode
 from Cryptodome.Cipher import AES
 from termcolor import colored
 from urllib.parse import urlparse
 
+url = "github.com/offici5l/MiTool"
+border_length = len(url) + 4
+terminal_width, _ = shutil.get_terminal_size()
+left_padding = (terminal_width - border_length) // 2
+border = '━' * border_length
+formatted_url = f"\n{' ' * left_padding}┏{border}┓\n{' ' * left_padding}┃  {url}  ┃\n{' ' * left_padding}┗{border}┛"
+print(formatted_url)
 
 filename = "/sdcard/Download/account_info.txt"
 
@@ -43,12 +50,6 @@ elif choice == "2":
 else:
     print("\nInvalid choice.\n")
     exit()
-
-text_to_print = """
-Go to Settings » Additional settings » Developer options:\n\n- Enable OEM unlocking and USB debugging.\n- Tap Mi Unlock status » Agree » Add account and device.\n\n"After successful binding, you'll see a confirmation message: Added successfully."
-"""
-
-input(colored(f"\n{'='*15}github.com/offici5l/MiTool{'='*15}\n{text_to_print}\n{'='*56}\n", 'green') + "\nIf you complete the steps successfully, press Enter")
 
 while os.path.isfile(filename):
     pr = input(f"\ndo you want to use previous information in \033[92m{filename}\033[0m (yes/no) ? : ").lower()
@@ -236,7 +237,7 @@ if "code" in result and result["code"] == 10000:
         lines = [line for line in file.readlines() if "token:" not in line and "product:" not in line]
     with open(filename, "w") as file:
         file.writelines(lines)
-    exec("\n".join(line for i, line in enumerate(codecs.open('/data/data/com.termux/files/usr/bin/un-lock.py', 'r', 'utf-8').read().split('\n'), 1) if i not in range(28, 63)))
+    exec("\n".join(line for i, line in enumerate(codecs.open('/data/data/com.termux/files/usr/bin/un-lock.py', 'r', 'utf-8').read().split('\n'), 1) if i not in range(35, 64)))
     exit()
 
 if "code" in result and result["code"] == 20036:
