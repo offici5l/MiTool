@@ -122,7 +122,7 @@ if not argsjson.get("cloudsp_nonce"):
     random_part = secrets.token_hex(random_part_length // 2)
     argsjson["cloudsp_nonce"] = random_part + "_3b1fa"
 
-if "V816" in argsjson["rom_version"]:
+if argsjson["rom_version"].startswith("V816"):
     argsjson["rom_version"] = argsjson["rom_version"].replace("V816", "V14")
     print("\nValue changed \033[92mdone\033[0m\n")
 
