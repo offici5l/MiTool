@@ -24,7 +24,7 @@ curl -m3 -s https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitoolV 
 
 printf "\n\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n┃ https://github.com/offici5l/MiTool\n┃ Version: current:%s | latest:%s\n┃ - \e[1;32mm\e[0m for issues or suggestions\n┃ - \e[1;32mu\e[0m or \e[1;32muall\e[0m to update\n┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛" "$c_v" "$l_v"
 
-echo -e "\n\n- \e[1;32mh\e[0m help (root, custom-recovery, partitions, commands ...)\n"
+printf "\n\n- \e[1;32mh\e[0melp (root, custom-recovery, partitions, commands ...)\n"
 
 echo -e "
 
@@ -32,12 +32,15 @@ echo -e "
 - \e[1;32m1\e[0m Unlock-or-Lock-Bootloader
 "
 echo -e "
-- \e[1;32m2\e[0m Flash-Fastboot-ROM | - \e[1;32mv2\e[0m \e[1;31mFlash-Fastboot-ROM-V2\e[0m
+- \e[1;32m2\e[0m Flash-Fastboot-ROM
+ \e[1;32mv2\e[0m \e[1;31mFlash-Fastboot-ROM-V2\e[0m
 "
 echo -e "
 - \e[1;32m3\e[0m Flash-Zip-With-Sideload
+"
 
-
+echo -e "
+- \e[1;32m4\e[0m Bypass-HyperOS-BootLoader-Restrictions
 
 "
 
@@ -53,6 +56,8 @@ elif [ "$choice" == "2" ]; then
     python3 "$PREFIX/bin/flashfastbootrom.py"
 elif [ "$choice" == "3" ]; then
     python3 "$PREFIX/bin/flashwithsideloadmode.py"
+elif [ "$choice" == "4" ]; then
+    python3 "$PREFIX/bin/bypass-bl.py"
 elif [ "$choice" == "u" ]; then
     curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | sed -n '/files=("mitool"/,/^done/p' | bash
     mitool
@@ -96,5 +101,3 @@ else
     echo "Invalid choice"
     exit
 fi
-
-
