@@ -5,8 +5,6 @@ from base64 import b64encode, b64decode
 from Cryptodome.Cipher import AES
 from urllib.parse import urlparse
 
-filename = "/sdcard/Download/account_info.txt"
-
 def check_mode_d():
     while True:
         status1 = os.popen("adb get-state 2>/dev/null").read().strip()
@@ -80,42 +78,36 @@ cipherheaders = AES.new(passheaders, AES.MODE_CBC, headersiv)
 decryptedheaders = cipherheaders.decrypt(base64.b64decode(headers)).rstrip(b'\0').decode('utf-8')
 print("\ndecrypted headers \033[92mdone\033[0m\n")
 
-while os.path.isfile(filename):
-    pr = input(f"\ndo you want to use previous information in \033[92m{filename}\033[0m (yes/no) ? : ").lower()
-    if pr == "yes":
-        break
-    elif pr == "no":
-        os.remove(filename)
-        break
-    else:
-        print("Invalid choice. Please enter 'yes' or 'no'.")
-
 user = argsjson["userId"]
-print(f"\nXiaomi Account ID: \033[92m{user}\033[0m\n")
 
-with open(filename, "a+") as file:
-    file.seek(0)
-    content = file.read()
-    if "Username:" not in content:
-        file.write(f"\nUsername: {user}\n")
-    if "Password:" not in content:
-        password = input(f"\nEnter password for Account \033[92m{user}\033[0m : ")
-        file.write(f"\nPassword: {password}\n")
+print("\nXiaomi Account Regions:\n")
+print("\033[92m1\033[0m - Global")
+print("\033[92m2\033[0m - India")
+print("\033[92m3\033[0m - China")
+print("\033[92m4\033[0m - Russia")
+print("\033[92m5\033[0m - Europe")
 
-def get_info(label):
-    return next((line.split(' ', 1)[1].strip() for line in open(filename) if f"{label}:" in line), None)
+while True:
+    user_choice = input(f"\nEnter \033[92mregion\033[0m for your account {user} : ")
 
-username = get_info("Username")
-password = get_info("Password")
+    if user_choice.isdigit():
+        choice_number = int(user_choice)
+        if 1 <= choice_number <= 5:
+            break
+    print("Invalid input. Please enter a valid number between 1 and 5.")
 
-print("\n\033[92mSending request to obtain region/url\033[0m\n")
+region_mapping = {1: 'Global', 2: 'India', 3: 'China', 4: 'Russia', 5: 'Europe'}
+final_region = region_mapping[choice_number]
 
-region = {"india": "https://in-unlock.update.intl.miui.com", "global": "https://unlock.update.intl.miui.com", "china": "https://unlock.update.miui.com", "russia": "https://ru-unlock.update.intl.miui.com", "europe": "https://eu-unlock.update.intl.miui.com"}.get(
-    re.search(r'p_idc=(.*?)&nonce', requests.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&_json=true", data={"user": username, "hash": hashlib.md5(password.encode()).hexdigest().upper()}).text).group(1).lower()
-    if re.search(r'p_idc=(.*?)&nonce', requests.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&_json=true", data={"user": username, "hash": hashlib.md5(password.encode()).hexdigest().upper()}).text)
-    and re.search(r'p_idc=(.*?)&nonce', requests.post("https://account.xiaomi.com/pass/serviceLoginAuth2?sid=unlockApi&_json=true", data={"user": username, "hash": hashlib.md5(password.encode()).hexdigest().upper()}).text).group(1).lower() in ['india', 'europe', 'russia', 'china'] else 'global', '')
+region_urls = {
+    "India": "https://in-unlock.update.intl.miui.com",
+    "Global": "https://unlock.update.intl.miui.com",
+    "China": "https://unlock.update.miui.com",
+    "Russia": "https://ru-unlock.update.intl.miui.com",
+    "Europe": "https://eu-unlock.update.intl.miui.com"
+}
 
-print("\n\033[92mregion/url obtained successfully\033[0m\n")
+region = region_urls.get(final_region, '')
 
 if not argsjson.get("cloudsp_nonce"):
     random_part_length = 42 - len("_3b1fa")
@@ -158,15 +150,11 @@ response = requests.post(url, data=payload, headers=headers)
 data = json.loads(response.text)
 
 code = data['code']
-descEN = data['descEN']
 
 if code == 0:
-    print(f'\nCode: \033[92m{code}\033[0m\nDescription: \033[92m{descEN}\033[0m\n')
-elif code == 10000:
-    print(f'\nCode: \033[92m{code}\033[0m\nDescription: \033[92m{descEN}\033[0m\n')
-    exit()
+    print(data)
 else:
-    print(f'\nCode: \033[92m{code}\033[0m\nDescription: \033[92m{descEN}\033[0m\n')
+    print(data)
     exit()
 
 print("\nbypass \033[92mdone\033[0m\n")
