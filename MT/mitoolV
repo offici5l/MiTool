@@ -1,6 +1,10 @@
-1.4.7
+1.4.8
 
 #Note:
 
 #Update:
+- add Bypass HyperOS BootLoader Restrictions
+
+  bypass message "Cloudn't verify, wait a minute or two and try again" for miui and hyperos
+
 - improvements
