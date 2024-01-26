@@ -53,6 +53,8 @@ while True:
     for output in process.split('\n'):
         if "CloudDeviceStatus: args:" in output:
             args = output.split('args:')[1].strip()
+            os.system("adb shell svc data disable")
+            print("\nDisable data service \033[92mDone\033[0m\n")
             args_found = True
         if "CloudDeviceStatus: headers:" in output:
             headers = output.split('headers:')[1].strip()
@@ -60,8 +62,6 @@ while True:
         if args_found and headers_found:
             account_bind_found = True
             print("\n\033[92mData successfully obtained\033[0m\n")
-            os.system("adb shell svc data disable")
-            print("\nDisable data service \033[92mDone\033[0m\n")
             break
     if account_bind_found:
         break
