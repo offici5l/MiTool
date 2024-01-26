@@ -66,16 +66,12 @@ while True:
     if account_bind_found:
         break
 
-passargs = "20nr1aobv2xi8ax4"
-argsiv = "0102030405060708"
-cipherargs = AES.new(passargs.encode("utf-8"), AES.MODE_CBC, argsiv.encode("utf-8"))
-decryptedargs = unpad(cipherargs.decrypt(base64.b64decode(args)), AES.block_size).decode("utf-8")
+secret_pass = "20nr1aobv2xi8ax4"
+iv = "0102030405060708"
+decryptedargs = unpad(AES.new(secret_pass.encode("utf-8"), AES.MODE_CBC, iv.encode("utf-8")).decrypt(base64.b64decode(args)), AES.block_size).decode("utf-8")
 argsjson = json.loads(decryptedargs)
 print("\ndecrypted args \033[92mdone\033[0m\n")
-passheaders = b'20nr1aobv2xi8ax4'
-headersiv = b'0102030405060708' 
-cipherheaders = AES.new(passheaders, AES.MODE_CBC, headersiv)
-decryptedheaders = cipherheaders.decrypt(base64.b64decode(headers)).rstrip(b'\0').decode('utf-8')
+decryptedheaders = AES.new(secret_pass.encode("utf-8"), AES.MODE_CBC, iv.encode("utf-8")).decrypt(base64.b64decode(headers)).rstrip(b'\0').decode('utf-8')
 print("\ndecrypted headers \033[92mdone\033[0m\n")
 
 user = argsjson["userId"]
