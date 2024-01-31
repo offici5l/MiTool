@@ -322,7 +322,6 @@ if "encryptData" in result:
     os.system("fastboot stage token.bin")
     os.system("fastboot oem unlock")
 else:
-    print("\n\n")
     if "uid" in result:
         print_result_info("userId", result["uid"])
     if "code" in result:
