@@ -1,10 +1,9 @@
-1.4.8
+1.4.9
 
 #Note:
 
 #Update:
-- add Bypass HyperOS BootLoader Restrictions
+- Improvements:
+It is now expected that the securityStatus16 error will not occur. If it does happen, please report it.
 
-  bypass message "Cloudn't verify, wait a minute or two and try again" for miui and hyperos
-
-- improvements
+- Other improvements
