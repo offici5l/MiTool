@@ -118,6 +118,7 @@ while True:
                 print(f"\n\nuserId: \033[92m{data['user']}\033[0m Data exists !\n")
                 choice = input("\n- \033[92m1\033[0m use previous data\n- \033[92m2\033[0m delete previous data\n\nEnter your \033[92mchoice\033[0m: ")
                 if choice == "1":
+                    print("\n")
                     break
                 elif choice == "2":
                     remove_file(filedata)
@@ -210,7 +211,7 @@ with open(filetp, 'r') as file:
     data = json.load(file)
 
 for key, value in data.items():
-    print(f"\n{key}: \033[92m{value}\033[0m\n")
+    print(f"{key}: \033[92m{value}\033[0m")
 
 token_value = data.get("deviceToken", {})
 product_value = data.get("product", {})
@@ -325,10 +326,10 @@ else:
     if "uid" in result:
         print_result_info("userId", result["uid"])
     if "code" in result:
-        print(f"\n{colored('code: ' + str(result['code']), 'green')}\n")
+        print(f"{colored('code: ' + str(result['code']), 'green')}\n")
     if "description" in result:
-        print(f"\n{colored(result['description'], 'green')}\n")
+        print(f"{colored(result['description'], 'green')}\n")
     if "descEN" in result:
-        print(f"\n{colored(result['descEN'], 'green')}\n")
+        print(f"{colored(result['descEN'], 'green')}\n")
     print("\n\n")
 
