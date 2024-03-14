@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-version = "1.5.0"
+version = "1.4.0"
 
 import subprocess, requests, shutil, re
 from os import get_terminal_size
@@ -63,8 +63,8 @@ elif choice == "3":
 elif choice == "4":
     subprocess.run(["mibypass"])
 elif choice == "u":
-    subprocess.run(["curl", "-s", "https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh", "|", "bash"])
-    subprocess.run(["mitool"])
+    subprocess.run("curl https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash", shell=True)
+    exit()
 elif choice == "h":
     print(f"""
 {_l}
