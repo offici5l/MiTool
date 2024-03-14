@@ -1,9 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-upgradable_packages=$(apt list --upgradable 2>/dev/null | wc -l)
-if [ "$upgradable_packages" -gt 1 ]; then
-    yes | apt update && yes | apt upgrade
-fi
+yes | apt update && yes | apt upgrade
 
 if ! command -v adb &>/dev/null || ! command -v fastboot &>/dev/null; then
     echo "Installing ADB and Fastboot..."
