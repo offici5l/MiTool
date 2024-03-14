@@ -14,7 +14,6 @@ try:
             vcloud = version_match.group(1)
             if vcloud > version:
                 subprocess.run("curl https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash", shell=True)
-                print("\nChangelog: https://github.com/offici5l/MiTool/blob/main/Show-Version-History.md\n)
                 exit()
         else:
             pass
