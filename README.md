@@ -4,7 +4,7 @@
 
 ### compatible with Android(Termux)
 
-[Show Version History](https://raw.githubusercontent.com/offici5l/MiTool/master/Show-Version-History)
+[Show Version History](https://github.com/offici5l/MiTool/blob/main/Show-Version-History.md)
 
 
 [![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
