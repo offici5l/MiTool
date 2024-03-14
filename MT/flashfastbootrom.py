@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import os
 
 def check_mode():
