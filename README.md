@@ -15,7 +15,8 @@
 - [x] Flash Specific Partitions
 - [x] Flash Fastboot ROM
 - [x] Flash Zip
-- [x] Bypass ([with MiBypassTool](https://github.com/offici5l/MiBypassTool))
+- [x] Bypass:
+ HyperOS Restriction(Couldn't add. Please go to Mi Community to apply for authorization and try again.) ([with MiBypassTool](https://github.com/offici5l/MiBypassTool))
 - [x] Root
 - [x] More
 
