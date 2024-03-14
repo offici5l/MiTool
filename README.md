@@ -8,7 +8,8 @@
 
 ### MiTool To-Do List
 
-- [x] Unlock or Lock Bootloader
+- [x] Unlock Bootloader
+- [x] Lock Bootloader ([with MiUnlockTool)](https://github.com/offici5l/MiUnlockTool)
 - [x] Flash Specific Partitions
 - [x] Flash Fastboot ROM
 - [x] Flash Zip
