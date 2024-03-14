@@ -53,7 +53,7 @@ It is now expected that the securityStatus16 error will not occur. If it does ha
 
 MiTool version 1.5.0 :
 
-- MiTool now directly utilizes MiUnlockTool for bootloader unlocking. If you only need to unlock the bootloader, you can use MiUnlockTool directly without MiTool. ([Changelog](https://github.com/offici5l/MiUnlockTool/blob/main/Show-Version-History.md))
+- MiTool now directly utilizes MiUnlockTool for bootloader unlocking. If you only need to unlock the bootloader, you can use MiUnlockTool directly without MiTool. ([MiUnlockTool Changelog](https://github.com/offici5l/MiUnlockTool/blob/main/Show-Version-History.md))
 
 - MiTool now directly utilizes MiBypassTool for bypassing. If you only need to bypass, you can use MiBypassTool directly without MiTool. (Changelog)
 
