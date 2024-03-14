@@ -32,11 +32,6 @@ termux-setup-storage
 ```bash
 curl https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
 ```
-**Usage:**
-Run command:
-```bash
-mitool
-```
 
 <div align="center">
 
