@@ -1,9 +1,5 @@
-1.4.9
+1.5.0
 
 #Note:
 
 #Update:
-- Improvements:
-It is now expected that the securityStatus16 error will not occur. If it does happen, please report it.
-
-- Other improvements
