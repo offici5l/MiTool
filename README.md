@@ -16,6 +16,7 @@
 - [x] Flash Fastboot ROM
 - [x] Flash Zip
 - [x] Bypass ([with MiBypassTool](https://github.com/offici5l/MiBypassTool))
+- [x] Root
 - [x] More
 
 ## Install
