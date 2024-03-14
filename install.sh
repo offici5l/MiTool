@@ -1,8 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-yes | apt update && yes | apt upgrade
-
 if ! command -v adb &>/dev/null || ! command -v fastboot &>/dev/null; then
+    yes | apt update && yes | apt upgrade
     echo "Installing ADB and Fastboot..."
     yes | pkg uninstall termux-adb 2>/dev/null
     curl -s https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash
