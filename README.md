@@ -6,8 +6,6 @@
 
 [![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
 
-</div>
-
 ### MiTool To-Do List
 
 - [x] Unlock or Lock Bootloader
@@ -16,6 +14,8 @@
 - [x] Flash Zip
 - [x] Bypass
 - [x] More
+
+</div>
 
 ## Install
 
