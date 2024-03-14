@@ -48,6 +48,4 @@ curl "https://raw.githubusercontent.com/offici5l/MiUnlockTool/master/MiUnlockToo
 echo -e "\033[32mupdate MiBypassTool...\033[0m"
 curl "https://raw.githubusercontent.com/offici5l/MiBypassTool/master/MiBypassTool.py" -o "$PREFIX/bin/mibypass" && chmod +x "$PREFIX/bin/mibypass"
 
-if [ ! -e "$PREFIX/bin/mitool" ]; then
-    printf "use command: \e[1;32mmitool\e[0m\n"
-fi
+printf "use command: \e[1;32mmitool\e[0m\n"
