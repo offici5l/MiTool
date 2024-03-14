@@ -10,12 +10,12 @@
 
 ### MiTool To-Do List
 
-- [x] Unlock Bootloader ([with MiUnlockTool](https://github.com/offici5l/MiUnlockTool))
+- [x] [Unlock Bootloader](https://github.com/offici5l/MiUnlockTool)
 - [x] Lock Bootloader
 - [x] Flash Specific Partitions
 - [x] Flash Fastboot ROM
 - [x] Flash Zip
-- [x] Bypass ([with MiBypassTool](https://github.com/offici5l/MiBypassTool))
+- [x] [with bypass](https://github.com/offici5l/MiBypassTool)
 - [x] Root
 - [x] More
 
