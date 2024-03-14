@@ -44,5 +44,5 @@ curl "https://raw.githubusercontent.com/offici5l/MiUnlockTool/master/MiUnlockToo
 echo -e "\033[32mupdate MiBypassTool...\033[0m"
 curl "https://raw.githubusercontent.com/offici5l/MiBypassTool/master/MiBypassTool.py" -o "$PREFIX/bin/mibypass" && chmod +x "$PREFIX/bin/mibypass"
 
-echo -e "\nChangelog: https://github.com/offici5l/MiTool/blob/main/Show-Version-History.md\n"
+echo -e "\n\e[34mChangelog: https://github.com/offici5l/MiTool/blob/main/Show-Version-History.md\e[0m\n"
 printf "use command: \e[1;32mmitool\e[0m\n"
