@@ -38,9 +38,9 @@ choice = input(f'Enter your {c1}choice{c2}: ')
 if choice == "1":
     subprocess.run(["miunlock"])
 elif choice == "2":
-    subprocess.run(["flashfastbootrom"])
+    subprocess.run(["flashf"])
 elif choice == "3":
-    subprocess.run(["flashwithsideloadmode"])
+    subprocess.run(["flashz"])
 elif choice == "4":
     subprocess.run(["mibypass"])
 elif choice == "u":
