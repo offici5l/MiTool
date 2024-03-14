@@ -2,8 +2,27 @@
 
 version = "1.5.0"
 
-import subprocess, requests, shutil
+import subprocess, requests, shutil, re
 from os import get_terminal_size
+
+try:
+    response = requests.get("https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitool.py", timeout=3)
+    response.raise_for_status()
+    if response.status_code == 200:
+        version_match = re.search(r'version\s*=\s*"([^"]+)"', response.text)
+        if version_match:
+            vcloud = version_match.group(1)
+            if vcloud > version:
+                subprocess.run("curl https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash", shell=True)
+                exit()
+        else:
+            pass
+    else:
+        pass
+except requests.exceptions.ConnectionError:
+    pass
+except requests.exceptions.Timeout:
+    pass
 
 c1="\033[1;32m"
 c2="\033[0m"
@@ -96,3 +115,4 @@ To report issues or share feedback, visit:
 else:
     print("\nInvalid choice\n")
     exit()
+
