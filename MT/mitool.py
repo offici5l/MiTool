@@ -104,7 +104,7 @@ Type: {c1}fastboot help{c2} or {c1}adb help{c2}
 {_l}
 For updating MiTool:
 
-Type: {c1}u or mitool u{c2}
+Type: {c1}u{c2}
 {_l}
 To report issues or share feedback, visit:
 
