@@ -47,7 +47,7 @@ print(f"""
 
 ━ {c1}3{c2} Flash-Zip-With-Sideload
 
-━ {c1}4{c2} Mi-Bypass
+━ {c1}4{c2} Bypass
 
 
 """)
