@@ -15,7 +15,7 @@
 - [x] Flash Specific Partitions
 - [x] Flash Fastboot ROM
 - [x] Flash Zip
-- [x] Bypass ([with MiBypassTool)](https://github.com/offici5l/MiBypassTool)
+- [x] Bypass ([with MiBypassTool](https://github.com/offici5l/MiBypassTool))
 - [x] More
 
 ## Install
