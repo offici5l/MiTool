@@ -55,13 +55,13 @@ print(f"""
 choice = input(f'Enter your {c1}choice{c2}: ')
 
 if choice == "1":
-    subprocess.run(["miunlock"])
+    subprocess.run("miunlock", shell=True)
 elif choice == "2":
-    subprocess.run(["flashf"])
+    subprocess.run("flashf", shell=True)
 elif choice == "3":
-    subprocess.run(["flashz"])
+    subprocess.run("flashz", shell=True)
 elif choice == "4":
-    subprocess.run(["mibypass"])
+    subprocess.run("mibypass", shell=True)
 elif choice == "u":
     subprocess.run("curl https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash", shell=True)
     exit()
