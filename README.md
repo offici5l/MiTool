@@ -16,7 +16,7 @@
 - [x] Unlock or Lock Bootloader.
 - [x] Flash Fastboot ROM
 - [x] Bypass
-- [x] More
+- [] More
 
 ## Install
 
