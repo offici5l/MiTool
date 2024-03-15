@@ -6,8 +6,9 @@
 
 [Show Version History](https://github.com/offici5l/MiTool/blob/main/Show-Version-History.md)
 
-
 [![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
+
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
 
 </div>
 
@@ -31,10 +32,6 @@ termux-setup-storage
 ```bash
 curl https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
 ```
-
-<div align="center">
-
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
 
 
 
