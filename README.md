@@ -12,7 +12,7 @@
 
 </div>
 
-### MiTool To-Do List:
+## MiTool To-Do List:
 
 - [x] Unlock or Lock Bootloader
 - [x] Flash Fastboot ROM
