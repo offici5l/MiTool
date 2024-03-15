@@ -13,7 +13,7 @@
 
 ### MiTool To-Do List:
 
-- [x] Unlock or Lock Bootloader.
+- [x] Unlock or Lock Bootloader
 - [x] Flash Fastboot ROM
 - [x] Bypass
 - [ ] More
