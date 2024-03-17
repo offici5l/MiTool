@@ -1,5 +1,10 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+if ! command -v pv &>/dev/null; then
+    echo "Installing pv..."
+    yes | pkg install pv
+fi
+
 if ! command -v adb &>/dev/null || ! command -v fastboot &>/dev/null; then
     yes | apt update && yes | apt upgrade
     echo "Installing ADB and Fastboot..."
