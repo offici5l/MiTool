@@ -66,9 +66,9 @@ else:
 if choice == "1":
     subprocess.run("$PREFIX/bin/miunlock", shell=True)
 elif choice == "2":
-    subprocess.run("$PREFIX/bin/flashf", shell=True)
+    subprocess.run("$PREFIX/bin/miflashf", shell=True)
 elif choice == "3":
-    subprocess.run("$PREFIX/bin/flashz", shell=True)
+    subprocess.run("$PREFIX/bin/miflashz", shell=True)
 elif choice == "4":
     subprocess.run("$PREFIX/bin/mibypass", shell=True)
 elif choice == "5":
