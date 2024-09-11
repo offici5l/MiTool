@@ -68,7 +68,7 @@ if choice == "1":
 elif choice == "2":
     subprocess.run("$PREFIX/bin/miflashf", shell=True)
 elif choice == "3":
-    subprocess.run("$PREFIX/bin/miflashz", shell=True)
+    subprocess.run("$PREFIX/bin/miflashs", shell=True)
 elif choice == "4":
     subprocess.run("$PREFIX/bin/mibypass", shell=True)
 elif choice == "5":
