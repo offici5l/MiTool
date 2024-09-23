@@ -9,7 +9,7 @@ if not os.path.isdir(os.path.expanduser('~/storage')):
     print("\nPlease grant permission via command:\ntermux-setup-storage\n\nthen restart the tool\n")
     exit()
 
-if 'u' in sys.argv:
+if 'u' or 'update' in sys.argv:
     subprocess.run("curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash -s -- f", shell=True)
     exit()
 
@@ -38,12 +38,13 @@ c2="\033[0m"
 _l =  c1 + "_"*56 + c2 + "\n"
 
 print(_l)
-
+print(f" ━ {c1}h{c2} help")
+print(f" ━ {c1}u{c2} update")
 ver = f"MiTool {version}"
 b = '━' * (len(ver) + 4)
 p = ' ' * ((get_terminal_size().columns - len(b)) // 2)
 furl = f"\n{p}┏{b}┓\n{p}┃  {ver}  ┃\n{p}┗{b}┛"
-print(furl + f" ━ {c1}help{c2}")
+print(furl)
 
 
 print(f"""
@@ -79,7 +80,7 @@ elif choice == "5":
     subprocess.run("$PREFIX/bin/miasst", shell=True)
 elif choice == "h" or choice == "help":
     subprocess.run("$PREFIX/bin/mihelp", shell=True)
-elif choice == "u":
+elif choice == "u" or choice == "update":
     subprocess.run("curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash -s -- f", shell=True)
     exit()
 else:
