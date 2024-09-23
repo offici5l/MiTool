@@ -17,7 +17,7 @@ try:
         if version_match:
             vcloud = version_match.group(1)
             if vcloud > version:
-                subprocess.run("curl https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash", shell=True)
+                subprocess.run("curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash", shell=True)
                 exit()
         else:
             pass
@@ -76,7 +76,7 @@ elif choice == "5":
 elif choice == "h" or choice == "help":
     subprocess.run("$PREFIX/bin/mihelp", shell=True)
 elif choice == "u":
-    subprocess.run("curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash", shell=True)
+    subprocess.run("curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash -s -- f", shell=True)
     exit()
 else:
     print("\nInvalid choice\n")
