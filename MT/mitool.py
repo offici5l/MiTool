@@ -9,6 +9,10 @@ if not os.path.isdir(os.path.expanduser('~/storage')):
     print("\nPlease grant permission via command:\ntermux-setup-storage\n\nthen restart the tool\n")
     exit()
 
+if 'u' in sys.argv:
+    subprocess.run("curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash -s -- f", shell=True)
+    exit()
+
 try:
     response = requests.get("https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitool.py", timeout=3)
     response.raise_for_status()
