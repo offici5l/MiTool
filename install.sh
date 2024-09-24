@@ -5,6 +5,11 @@ if [ ! -d "$HOME/storage" ]; then
     exit 1
 fi
 
+if [ ! -d "/data/data/com.termux.api" ]; then
+    echo -e "\ncom.termux.api app is not installed\nPlease install it first\n"
+    exit 1
+fi
+
 arch=$(uname -m)
 
 if [ "$arch" = "aarch64" ]; then
@@ -18,16 +23,34 @@ fi
 
 main_repo=$(grep -E '^deb ' /data/data/com.termux/files/usr/etc/apt/sources.list | awk '{print $2}' | head -n 1)
 
-while true; do
-    curl -s $main_repo > /dev/null
-    if [ $? -eq 0 ]; then
-        echo -e "\n\033[32mapt update...\033[0m"
-        apt update > /dev/null 2> >(grep -v "apt does not have a stable CLI interface") && break
-    else
-        echo -e "\nNo internet connection. Please check your connection. \nRetrying in 5s...\n"
-        sleep 5
-    fi
-done
+echo -e "\nChecking $main_repo ...\n"
+curl -s --retry 4 $main_repo > /dev/null
+exit_code=$?
+
+if [ $exit_code -eq 6 ]; then
+    echo -e "\nRequest to $main_repo failed. Please check your internet connection.\n"
+    exit 6
+elif [ $exit_code -eq 35 ]; then
+    echo -e "\nThe $main_repo is blocked in your current country.\n"
+    exit 35
+fi
+
+git_repo="https://raw.githubusercontent.com"
+
+echo -e "\nChecking $git_repo ...\n"
+
+curl -s --retry 4 $git_repo > /dev/null
+exit_code=$?
+
+if [ $exit_code -eq 6 ]; then
+    echo -e "\nRequest to $git_repo failed.Please check your internet connection.\n"
+    exit 6
+elif [ $exit_code -eq 35 ]; then
+    echo -e "\nThe $git_repo is blocked in your current country.\n"
+    exit 35
+fi
+
+apt update > /dev/null 2> >(grep -v "apt does not have a stable CLI interface")
 
 url="https://raw.githubusercontent.com/nohajc/nohajc.github.io/master/dists/termux/extras/binary-${arch}"
 
@@ -110,14 +133,14 @@ check_package() {
     latest_version=$(pip index versions "$package_name" 2>/dev/null | grep 'LATEST:' | awk '{print $2}')
 
     if [ -z "$installed_version" ]; then
-        echo -e "\n$package_name is not installed. Installing...\n"
+        echo -e "\nInstalling $package_name ...\n"
         eval "$install_cmd -q"
     else
         if [ "$installed_version" != "$latest_version" ]; then
-            echo -e "\nThe installed version of $package_name is outdated. \nUpdating...\n"
+            echo -e "\nUpdating $package_name ...\n"
             eval "$install_cmd --upgrade -q"
         else
-            echo -e "\n$package_name is up to date.\n"
+            echo -e "\n$package_name is already the newest version.\n"
         fi
     fi
 }
@@ -147,7 +170,7 @@ if [ "$1" == "f" ]; then
 fi
 
 if [ "$cmd" == "0" ]; then
-    echo -e "\nMiTool is already the newest version installed: $miv_i.\nLatest available version: $miv_c.\n"
+    echo -e "\nMiTool is already the newest\nversion installed: $miv_i.\nLatest available version: $miv_c.\n"
     exit
 elif [ "$cmd" == "1" ]; then
     echo -e "\nAn update is available! Updating from version $miv_i to $miv_c...\n"
