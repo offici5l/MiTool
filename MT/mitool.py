@@ -38,14 +38,11 @@ c2="\033[0m"
 _l =  c1 + "_"*56 + c2 + "\n"
 
 print(_l)
-print(f" ━ {c1}h{c2} help")
-print(f" ━ {c1}u{c2} update")
 ver = f"MiTool {version}"
 b = '━' * (len(ver) + 4)
 p = ' ' * ((get_terminal_size().columns - len(b)) // 2)
 furl = f"\n{p}┏{b}┓\n{p}┃  {ver}  ┃\n{p}┗{b}┛"
-print(furl)
-
+print(furl + f" ━ {c1}help{c2}")
 
 print(f"""
 
