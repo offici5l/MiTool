@@ -83,7 +83,7 @@ compare_versions() {
   if [ "$installed_version" == "$available_version" ]; then
     echo -e "\n$package_name is already the newest version.\n"
   else
-    curl -O "$url/${package_name}_${available_version}_${arch}.deb"
+    curl -s -O "$url/${package_name}_${available_version}_${arch}.deb"
     dpkg -i "${package_name}_${available_version}_${arch}.deb"
     rm -f "${package_name}_${available_version}_${arch}.deb"
   fi
