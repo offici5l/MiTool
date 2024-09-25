@@ -3,7 +3,7 @@
 echo
 
 if [ ! -d "$HOME/storage" ]; then
-    echo -e "\nYou must first grant permission using the following command:\ntermux-setup-storage\n\nThen run the command again.\n"
+    echo -e "\nGrant permission: termux-setup-storage\nThen rerun the command.\n"
     exit 1
 fi
 
