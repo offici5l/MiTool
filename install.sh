@@ -56,11 +56,19 @@ apt update > /dev/null 2> >(grep -v "apt does not have a stable CLI interface")
 
 charit=-1
 total=28
+start_time=$(date +%s)
 
 _progress() {
     charit=$((charit + 1)) 
     percentage=$((charit * 100 / total))
     echo -ne "\rProgress: $charit/$total ($percentage%)"
+    if [ $percentage -eq 100 ]; then
+        end_time=$(date +%s)
+        elapsed_time=$((end_time - start_time))
+        echo -ne "\rProgress: $charit/$total ($percentage%) Process Took: $elapsed_time seconds"
+    else
+        echo -ne "\rProgress: $charit/$total ($percentage%)"
+    fi
 }
 
 _progress
