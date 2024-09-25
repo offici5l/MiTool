@@ -21,9 +21,10 @@ else
     exit 1
 fi
 
+echo -e "\nRepo URL check...\n"
+
 main_repo=$(grep -E '^deb ' /data/data/com.termux/files/usr/etc/apt/sources.list | awk '{print $2}' | head -n 1)
 
-echo -e "\nChecking $main_repo ...\n"
 curl -s --retry 4 $main_repo > /dev/null
 exit_code=$?
 
@@ -36,8 +37,6 @@ elif [ $exit_code -eq 35 ]; then
 fi
 
 git_repo="https://raw.githubusercontent.com"
-
-echo -e "\nChecking $git_repo ...\n"
 
 curl -s --retry 4 $git_repo > /dev/null
 exit_code=$?
