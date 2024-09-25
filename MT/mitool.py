@@ -21,6 +21,7 @@ try:
         if version_match:
             vcloud = version_match.group(1)
             if vcloud > version:
+                print(f"\nAn update is available! \nUpdating from version {version} to {vcloud} ...")
                 subprocess.run("curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash", shell=True)
                 exit()
         else:
