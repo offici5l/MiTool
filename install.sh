@@ -65,7 +65,7 @@ _progress() {
     if [ $percentage -eq 100 ]; then
         end_time=$(date +%s)
         elapsed_time=$((end_time - start_time))
-        echo -ne "\rProgress: $charit/$total ($percentage%) Process Took: $elapsed_time seconds"
+        echo -ne "\rProgress: $charit/$total ($percentage%) Took: $elapsed_time seconds"
     else
         echo -ne "\rProgress: $charit/$total ($percentage%)"
     fi
