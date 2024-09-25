@@ -119,7 +119,7 @@ for package in "${packages[@]}"; do
         echo -e "\n$package is already the newest version.\n"
     else
         echo -e "\nDownloading $package...\n"
-        apt download "$package"
+        apt download "$package" >/dev/null 2>&1
         echo -e "\nInstalling $package...\n"
         dpkg -i "${package}"*.deb >/dev/null 2>&1
         rm -f "${package}"*.deb
