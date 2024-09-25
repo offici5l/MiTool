@@ -10,7 +10,7 @@ if not os.path.isdir(os.path.expanduser('~/storage')):
     exit()
 
 if 'u' in sys.argv or 'update' in sys.argv:
-    subprocess.run("curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash -s -- f", shell=True)
+    subprocess.run("curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash", shell=True)
     exit()
 
 try:
@@ -79,7 +79,7 @@ elif choice == "5":
 elif choice == "h" or choice == "help":
     subprocess.run("$PREFIX/bin/mihelp", shell=True)
 elif choice == "u" or choice == "update":
-    subprocess.run("curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash -s -- f", shell=True)
+    subprocess.run("curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash", shell=True)
     exit()
 else:
     print("\nInvalid choice\n")
