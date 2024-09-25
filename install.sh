@@ -84,7 +84,7 @@ compare_versions() {
     echo -e "\n$package_name is already the newest version.\n"
   else
     curl -s -O "$url/${package_name}_${available_version}_${arch}.deb"
-    dpkg -i "${package_name}_${available_version}_${arch}.deb"
+    dpkg -i "${package_name}_${available_version}_${arch}.deb" >/dev/null 2>&1
     rm -f "${package_name}_${available_version}_${arch}.deb"
   fi
 }
@@ -121,7 +121,7 @@ for package in "${packages[@]}"; do
         echo -e "\nDownloading $package...\n"
         apt download "$package"
         echo -e "\nInstalling $package...\n"
-        dpkg -i "${package}"*.deb
+        dpkg -i "${package}"*.deb >/dev/null 2>&1
         rm -f "${package}"*.deb
     fi
 done
