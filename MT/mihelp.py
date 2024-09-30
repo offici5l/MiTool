@@ -29,7 +29,6 @@ To report issues or share feedback, visit:
 - Telegram Group: t.me/Offici5l_Group
 {GRAY}━{'━' * (terminal_width - 2)}━
 {GRAY}⚙️{'⚙️' * (terminal_width - 2)}⚙️
-{'⬇️'.center(shutil.get_terminal_size().columns)}
 """)
 
 print(f"""
