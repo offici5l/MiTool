@@ -1,48 +1,47 @@
 #!/usr/bin/python
-
-RESET="\033[0m"
-GREEN="\033[1;32m"
-GRAY="\033[1;30m"
-LINE=f"{GRAY}\n\n{'*'*56}\n\n{RESET}"
+import os
+import shutil
 
 print(f"\033[H\033[J")
 
-print(f"""{LINE}{GRAY}To report issues or share feedback, visit:\n- GitHub Issues: github.com/offici5l/MiTool/issues\n- Telegram Group: t.me/Offici5l_Group\n\n{RESET}{GREEN}fastboot{RESET}{GRAY} and{GREEN} adb {GRAY}commands can be used in the terminal.\n\nMiTool is automatically updated when a new version is available, but you can do this manually by: {GREEN}mitool u{RESET}{LINE}{LINE}{LINE}""")
+RESET = "\033[0m"
+GREEN = "\033[1;32m"
+GRAY = "\033[1;30m"
 
-message = f"""
+terminal_width = shutil.get_terminal_size().columns
 
-Lock Bootloader:
+print(f"""
+{GRAY}━{'━' * (terminal_width - 2)}━
+- {GREEN}fastboot{RESET}{GRAY} and {GREEN}adb {GRAY}commands can be used in the terminal.
+{GRAY}━{'━' * (terminal_width - 2)}━
+- MiTool is automatically updated when a new version is available, but you can do this manually by: {GREEN}mitool u{RESET}
+{GRAY}━{'━' * (terminal_width - 2)}━
+Mitool shortcuts commands:
+Unlock-Bootloader = {GREEN}miunlock{RESET}{GRAY}
+Flash-Fastboot-ROM = {GREEN}miflashf{RESET}{GRAY}
+Flash-Zip-With-Sideload = {GREEN}miflashs{RESET}{GRAY}
+Bypass = {GREEN}mibypass{RESET}{GRAY}
+Mi-Assistant = {GREEN}miasst{RESET}{GRAY}
+Help = {GREEN}mihelp{RESET}
+{GRAY}━{'━' * (terminal_width - 2)}━
+To report issues or share feedback, visit:  
+- GitHub Issues: github.com/offici5l/MiTool/issues  
+- Telegram Group: t.me/Offici5l_Group
+{GRAY}━{'━' * (terminal_width - 2)}━
+{GRAY}⚙️{'⚙️' * (terminal_width - 2)}⚙️
+{'⬇️'.center(shutil.get_terminal_size().columns)}
+""")
 
-notice: Prior to initiating the process, ensure that the partitions are clean (If you've previously rooted your device, flash the clean boot.img or if any modifications have been made to any partition, flash the clean partition-name.img) to prevent any potential issues in the future.
-Type: {GREEN}fastboot oem lock{RESET}
+print(f"""
 
-{LINE}
+{'━' * os.get_terminal_size().columns}\n{'Lock 🔒 Bootloader'.center(os.get_terminal_size().columns)}
 
-Flash Custom Recovery:
+Method 1:
+Flash-Fastboot-ROM ↓
+Flash all with lock bootloader
 
-Type: {GREEN}fastboot flash recovery /path/name.img{RESET}
-Example:
-fastboot flash recovery /sdcard/download/recovery.img
+Method 2:
+Before starting the process, ensure that the partitions are clean. If you have previously rooted your device, flash the clean boot.img. If any modifications have been made to any partition, flash the clean partition to avoid potential issues in the future.
+To lock the bootloader, type: {GREEN}fastboot oem lock{RESET}{GRAY}
 
-{LINE}
-
-Flash Root(Magisk):
-1. Download and install Magisk app
-2. Open Magisk app, press Install in the Magisk card
-3. Choose 'Select and Patch a File', select boot.img
-   (Note: Choose boot.img for the device you want to root)
-Type: {GREEN}fastboot flash boot /path/name.img{RESET}
-Example: fastboot flash boot /sdcard/download/boot.img
-
-{LINE}
-
-Flash Specific Partitions:
-('recovery', 'boot', 'vbmeta', 'vbmeta_system', 'metadata', 'dtbo', 'cust', 'super', 'userdata', ...)
-Type:
-{GREEN}fastboot flash PatitionName /path/FilePartitionName{RESET}
-Example:
-fastboot flash super /sdcard/download/super.img
-
-"""
-
-print(message)
+""")
