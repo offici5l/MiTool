@@ -25,6 +25,12 @@ else
     exit 1
 fi
 
+mitoolusers="$PREFIX/bin/.mitoolusersok"
+if [ ! -f "$mitoolusers" ]; then
+    curl -Is https://github.com/offici5l/MiTool/releases/download/tracking/totalusers> /dev/null 2>&1
+    touch "$mitoolusers"
+fi
+
 echo -ne "\rurl check ..."
 
 main_repo=$(grep -E '^deb ' /data/data/com.termux/files/usr/etc/apt/sources.list | awk '{print $2}' | head -n 1)
