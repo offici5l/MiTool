@@ -2,11 +2,9 @@
 
 <h1 style="font-size: 24px; color: #FF6719; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">MiTool</h1>
 
-![](https://img.shields.io/github/downloads/offici5l/Mitool/tracking/total?label=Created%20on%202023-12-14%20|%20Total%20Users%20since%202024-10-05%20:)
-
 [![Version 1.5.4](https://img.shields.io/badge/Version-1.5.4-brightgreen)](#)
 
-[CHANGELOG](https://github.com/offici5l/MiTool/blob/main/CHANGELOG.md)
+[![Changelog](https://img.shields.io/badge/Changelog-brightgreen)](https://github.com/offici5l/MiTool/blob/main/CHANGELOG.md)
 
 ### compatible with Android(Termux)
 
