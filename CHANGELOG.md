@@ -149,3 +149,17 @@ Miunlocktool version 1.5.5:
 MiTool version 1.5.4 :
 
 - improvements
+
+
+#
+
+MiTool version 1.5.5 :
+
+- improvements
+- add pycryptodomex-3.21 to solve the issue of conflict between pycryptodomex-3.20 with python3.12
+
+MiUnlockTool-1.5.6: [
+- Remove manual mode, and remove some functions that are no longer necessary. 
+- Some improvements, to handle jobs better.
+- Fix the issue with termux (Error message: fastboot: error: cannot load /sdcard/encryptData) , due to some termux-setup-storage issues, the encryptData will now be saved in $PREFIX/bin instead of /sdcard...
+- Other improvements in the installation process regarding Termux. ]
