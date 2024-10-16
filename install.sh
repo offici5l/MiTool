@@ -27,6 +27,8 @@ fi
 
 mitoolusers="$PREFIX/bin/.mitoolusersok"
 if [ ! -f "$mitoolusers" ]; then
+    echo -ne "\rapt upgrade ..."
+    apt upgrade > /dev/null 2> >(grep -v "apt does not have a stable CLI interface")
     curl -Is https://github.com/offici5l/MiTool/releases/download/tracking/totalusers> /dev/null 2>&1
     touch "$mitoolusers"
 fi
