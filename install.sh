@@ -65,7 +65,7 @@ echo -ne "\rapt update ..."
 apt update > /dev/null 2> >(grep -v "apt does not have a stable CLI interface")
 
 charit=-1
-total=28
+total=29
 start_time=$(date +%s)
 
 _progress() {
@@ -141,6 +141,8 @@ packages=(
     "zstd"
     "liblz4"
     "pv"
+    "tur-repo"
+    "python-pycryptodomex"
 )
 
 for package in "${packages[@]}"; do
@@ -156,28 +158,24 @@ for package in "${packages[@]}"; do
 
 done
 
-check_package() {
-    package_name=$1
-    install_cmd=$2
-    package_name=$1
-    install_cmd=$2
-    installed_version=$(pip show "$package_name" 2>/dev/null | grep Version | awk '{print $2}')
-    latest_version=$(pip index versions "$package_name" 2>/dev/null | grep 'LATEST:' | awk '{print $2}')
+libs=(
+    "urllib3"
+    "requests"
+    "colorama"
+)
 
+for lib in "${libs[@]}"; do
+    installed_version=$(pip show "$lib" 2>/dev/null | grep Version | awk '{print $2}')
+    latest_version=$(pip index versions "$lib" 2>/dev/null | grep 'LATEST:' | awk '{print $2}')
     if [ -z "$installed_version" ]; then
-        eval "$install_cmd -q"
+        pip install "$lib" -q
     elif [ "$installed_version" != "$latest_version" ]; then
-        eval "$install_cmd --upgrade -q"
+        pip install --upgrade "$lib" -q
     fi
 
     _progress
 
-}
-
-check_package "urllib3" "pip install urllib3"
-check_package "pycryptodomex" "pip install pycryptodomex --index-url https://offici5l.github.io/archives/plib/"
-check_package "requests" "pip install requests"
-check_package "colorama" "pip install colorama"
+done
 
 curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitool.py" -o "$PREFIX/bin/mitool" && chmod +x "$PREFIX/bin/mitool"
 
