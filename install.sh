@@ -193,7 +193,13 @@ curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/miflashs.py
 
 _progress
 
-curl -s "https://raw.githubusercontent.com/offici5l/MiUnlockTool/master/MiUnlockTool.py" -o "$PREFIX/bin/miunlock" && chmod +x "$PREFIX/bin/miunlock"
+miunlockusers="$PREFIX/bin/.miunlockusersok"
+if [ ! -f "$miunlockusers" ]; then
+    curl -sSL -o "$PREFIX/bin/miunlock" https://github.com/offici5l/MiUnlockTool/releases/latest/download/MiUnlockTool.py
+    touch "$miunlockusers"
+else
+    curl -sSL -o "$PREFIX/bin/miunlock" https://raw.githubusercontent.com/offici5l/MiUnlockTool/master/MiUnlockTool.py
+fi
 
 _progress
 
