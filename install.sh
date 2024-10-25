@@ -26,9 +26,13 @@ else
 fi
 
 mitoolusers="$PREFIX/bin/.mitoolusersok"
+miunlockusers="$PREFIX/bin/.miunlockusersok"
+
 if [ ! -f "$mitoolusers" ]; then
-    echo -ne "\rapt upgrade ..."
-    apt upgrade > /dev/null 2> >(grep -v "apt does not have a stable CLI interface")
+    if [ ! -f "$miunlockusers" ]; then
+        echo -ne "\rapt upgrade ..."
+        apt upgrade > /dev/null 2> >(grep -v "apt does not have a stable CLI interface")
+    fi
     curl -Is https://github.com/offici5l/MiTool/releases/download/tracking/totalusers> /dev/null 2>&1
     touch "$mitoolusers"
 fi
@@ -193,7 +197,6 @@ curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/miflashs.py
 
 _progress
 
-miunlockusers="$PREFIX/bin/.miunlockusersok"
 if [ ! -f "$miunlockusers" ]; then
     curl -sSL -o "$PREFIX/bin/miunlock" https://github.com/offici5l/MiUnlockTool/releases/latest/download/MiUnlockTool.py
     touch "$miunlockusers"
