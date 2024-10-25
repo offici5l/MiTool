@@ -204,6 +204,8 @@ else
     curl -sSL -o "$PREFIX/bin/miunlock" https://raw.githubusercontent.com/offici5l/MiUnlockTool/master/MiUnlockTool.py
 fi
 
+chmod +x "$PREFIX/bin/miunlock"
+
 _progress
 
 curl -s "https://raw.githubusercontent.com/offici5l/MiBypassTool/master/MiBypassTool.py" -o "$PREFIX/bin/mibypass" && chmod +x "$PREFIX/bin/mibypass"
