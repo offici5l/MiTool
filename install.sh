@@ -24,7 +24,7 @@ else
 fi
 
 if [[ "$arch" != "aarch64" && "$arch" != "arm" ]]; then
-    echo "MiTool does not support architecture $architecture"
+    echo "MiTool does not support architecture $arch"
     exit 1
 fi
 
