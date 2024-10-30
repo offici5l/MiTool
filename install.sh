@@ -212,7 +212,7 @@ curl -s "https://raw.githubusercontent.com/offici5l/MiBypassTool/master/MiBypass
 
 _progress
 
-curl -s -L -o $PREFIX/bin/miasst $(curl -s "https://api.github.com/repos/offici5l/MiAssistantTool/releases/latest" | grep "browser_download_url.*miasst_termux_${arch}" | cut -d '"' -f 4) && chmod +x $PREFIX/bin/miasst
+curl -s -L -o $PREFIX/bin/miasst $(curl -s "https://api.github.com/repos/offici5l/MiAssistantTool/releases/latest" | grep "browser_download_url.*miasst_termux_$(uname -m)" | cut -d '"' -f 4) && chmod +x $PREFIX/bin/miasst
 
 _progress
 
