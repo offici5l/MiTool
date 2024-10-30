@@ -22,7 +22,7 @@
 
 ## Installation:
 
-1 - [Termux&termux-api](http://offici5l.github.io/d-termux.html)
+1 - Download and Install [Termux & Termux-api](http://offici5l.github.io/d-termux.html)
 
 2 - From Termux command line:
 ```bash
