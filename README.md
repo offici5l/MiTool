@@ -22,11 +22,9 @@
 
 ## Installation:
 
-1 - [Termux](https://github.com/termux/termux-app/releases/download/v0.118.0/termux-app_v0.118.0+github-debug_universal.apk)
+1 - [Termux&termux-api](http://offici5l.github.io/d-termux.html)
 
-2 - [Termux API](https://github.com/termux/termux-api/releases/download/v0.50.1/termux-api_v0.50.1+github-debug.apk)
-
-3 - From Termux command line:
+2 - From Termux command line:
 ```bash
 termux-setup-storage
 ```
