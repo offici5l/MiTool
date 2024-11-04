@@ -12,16 +12,7 @@ if [ ! -d "/data/data/com.termux.api" ]; then
     exit 1
 fi
 
-source "/data/data/com.termux/files/usr/bin/termux-setup-package-manager" || { echo "Failed to load package manager"; exit 1; }
-
-if [ "$TERMUX_APP_PACKAGE_MANAGER" = "apt" ]; then
-    arch=$(dpkg --print-architecture)
-elif [ "$TERMUX_APP_PACKAGE_MANAGER" = "pacman" ]; then
-    arch=$(pacman-conf | awk -F ' = ' '/Architecture/ {print $2}')
-else
-    echo "Unknown package manager"
-    exit 1
-fi
+arch=$(dpkg --print-architecture)
 
 if [[ "$arch" != "aarch64" && "$arch" != "arm" ]]; then
     echo "MiTool does not support architecture $arch"
