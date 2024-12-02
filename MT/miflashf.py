@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 import os
 import sys
@@ -31,7 +31,6 @@ def check_mode():
             print("\ndevice is connected\n")
             return
 
-
 def translate_file_name(file_name):
     translations = {
         "flash_all.sh": "Flash all \033[92mwithout locking bootloader\033[0m",
@@ -42,7 +41,7 @@ def translate_file_name(file_name):
 
 def flash_selected_result(selected_result):
     file_names = ["flash_all.sh", "flash_all_lock.sh", "flash_all_except_data_storage.sh"]
-    
+
     while True:
         found_files = [file for file in os.listdir(selected_result) if file in file_names]
 
@@ -50,27 +49,27 @@ def flash_selected_result(selected_result):
             for index, file in enumerate(found_files, start=1):
                 translated_name = translate_file_name(file)
                 print(f"\n \033[92m{index}\033[0m -  {translated_name}")
-            
-            choice = input("\nEnter your \033[92mchoice\033[0m: ")
 
-            try:
-                choice = int(choice)
-                if 1 <= choice <= len(found_files):
-                    selected_file = found_files[choice - 1]
-                    translated_file = translate_file_name(selected_file)
-                    [print(char, end='', flush=True) or time.sleep(0.01) for char in "\nEnsure you're in Fastboot mode\n\n"]
-                    check_mode()
-                    print("\nflashing process will start now...\n")
-                    os.system(f"sh {selected_result}/{selected_file}")
-                    exit()
-                else:
-                    print("\nInvalid choice !\n")
-            except ValueError:
-                print("\nInvalid input !\n")
+            choice = input("\nEnter your \033[92mchoice\033[0m: ").strip()
+
+            if not choice.isdigit():
+                print("\nInvalid input! Please enter a valid number.\n")
+                continue
+
+            choice = int(choice)
+
+            if 1 <= choice <= len(found_files):
+                selected_file = found_files[choice - 1]
+                [print(char, end='', flush=True) or time.sleep(0.01) for char in "\nEnsure you're in Fastboot mode\n\n"]
+                check_mode()
+                print("\nFlashing process will start now...\n")
+                os.system(f"sh {selected_result}/{selected_file}")
+                exit()
+            else:
+                print(f"\nInvalid choice! Please select a number between 1 and {len(found_files)}.\n")
         else:
-            print("\nThe required files were not found !\n")
-            exit()  
-
+            print("\nThe required files were not found!\n")
+            exit()
 
 def decompress_and_flash_rom(tgz_file_name):
     RF = "/sdcard/Download/mi-flash-fastboot-rom"
@@ -112,7 +111,7 @@ for root, dirs, files in os.walk("/sdcard"):
 if result_paths:
     for i, result in enumerate(result_paths, start=1):
         print(f"\n \033[92m{i}\033[0m - {result}\n")
-        
+
     while True:
         try:
             selected_index = int(input("\nEnter your \033[92mchoice\033[0m: "))
