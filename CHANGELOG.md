@@ -169,10 +169,14 @@ MiUnlockTool-1.5.6: [
 
 💡 Note: If you are facing issues recognizing your device through ADB & Fastboot commands, use termux-monet:
 
-Termux Monet: github.com/Termux-Monet/termux-monet/releases
-Termux API: github.com/Termux-Monet/termux-api/releases
+Termux Monet:
+ github.com/Termux-Monet/termux-monet/releases
+Termux API Monet:
+ github.com/Termux-Monet/termux-api/releases
 
 
 MiTool version 1.5.6 :
 
 - minor fixes and improvements
+
+
