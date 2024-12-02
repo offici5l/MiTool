@@ -163,3 +163,16 @@ MiUnlockTool-1.5.6: [
 - Some improvements, to handle jobs better.
 - Fix the issue with termux (Error message: fastboot: error: cannot load /sdcard/encryptData) , due to some termux-setup-storage issues, the encryptData will now be saved in $PREFIX/bin instead of /sdcard...
 - Other improvements in the installation process regarding Termux. ]
+
+
+#
+
+💡 Note: If you are facing issues recognizing your device through ADB & Fastboot commands, use termux-monet:
+
+Termux Monet: github.com/Termux-Monet/termux-monet/releases
+Termux API: github.com/Termux-Monet/termux-api/releases
+
+
+MiTool version 1.5.6 :
+
+- minor fixes and improvements
