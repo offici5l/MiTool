@@ -186,4 +186,4 @@ Mi-Assistant => 2 => ROMs that can be flashed.
 
 - Added **Firmware-Content-Extractor**: A new option (6) that **gets file.img** from a ROM without downloading the ROM!
 
-- - minor fixes and improvements
+- minor fixes and improvements
