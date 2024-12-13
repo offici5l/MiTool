@@ -164,6 +164,11 @@ MiUnlockTool-1.5.6: [
 - Fix the issue with termux (Error message: fastboot: error: cannot load /sdcard/encryptData) , due to some termux-setup-storage issues, the encryptData will now be saved in $PREFIX/bin instead of /sdcard...
 - Other improvements in the installation process regarding Termux. ]
 
+#
+
+MiTool version 1.5.6 :
+
+- minor fixes and improvements
 
 #
 
@@ -174,9 +179,10 @@ Termux Monet:
 Termux API Monet:
  github.com/Termux-Monet/termux-api/releases
 
+MiTool version 1.5.7 :
 
-MiTool version 1.5.6 :
+- Now MiAssistantTool V1.2 , you can flash other versions that are suggested to you by the option : Mi-Assistant => 2 => ROMs that can be flashed
 
-- minor fixes and improvements
+- Added **Firmware-Content-Extractor**: A new option (6) that **gets file.img** from a ROM without downloading the ROM!
 
-
+- - minor fixes and improvements

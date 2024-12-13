@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-version = "1.5.6"
+version = "1.5.7"
 
 import subprocess, requests, shutil, re, sys, os
 from os import get_terminal_size
@@ -58,6 +58,8 @@ print(f"""
 
 ━ {c1}5{c2} Mi-Assistant
 
+━ {c1}6{c2} Firmware-Content-Extractor
+
 """)
 
 if len(sys.argv) > 1:
@@ -76,6 +78,8 @@ elif choice == "4":
     subprocess.run("$PREFIX/bin/mibypass", shell=True)
 elif choice == "5":
     subprocess.run("$PREFIX/bin/miasst", shell=True)
+elif choice == "6":
+    subprocess.run("$PREFIX/bin/mifce", shell=True)
 elif choice == "h" or choice == "help":
     subprocess.run("$PREFIX/bin/mihelp", shell=True)
 elif choice == "u" or choice == "update":

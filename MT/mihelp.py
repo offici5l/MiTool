@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 import os
 import shutil
 
@@ -22,6 +23,7 @@ Flash-Fastboot-ROM = {GREEN}miflashf{RESET}{GRAY}
 Flash-Zip-With-Sideload = {GREEN}miflashs{RESET}{GRAY}
 Bypass = {GREEN}mibypass{RESET}{GRAY}
 Mi-Assistant = {GREEN}miasst{RESET}{GRAY}
+Firmware-Content-Extractor = {GREEN}mifce{RESET}{GRAY}
 Help = {GREEN}mihelp{RESET}
 {GRAY}━{'━' * (terminal_width - 2)}━
 To report issues or share feedback, visit:  

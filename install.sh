@@ -63,7 +63,7 @@ echo -ne "\rapt update ..."
 apt update > /dev/null 2> >(grep -v "apt does not have a stable CLI interface")
 
 charit=-1
-total=29
+total=31
 start_time=$(date +%s)
 
 _progress() {
@@ -191,6 +191,15 @@ curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/miflashs.py
 
 _progress
 
+curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mifce.py" -o "$PREFIX/bin/mifce" && chmod +x "$PREFIX/bin/mifce"
+
+_progress
+
+
+curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/miasst.py" -o "$PREFIX/bin/miasst" && chmod +x "$PREFIX/bin/miasst"
+
+_progress
+
 if [ ! -f "$miunlockusers" ]; then
     curl -sSL -o "$PREFIX/bin/miunlock" https://github.com/offici5l/MiUnlockTool/releases/latest/download/MiUnlockTool.py
     touch "$miunlockusers"
@@ -206,7 +215,7 @@ curl -s "https://raw.githubusercontent.com/offici5l/MiBypassTool/master/MiBypass
 
 _progress
 
-curl -s -L -o $PREFIX/bin/miasst $(curl -s "https://api.github.com/repos/offici5l/MiAssistantTool/releases/latest" | grep "browser_download_url.*miasst_termux_${arch}" | cut -d '"' -f 4) && chmod +x $PREFIX/bin/miasst
+curl -s -L -o $PREFIX/bin/miasst_termux $(curl -s "https://api.github.com/repos/offici5l/MiAssistantTool/releases/latest" | grep "browser_download_url.*miasst_termux_${arch}" | cut -d '"' -f 4) && chmod +x $PREFIX/bin/miasst_termux
 
 _progress
 
