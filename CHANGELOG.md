@@ -181,7 +181,8 @@ Termux API Monet:
 
 MiTool version 1.5.7 :
 
-- Now MiAssistantTool V1.2 , you can flash other versions that are suggested to you by the option : Mi-Assistant => 2 => ROMs that can be flashed
+- Previously, you could only flash the same version. Now, with MiAssistantTool V1.2, you can flash other suggested versions using the option:
+Mi-Assistant => 2 => ROMs that can be flashed.
 
 - Added **Firmware-Content-Extractor**: A new option (6) that **gets file.img** from a ROM without downloading the ROM!
 
