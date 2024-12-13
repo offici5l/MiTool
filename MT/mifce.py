@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import requests
 
 print("\n\033[1;36m\nGet file.img from a ROM without downloading the ROM!\n")
