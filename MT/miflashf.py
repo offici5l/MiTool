@@ -35,12 +35,13 @@ def translate_file_name(file_name):
     translations = {
         "flash_all.sh": "Flash all \033[92mwithout locking bootloader\033[0m",
         "flash_all_lock.sh": "Flash all \033[91mwith lock bootloader\033[0m",
-        "flash_all_except_data_storage.sh": "Flash all \033[92mexcept data storage\033[0m"
+        "flash_all_except_data_storage.sh": "Flash all \033[92mexcept data storage\033[0m",
+        "flash_all_except_storage.sh": "Flash all \033[92mexcept storage\033[0m"
     }
     return translations.get(file_name, file_name)
 
 def flash_selected_result(selected_result):
-    file_names = ["flash_all.sh", "flash_all_lock.sh", "flash_all_except_data_storage.sh"]
+    file_names = ["flash_all.sh", "flash_all_lock.sh", "flash_all_except_data_storage.sh", "flash_all_except_storage.sh"]
 
     while True:
         found_files = [file for file in os.listdir(selected_result) if file in file_names]
@@ -89,7 +90,7 @@ def decompress_and_flash_rom(tgz_file_name):
         exit()
 
 target_extension = ".tgz"
-target_files = ["flash_all_lock.sh", "flash_all.sh", "flash_all_except_data_storage.sh"]
+target_files = ["flash_all_lock.sh", "flash_all.sh", "flash_all_except_data_storage.sh", "flash_all_except_storage.sh"]
 target_folder = "images"
 
 result_paths = []
