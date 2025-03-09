@@ -10,9 +10,8 @@ def check_mode():
     message = "\r device not connected ! "
     while True:
         for char in spinner:
-            process = subprocess.Popen(['fastboot', 'devices'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            process = subprocess.Popen(['fastboot', 'devices'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, encoding="utf-8", errors="ignore")
             line = process.stdout.readline()
-
             if not line and process.poll() is not None:
                 sys.stdout.write(message + char + '\r')
                 sys.stdout.flush()
