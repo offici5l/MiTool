@@ -63,7 +63,8 @@ def flash_selected_result(selected_result):
                 [print(char, end='', flush=True) or time.sleep(0.01) for char in "\nEnsure you're in Fastboot mode\n\n"]
                 check_mode()
                 print("\nFlashing process will start now...\n")
-                os.system(f"sh {selected_result}/{selected_file}")
+                os.system(f"bash {selected_result}/{selected_file}")
+                # os.system(f"sh {selected_result}/{selected_file}")
                 exit()
             else:
                 print(f"\nInvalid choice! Please select a number between 1 and {len(found_files)}.\n")
