@@ -187,3 +187,9 @@ Mi-Assistant => 2 => ROMs that can be flashed.
 - Added **Firmware-Content-Extractor**: A new option (6) that **gets file.img** from a ROM without downloading the ROM!
 
 - minor fixes and improvements
+
+#
+
+MiTool version 1.5.8 :
+
+- minor fixes and improvements
