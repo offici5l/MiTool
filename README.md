@@ -22,7 +22,7 @@
 
 ## Installation:
 
-1 - Install [Termux & Termux-api](http://offici5l.github.io/d-termux.html)
+1 - Install [Termux](https://github.com/termux/termux-app/releases/latest) & [Termux-Api](https://github.com/termux/termux-api/releases/latest)
 
 2 - From Termux command line:
 ```bash
@@ -35,10 +35,5 @@ curl -sS https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | b
 <div align="center">
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
-
-
-
-
-
 
 
