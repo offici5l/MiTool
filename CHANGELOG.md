@@ -190,4 +190,5 @@ Mi-Assistant => 2 => ROMs that can be flashed.
 
 #
 
-- MiTools App Launched!: https://github.com/offici5l/MiTools
+- MiTools App Launched!:
+ 'https://github.com/offici5l/MiTools'
