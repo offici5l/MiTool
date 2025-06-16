@@ -190,6 +190,5 @@ Mi-Assistant => 2 => ROMs that can be flashed.
 
 #
 
-MiTool version 1.5.8 :
-
-- minor fixes and improvements
+MiTools App Launched!
+https://github.com/offici5l/MiTools
