@@ -88,7 +88,7 @@ get_version() {
   local __resultvar=$2
 
   version=$(curl -s "$url/Packages" | awk -v package="$package_name" '
-    $0 ~ "^Package: " package {found=1} 
+    $1 == "Package:" && $2 == package {found=1} 
     found && /^Version:/ {print $2; exit}
   ')
   eval $__resultvar="'$version'"
