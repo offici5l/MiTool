@@ -191,7 +191,7 @@ curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/miflashs.py
 
 _progress
 
-curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mifce.py" -o "$PREFIX/bin/mifce" && chmod +x "$PREFIX/bin/mifce"
+curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mifce" -o "$PREFIX/bin/mifce" && chmod +x "$PREFIX/bin/mifce"
 
 _progress
 
