@@ -8,9 +8,13 @@ if [ ! -d "$HOME/storage" ]; then
 fi
 
 if ! cmd package list packages com.termux.api 2>/dev/null | grep -q 'com.termux.api'; then
-    echo -e '\ncom.termux.api app is not installed\nPlease install it first\n'
+    echo
+    echo 'com.termux.api app is not installed'
+    echo 'Please install it first'
+    echo
     exit 1
 fi
+
 
 arch=$(dpkg --print-architecture)
 
@@ -103,7 +107,6 @@ get_version "termux-adb" termux_adb_version_c
 libprotobuf_version_i=$(pkg show libprotobuf-tadb-core 2>/dev/null | grep Version | cut -d ' ' -f 2)
 termux_adb_version_i=$(pkg show termux-adb 2>/dev/null | grep Version | cut -d ' ' -f 2)
 
-# Function to compare versions without printing anything if the package is already updated
 compare_versions() {
   package_name="$1"
   available_version="$2"
@@ -215,7 +218,8 @@ curl -s "https://raw.githubusercontent.com/offici5l/MiBypassTool/master/MiBypass
 
 _progress
 
-curl -s -L -o $PREFIX/bin/miasst_termux $(curl -s "https://api.github.com/repos/offici5l/MiAssistantTool/releases/latest" | grep "browser_download_url.*miasst_termux_${arch}" | cut -d '"' -f 4) && chmod +x $PREFIX/bin/miasst_termux
+download_url=$(curl -s 'https://api.github.com/repos/offici5l/MiAssistantTool/releases/latest' | grep 'browser_download_url.*miasst_termux_'${arch} | cut -d '"' -f 4)
+curl -s -L -o $PREFIX/bin/miasst_termux "$download_url" && chmod +x $PREFIX/bin/miasst_termux
 
 _progress
 
