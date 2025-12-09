@@ -7,8 +7,8 @@ if [ ! -d "$HOME/storage" ]; then
     exit 1
 fi
 
-if ! cmd package list packages com.termux.api 2>/dev/null | grep -q "com.termux.api"; then
-    echo -e "\ncom.termux.api app is not installed\nPlease install it first\n"
+if ! cmd package list packages com.termux.api 2>/dev/null | grep -q 'com.termux.api'; then
+    echo -e '\ncom.termux.api app is not installed\nPlease install it first\n'
     exit 1
 fi
 
