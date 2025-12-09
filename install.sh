@@ -7,14 +7,13 @@ if [ ! -d "$HOME/storage" ]; then
     exit 1
 fi
 
-if ! cmd package list packages com.termux.api 2>/dev/null | grep -q 'com.termux.api'; then
+if ! cmd package list packages com.termux.api < /dev/null 2>/dev/null | grep -q 'com.termux.api'; then
     echo
     echo 'com.termux.api app is not installed'
     echo 'Please install it first'
     echo
     exit 1
 fi
-
 
 arch=$(dpkg --print-architecture)
 
