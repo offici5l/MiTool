@@ -202,12 +202,7 @@ curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/miasst.py" 
 
 _progress
 
-if [ ! -f "$miunlockusers" ]; then
-    curl -sSL -o "$PREFIX/bin/miunlock" https://github.com/offici5l/MiUnlockTool/releases/latest/download/MiUnlockTool.py
-    touch "$miunlockusers"
-else
-    curl -sSL -o "$PREFIX/bin/miunlock" https://raw.githubusercontent.com/offici5l/MiUnlockTool/master/MiUnlockTool.py
-fi
+curl -sSL -o "$PREFIX/bin/miunlock" https://github.com/offici5l/MiUnlockTool/releases/download/1.5.9/MiUnlockTool.py
 
 chmod +x "$PREFIX/bin/miunlock"
 
