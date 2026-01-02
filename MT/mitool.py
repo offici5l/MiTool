@@ -1,94 +1,75 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
-version = "1.5.8"
+import subprocess
+import sys
+import os
 
-import subprocess, requests, shutil, re, sys, os
-from os import get_terminal_size
+version = "1.5.9"
 
-if not os.path.isdir(os.path.expanduser('~/storage')):
-    print("\nPlease grant permission via command:\ntermux-setup-storage\n\nthen restart the tool\n")
-    exit()
+ORANGE = "\033[38;5;208m"
+DIM = "\033[2m"
+BOLD = "\033[1m"
+RED = "\033[1;31m"
+GREEN = "\033[1;32m"
+RESET = "\033[0m"
 
-if 'u' in sys.argv or 'update' in sys.argv:
-    subprocess.run("curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash", shell=True)
-    exit()
+TOOLS = {
+    "1": ("Unlock Bootloader", "$PREFIX/bin/miunlock"),
+    "2": ("Flash Fastboot ROM", "$PREFIX/bin/miflashf"),
+    "3": ("Mi Assistant", "$PREFIX/bin/miasst"),
+    "4": ("Firmware Content Extractor", "$PREFIX/bin/mifcetool")
+}
 
 try:
-    response = requests.get("https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitool.py", timeout=3)
-    response.raise_for_status()
-    if response.status_code == 200:
-        version_match = re.search(r'version\s*=\s*"([^"]+)"', response.text)
-        if version_match:
-            vcloud = version_match.group(1)
-            if vcloud > version:
-                print(f"\nAn update is available! \nUpdating from version {version} to {vcloud} ...")
-                subprocess.run("curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash", shell=True)
-                exit()
-        else:
-            pass
-    else:
-        pass
-except requests.exceptions.ConnectionError:
-    pass
-except requests.exceptions.Timeout:
-    pass
+    term_width = os.get_terminal_size().columns
+except:
+    term_width = 80
 
-c1="\033[1;32m"
-c2="\033[0m"
+def get_center(text):
+    clean = text.replace(ORANGE, '').replace(RESET, '').replace(DIM, '')
+    pad = (term_width - len(clean)) // 2
+    return ' ' * pad + text
 
-_l =  c1 + "_"*56 + c2 + "\n"
+separator = f"{DIM}{'━' * min(term_width, 70)}{RESET}"
 
-print(_l)
-ver = f"MiTool {version}"
-b = '━' * (len(ver) + 4)
-p = ' ' * ((get_terminal_size().columns - len(b)) // 2)
-furl = f"\n{p}┏{b}┓\n{p}┃  {ver}  ┃\n{p}┗{b}┛"
-print(furl + f" ━ {c1}help{c2}")
+print("\n")
+print(get_center(f"{DIM}{'═' * min(term_width, 70)}{RESET}"))
 
-print(f"""
+title = f"MiTool v{version}"
+box_width = len(title) + 4
+print(get_center(f"┏{'━' * (box_width - 2)}┓"))
+print(get_center(f"┃  {ORANGE}MiTool{RESET} {DIM}v{version}{RESET}  ┃"))
+print(get_center(f"┗{'━' * (box_width - 2)}┛"))
 
+print(get_center(f"{DIM}github.com/offici5l/MiTool{RESET}"))
+print(get_center(f"{DIM}{'═' * min(term_width, 70)}{RESET}"))
+print()
 
-━ {c1}1{c2} Unlock-Bootloader
-
-━ {c1}2{c2} Flash-Fastboot-ROM
-
-━ {c1}3{c2} Flash-Zip-With-Sideload
-
-━ {c1}4{c2} Bypass
-
-━ {c1}5{c2} Mi-Assistant
-
-━ {c1}6{c2} Firmware-Content-Extractor
-
-""")
+print(f"{BOLD}Available Operations:{RESET}\n")
+for key, (desc, _) in TOOLS.items():
+    print(f"  {DIM}▸{RESET} [{ORANGE}{key}{RESET}] {desc}")
+print(f"\n  {DIM}▸{RESET} [{ORANGE}q{RESET}] Quit\n")
 
 if len(sys.argv) > 1:
-    choice = sys.argv[1]
-    print(choice)
+    choice = sys.argv[1].lower()
+    print(f"{ORANGE}►{RESET} Selected: {ORANGE}{choice}{RESET}\n")
 else:
-    choice = input(f'Enter your {c1}choice{c2}: ')
+    try:
+        choice = input(f"{BOLD}►{RESET} Enter choice: ").strip().lower()
+    except (KeyboardInterrupt, EOFError):
+        print(f"\n\n{ORANGE}Cancelled{RESET}")
+        sys.exit(0)
 
-if choice == "1":
-    subprocess.run("$PREFIX/bin/miunlock", shell=True)
-elif choice == "2":
-    subprocess.run("$PREFIX/bin/miflashf", shell=True)
-elif choice == "3":
-    subprocess.run("$PREFIX/bin/miflashs", shell=True)
-elif choice == "4":
-    subprocess.run("$PREFIX/bin/mibypass", shell=True)
-elif choice == "5":
-    subprocess.run("$PREFIX/bin/miasst", shell=True)
-elif choice == "6":
-    subprocess.run("$PREFIX/bin/mifce", shell=True)
-elif choice == "h" or choice == "help":
-    subprocess.run("$PREFIX/bin/mihelp", shell=True)
-elif choice == "u" or choice == "update":
-    subprocess.run("curl -s https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash", shell=True)
-    exit()
+if choice in ['q', 'quit', 'exit']:
+    print(f"{ORANGE}Exiting...{RESET}\n")
+    sys.exit(0)
+
+if choice in TOOLS:
+    desc, cmd = TOOLS[choice]
+    print(f"\n{ORANGE}►{RESET} Executing: {DIM}{cmd}{RESET}\n")
+    print(f"{DIM}{'─' * min(term_width, 70)}{RESET}\n")
+    subprocess.run(cmd, shell=True)
 else:
-    print("\nInvalid choice\n")
-    exit()
-
-
-
-
+    print(f"{RED}✗ Invalid:{RESET} '{choice}'")
+    print(f"{DIM}Select 1-4 or 'q' to quit{RESET}\n")
+    sys.exit(1)

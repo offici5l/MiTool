@@ -4,11 +4,9 @@
 
 ![](https://img.shields.io/badge/Compatible%20with%20Android(Termux)-black?logo=android&logoColor=green&style=for-the-badge)
 
-[![Version 1.5.8](https://img.shields.io/badge/Version-1.5.8-brightgreen)](#)
+[![Version 1.5.9](https://img.shields.io/badge/Version-1.5.9-brightgreen)](#)
 
 [![Changelog](https://img.shields.io/badge/Changelog-brightgreen)](https://github.com/offici5l/MiTool/blob/main/CHANGELOG.md)
-
-[![Telegram Channel](https://img.shields.io/badge/-telegram-red?color=white&logo=telegram&logoColor=blue)](https://t.me/Offici5l_Channel)
 
 </div>
 
@@ -16,8 +14,6 @@
 
 - [x] Unlock Bootloader
 - [x] Flash Fastboot ROM
-- [x] Flash Recovery ROM 
-- [x] Bypass
 - [ ] More
 
 ## Installation:

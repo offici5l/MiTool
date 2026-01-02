@@ -192,3 +192,9 @@ Mi-Assistant => 2 => ROMs that can be flashed.
 
 
 - MiTools App Launched!: github.com/offici5l/MiTools
+
+#
+
+MiTool version 1.5.9 :
+
+- improvements

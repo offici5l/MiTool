@@ -1,5 +1,27 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
+set -e
+
+R='\033[0;31m'
+G='\033[0;32m'
+I='\033[0;90m' 
+N='\033[0m'
+
+run_step() {
+    local msg="$1"
+    local cmd="$2"
+
+    echo -e "${I}[..]${N} $msg..."
+
+    if eval "$cmd" > /dev/null 2>&1; then
+        echo -e "     └─> ${G}[SUCCESS]${N}\n"
+    else
+        echo -e "     └─> ${R}[FAILED]${N}"
+        echo -e "${R}Error occurred during: $msg${N}\n"
+        exit 1
+    fi
+}
+
 echo
 
 if [ ! -d "$HOME/storage" ]; then
@@ -7,7 +29,7 @@ if [ ! -d "$HOME/storage" ]; then
     exit 1
 fi
 
-if ! cmd package list packages com.termux.api < /dev/null 2>/dev/null | grep -q 'com.termux.api'; then
+if ! cmd package list packages --user 0 com.termux.api < /dev/null 2>/dev/null | grep -q 'com.termux.api'; then
     echo
     echo 'com.termux.api app is not installed'
     echo 'Please install it first'
@@ -22,203 +44,54 @@ if [[ "$arch" != "aarch64" && "$arch" != "arm" ]]; then
     exit 1
 fi
 
-mitoolusers="$PREFIX/bin/.mitoolusersok"
-miunlockusers="$PREFIX/bin/.miunlockusersok"
+run_step "Updating System & Fixing Broken Packages" \
+"yes | apt --fix-broken install && yes | apt update && yes | apt upgrade"
 
-if [ ! -f "$mitoolusers" ]; then
-    if [ ! -f "$miunlockusers" ]; then
-        echo -ne "\rapt upgrade ..."
-        apt upgrade > /dev/null 2> >(grep -v "apt does not have a stable CLI interface")
-    fi
-    curl -Is https://github.com/offici5l/MiTool/releases/download/tracking/totalusers> /dev/null 2>&1
-    touch "$mitoolusers"
-fi
+run_step "Installing Python3" \
+"yes | pkg install python3"
 
-echo -ne "\rurl check ..."
+run_step "Installing libusb" \
+"yes | pkg install libusb"
 
-main_repo=$(grep -E '^deb ' /data/data/com.termux/files/usr/etc/apt/sources.list | awk '{print $2}' | head -n 1)
+run_step "Installing pv" \
+"yes | pkg install pv"
 
-curl -s --retry 4 $main_repo > /dev/null
-exit_code=$?
+run_step "Installing termux-adb" \
+"curl -fsS https://raw.githubusercontent.com/nohajc/termux-adb/master/install.sh | bash"
 
-if [ $exit_code -eq 6 ]; then
-    echo -e "\nRequest to $main_repo failed. Please check your internet connection.\n"
-    exit 6
-elif [ $exit_code -eq 35 ]; then
-    echo -e "\nThe $main_repo is blocked in your current country.\n"
-    exit 35
-fi
+run_step "symlink termux-adb/termux-fastboot — adb/fastboot" \
+"ln -sf "$PREFIX/bin/termux-fastboot" "$PREFIX/bin/fastboot" && ln -sf "$PREFIX/bin/termux-adb" "$PREFIX/bin/adb""
 
-git_repo="https://raw.githubusercontent.com"
+run_step "Installing colorama" \
+"pip install -U colorama"
 
-curl -s --retry 4 $git_repo > /dev/null
-exit_code=$?
+run_step "Installing miunlock" \
+"pip install -U miunlock"
 
-if [ $exit_code -eq 6 ]; then
-    echo -e "\nRequest to $git_repo failed. Please check your internet connection.\n"
-    exit 6
-elif [ $exit_code -eq 35 ]; then
-    echo -e "\nThe $git_repo is blocked in your current country.\n"
-    exit 35
-fi
+run_step "Installing fcetool" \
+"pip install -U fcetool"
 
-echo -ne "\rapt update ..."
-apt update > /dev/null 2> >(grep -v "apt does not have a stable CLI interface")
+run_step "download mitool.py" \
+"curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitool.py" -o "$PREFIX/bin/mitool" && chmod +x "$PREFIX/bin/mitool""
 
-charit=-1
-total=31
-start_time=$(date +%s)
+run_step "download miflashf.py" \
+"curl -fsS "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/miflashf.py" -o "$PREFIX/bin/miflashf" && chmod +x "$PREFIX/bin/miflashf""
 
-_progress() {
-    charit=$((charit + 1)) 
-    percentage=$((charit * 100 / total))
-    echo -ne "\rProgress: $charit/$total ($percentage%)"
-    if [ $percentage -eq 100 ]; then
-        end_time=$(date +%s)
-        elapsed_time=$((end_time - start_time))
-        echo -ne "\rProgress: $charit/$total ($percentage%) Took: $elapsed_time seconds"
-    else
-        echo -ne "\rProgress: $charit/$total ($percentage%)"
-    fi
-}
+run_step "download mifcetool.py" \
+"curl -fsS "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mifcetool.py" -o "$PREFIX/bin/mifcetool" && chmod +x "$PREFIX/bin/mifcetool""
 
-_progress
+run_step "download miasst.py" \
+"curl -fsS "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/miasst.py" -o "$PREFIX/bin/miasst" && chmod +x "$PREFIX/bin/miasst""
 
-url="https://raw.githubusercontent.com/nohajc/nohajc.github.io/master/dists/termux/extras/binary-${arch}"
+run_step "download miasst_termux" \
+"curl -fsS -L -o $PREFIX/bin/miasst_termux \
+"$(curl -fsS 'https://api.github.com/repos/offici5l/MiAssistantTool/releases/latest' \
+| grep 'browser_download_url.*miasst_termux_'${arch} | cut -d '"' -f 4)" \
+&& chmod +x $PREFIX/bin/miasst_termux"
 
-get_version() {
-  package_name="$1"
-  local __resultvar=$2
+curl -s -L https://raw.githubusercontent.com/offici5l/MiTool/main/CHANGELOG.md | tac | awk -v I="$I" -v N="$N" '/^#/{exit} {print I $0 N}' | tac
 
-  version=$(curl -s "$url/Packages" | awk -v package="$package_name" '
-    $1 == "Package:" && $2 == package {found=1} 
-    found && /^Version:/ {print $2; exit}
-  ')
-  eval $__resultvar="'$version'"
-}
+echo -e "${G}✔ Installation completed successfully${N}\n"
 
-libprotobuf_version_c=""
-termux_adb_version_c=""
-
-get_version "libprotobuf-tadb-core" libprotobuf_version_c
-get_version "termux-adb" termux_adb_version_c
-
-libprotobuf_version_i=$(pkg show libprotobuf-tadb-core 2>/dev/null | grep Version | cut -d ' ' -f 2)
-termux_adb_version_i=$(pkg show termux-adb 2>/dev/null | grep Version | cut -d ' ' -f 2)
-
-compare_versions() {
-  package_name="$1"
-  available_version="$2"
-  installed_version="$3"
-  if [ "$installed_version" != "$available_version" ]; then
-    curl -s -O "$url/${package_name}_${available_version}_${arch}.deb"
-    dpkg --force-overwrite -i "${package_name}_${available_version}_${arch}.deb" >/dev/null 2>&1
-    rm -f "${package_name}_${available_version}_${arch}.deb"
-  fi
-
-  _progress
-
-}
-
-compare_versions "libprotobuf-tadb-core" "$libprotobuf_version_c" "$libprotobuf_version_i"
-compare_versions "termux-adb" "$termux_adb_version_c" "$termux_adb_version_i"
-
-ln -sf "$PREFIX/bin/termux-fastboot" "$PREFIX/bin/fastboot" && ln -sf "$PREFIX/bin/termux-adb" "$PREFIX/bin/adb"
-
-packages=(
-    "libffi"
-    "abseil-cpp"
-    "termux-api"
-    "libusb"
-    "brotli"
-    "python"
-    "python-pip"
-    "libexpat"
-    "pkg-config"
-    "openssl"
-    "libc++"
-    "zlib"
-    "zstd"
-    "liblz4"
-    "pv"
-    "tur-repo"
-    "python-pycryptodomex"
-)
-
-for package in "${packages[@]}"; do
-    installed=$(apt policy "$package" 2>/dev/null | grep 'Installed' | awk '{print $2}')
-    candidate=$(apt policy "$package" 2>/dev/null | grep 'Candidate' | awk '{print $2}')
-    if [ "$installed" != "$candidate" ]; then
-        apt download "$package" >/dev/null 2>&1
-        dpkg --force-overwrite -i "${package}"*.deb >/dev/null 2>&1
-        rm -f "${package}"*.deb
-    fi
-
-    _progress
-
-done
-
-libs=(
-    "urllib3"
-    "requests"
-    "colorama"
-)
-
-for lib in "${libs[@]}"; do
-    installed_version=$(pip show "$lib" 2>/dev/null | grep Version | awk '{print $2}')
-    latest_version=$(pip index versions "$lib" 2>/dev/null | grep 'LATEST:' | awk '{print $2}')
-    if [ -z "$installed_version" ]; then
-        pip install "$lib" -q
-    elif [ "$installed_version" != "$latest_version" ]; then
-        pip install --upgrade "$lib" -q
-    fi
-
-    _progress
-
-done
-
-curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mitool.py" -o "$PREFIX/bin/mitool" && chmod +x "$PREFIX/bin/mitool"
-
-_progress
-
-curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mihelp.py" -o "$PREFIX/bin/mihelp" && chmod +x "$PREFIX/bin/mihelp"
-
-_progress
-
-curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/miflashf.py" -o "$PREFIX/bin/miflashf" && chmod +x "$PREFIX/bin/miflashf"
-
-_progress
-
-curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/miflashs.py" -o "$PREFIX/bin/miflashs" && chmod +x "$PREFIX/bin/miflashs"
-
-_progress
-
-curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/mifce.sh" -o "$PREFIX/bin/mifce" && chmod +x "$PREFIX/bin/mifce"
-
-_progress
-
-
-curl -s "https://raw.githubusercontent.com/offici5l/MiTool/master/MT/miasst.py" -o "$PREFIX/bin/miasst" && chmod +x "$PREFIX/bin/miasst"
-
-_progress
-
-curl -sSL -o "$PREFIX/bin/miunlock" https://github.com/offici5l/MiUnlockTool/releases/download/1.5.9/MiUnlockTool.py
-
-chmod +x "$PREFIX/bin/miunlock"
-
-_progress
-
-curl -s "https://raw.githubusercontent.com/offici5l/MiBypassTool/master/MiBypassTool.py" -o "$PREFIX/bin/mibypass" && chmod +x "$PREFIX/bin/mibypass"
-
-_progress
-
-download_url=$(curl -s 'https://api.github.com/repos/offici5l/MiAssistantTool/releases/latest' | grep 'browser_download_url.*miasst_termux_'${arch} | cut -d '"' -f 4)
-curl -s -L -o $PREFIX/bin/miasst_termux "$download_url" && chmod +x $PREFIX/bin/miasst_termux
-
-_progress
-
-echo
-
-curl -L -s https://raw.githubusercontent.com/offici5l/MiTool/main/CHANGELOG.md | tac | awk '/^#/{exit} {print "\033[0;34m" $0 "\033[0m"}' | tac
-
-printf "\nuse command: \e[1;32mmitool\e[0m\n\n"
+echo -e "Run command: ${G}mitool${N}"
+echo ""
