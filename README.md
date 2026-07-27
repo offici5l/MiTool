@@ -6,7 +6,7 @@
 
 [![Version 1.5.9](https://img.shields.io/badge/Version-1.5.9-brightgreen)](#)
 
-[![Changelog](https://img.shields.io/badge/Changelog-brightgreen)](https://github.com/offici5l/MiTool/blob/main/CHANGELOG.md)
+[![Changelog](https://img.shields.io/badge/Changelog-brightgreen)](https://github.com/MiForge/MiTool/blob/main/CHANGELOG.md)
 
 </div>
 
@@ -25,7 +25,7 @@
 termux-setup-storage
 ```
 ```bash
-curl -sS https://raw.githubusercontent.com/offici5l/MiTool/master/install.sh | bash
+curl -sS https://raw.githubusercontent.com/MiForge/MiTool/master/install.sh | bash
 ```
 
 <div align="center">
