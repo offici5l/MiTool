@@ -3,7 +3,7 @@
 import asyncio
 import os
 import time
-from firmware_content_extractor import extract_async
+from fcetool import extract_async
 
 url = input("\nEnter the ROM URL(.zip): ")
 filename = input("\nEnter the name of the filename to extract (e.g., boot.img): ")
