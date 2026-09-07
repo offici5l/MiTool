@@ -1,6 +1,7 @@
 <div align="center">
 
-  <a href="https://github.com/MiForge/MiTool"><img src="https://img.shields.io/badge/MiTool-%230070FF?style=flat&logo=xiaomi&logoColor=%23FF6900" alt="MiTool" style="width: 200px; vertical-align: middle;" /></a><br>
+  <a href="https://github.com/MiForge/MiTool"><img src="https://img.shields.io/badge/MiTool-%23FF6900?style=flat&logo=xiaomi&logoColor=white" alt="MiTool" style="width: 200px; vertical-align: middle;" /></a><br>
+
 
   Windows, macOS, Linux, and Termux.
 
