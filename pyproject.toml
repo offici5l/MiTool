@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pymitool"
+license = "Apache-2.0"
+version = "1.6.0"
+description = "Cross-platform CLI for Xiaomi"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "miunlock >= 1.7.3",
+    "miflash >= 1.0.0",
+    "miasst >= 1.4.1",
+    "miapply >= 1.0.1",
+    "fcetool >= 1.0.6",
+]
+
+[project.urls]
+Repository = "https://github.com/MiForge/MiTool"
+
+[project.scripts]
+mitool = "mitool.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["mitool*"]
